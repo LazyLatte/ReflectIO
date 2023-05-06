@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=Nunito+Sans:ital,wght@1,900&family=Orbitron&display=swap');
+
+body,html {
+  margin: 0;
+  padding: 0;
+
+}
+#root{
+  height: 100vh;
+  /*background-color: #FFCCCC;*/
+  /* background-image: url("https://stackblitz.com/files/react-ts-mirrorgame/github/LazyLatte/MirrorGame/main/img/background/bg.jpg");
+  background-size: 100% 100%; */
+
+}
+#app{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+#main{
+  position: relative;
+  width: 100%;
+  flex: 1;
+}
+.game{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  padding-bottom: 20px;
+  overflow: hidden;
+}
+
+.mask{
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; 
+}
+
+
+label {
+  display: inline-block;
+  margin: -5px 0;
+} 

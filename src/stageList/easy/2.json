@@ -1,0 +1,31 @@
+{
+  "height": 10,
+  "width": 10,
+  "lasers": [
+    {
+      "pos": {"x": 4, "y": 1},
+      "dir": {"x": 0, "y": 1},
+      "color": 2
+    }
+  ],
+  "targets": [
+    {
+      "pos": {"x": 4, "y": 3},
+      "color": 2
+    },
+    {
+      "pos": {"x": 4, "y": 8},
+      "color": 2
+    },
+    {
+      "pos": {"x": 7, "y": 5},
+      "color": 2
+    },
+    {
+      "pos": {"x": 2, "y": 5},
+      "color": 2
+    }
+  ],
+  "reflectorNum": 1,
+  "lensNum": 1
+}

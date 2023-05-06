@@ -1,0 +1,36 @@
+{
+  "height": 10,
+  "width": 10,
+  "lasers": [
+    {
+      "pos": {"x": 1, "y": 4},
+      "dir": {"x": 1, "y": 0},
+      "color": 4
+    },
+    {
+      "pos": {"x": 8, "y": 4},
+      "dir": {"x": -1, "y": 0},
+      "color": 2
+    }
+  ],
+  "targets": [
+    {
+      "pos": {"x": 3, "y": 7},
+      "color": 4
+    },
+    {
+      "pos": {"x": 6, "y": 2},
+      "color": 4
+    },
+    {
+      "pos": {"x": 3, "y": 1},
+      "color": 2
+    },
+    {
+      "pos": {"x": 7, "y": 7},
+      "color": 2
+    }
+  ],
+  "reflectorNum": 1,
+  "lensNum": 2
+}
