@@ -24,8 +24,8 @@ import {AllLevels} from './gameHelpers';
 import {BuiltInLevels} from './Interfaces';
 import { AnimatePresence  } from "framer-motion"
 import useAxiosPrivate from './hooks/useAxiosPrivate';
-import useStageConfig from './hooks/useStageConfig';
-import useModalRef from './hooks/useModalRef';
+import useStageConfig from './features/stage/hooks/useStageConfig';
+import useModalRef from './features/modal/useModalRef';
 import useRefreshToken from './hooks/useRefreshToken';
 import './style.css';
 

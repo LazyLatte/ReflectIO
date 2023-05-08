@@ -1,14 +1,14 @@
 import {useState, useEffect, FC} from 'react'
-import { AxiosInstance } from 'axios';
+import { AxiosInstance, isAxiosError } from 'axios';
 import {useLocation, useNavigate} from "react-router-dom";
 import Stage from '../components/stage/Stage';
 import StageButtonGroup from '../components/stage/StageButtonGroup';
 
 import {useLevel} from '../hooks/useLevel';
 import useAuth from '../hooks/useAuth';
-import useImages from '../hooks/useImages';
-import useStageConfig from '../hooks/useStageConfig';
-import useModalRef from '../hooks/useModalRef';
+import useImages from '../features/stage/hooks/useImages';
+import useStageConfig from '../features/stage/hooks/useStageConfig';
+import useModalRef from '../features/modal/useModalRef';
 import { Level, LevelInfo, UserLevelInfo } from '../Interfaces';
 interface LocationState {userLevelInfo: UserLevelInfo};
 interface PublicStageProps {axiosPrivate: AxiosInstance}
@@ -34,11 +34,26 @@ const PublicStage: FC<PublicStageProps> = ({axiosPrivate}) => {
         const response = await axiosPrivate.put(`/levels/like/${id}`);
         setIsFavorate(response.data);
       }catch(err){
-        if(err.response?.status === 401){
-          shouldSignInModalRef.current.open(false);
+        if(isAxiosError(err)){
+          if(err.response){
+            switch(err.response.status){
+              case 401:
+                shouldSignInModalRef.current.open(false);
+                break;
+              default:
+                console.error(err)
+                break;
+            }
+          }else if(err.request){
+            console.log(err.request);
+          }else{
+            console.log('Error', err.message);
+          }
+          console.log(err.config);
         }else{
           console.error(err);
         }
+
       }
     }else{
       alert('Sign in to add it to your favorite');

@@ -1,8 +1,7 @@
 import {FC} from 'react';
 import {useState, useEffect, createContext} from 'react';
 import useImage from 'use-image';
-import BulbImg from '../assets/images/icons/bulb.svg';
-import RestartImg from '../assets/images/icons/restart.svg';
+
 import LaserRedImg from '../assets/images/lasers/laser-red.png';
 import LaserGreenImg from '../assets/images/lasers/laser-green.png';
 import LaserBlueImg from '../assets/images/lasers/laser-blue.png';
@@ -26,34 +25,26 @@ import TargetMagentaActiveImg from '../assets/images/targets/target-magenta-acti
 import TargetWhiteImg from '../assets/images/targets/target-white.svg';
 import TargetWhiteActiveImg from '../assets/images/targets/target-white-active.svg';
 
+
 import ReflectorImg from '../assets/images/mirrors/reflector-default-dark.png';
 import LensImg from '../assets/images/mirrors/lens-default-dark.png';
 interface ImagesInterface {
   mirrorImages: (HTMLImageElement | undefined)[];
   laserImages: (HTMLImageElement | undefined)[];
   targetImages: (HTMLImageElement | undefined)[][];
-  StageButtonImages: {
-    bulbImg: HTMLImageElement | undefined;
-    restartImg: HTMLImageElement | undefined;
-    saveImg: HTMLImageElement | undefined;
-    uploadImg: HTMLImageElement | undefined;
-    emptyHeartImg: HTMLImageElement | undefined;
-    fullHeartImg: HTMLImageElement | undefined;
-  } ;
 }
 const ImagesContext = createContext<ImagesInterface | null>(null);
 
 export const ImagesProvider: FC<Provider> = ({children}) => {
   const [images, setImages]  = useState<ImagesInterface | null>(null);
 
-  const [restartImg] = useImage(RestartImg);
-  const [bulbImg] = useImage(BulbImg);
-  
-  const [saveImg] = useImage('https://www.svgrepo.com/show/509215/save-alt.svg');
-  const [uploadImg] = useImage('https://www.svgrepo.com/show/502880/upload-2.svg');
 
-  const [emptyHeartImg] = useImage('https://www.svgrepo.com/show/433523/heart-so.svg');
-  const [fullHeartImg] = useImage('https://www.svgrepo.com/show/503037/heart.svg');
+  
+  // const [saveImg] = useImage('https://www.svgrepo.com/show/509215/save-alt.svg');
+  // const [uploadImg] = useImage('https://www.svgrepo.com/show/502880/upload-2.svg');
+
+  // const [emptyHeartImg] = useImage('https://www.svgrepo.com/show/433523/heart-so.svg');
+  // const [fullHeartImg] = useImage('https://www.svgrepo.com/show/503037/heart.svg');
 
   const [reflector] = useImage(ReflectorImg);
   const [lens] = useImage(LensImg);
@@ -93,13 +84,12 @@ export const ImagesProvider: FC<Provider> = ({children}) => {
     setImages({
       mirrorImages: [reflector, lens],
       laserImages: [undefined, laser_blue, laser_green, laser_cyan, laser_red, laser_magenta, laser_yellow, laser_white],
-      targetImages: targetImages,
-      StageButtonImages: {bulbImg, restartImg, saveImg, uploadImg, emptyHeartImg, fullHeartImg}
+      targetImages: targetImages
     })
-  }, [bulbImg, restartImg, emptyHeartImg, fullHeartImg, saveImg, uploadImg,
-      reflector, lens, target_blue, target_blue_active, target_red, target_red_active, target_green, target_green_active, 
+  }, [laser_blue, laser_green, laser_cyan, laser_red, laser_magenta, laser_yellow, laser_white,
+      target_blue, target_blue_active, target_red, target_red_active, target_green, target_green_active, 
       target_yellow, target_yellow_active, target_cyan, target_cyan_active, target_white, target_white_active,
-      laser_blue, laser_green, laser_cyan, laser_red, laser_magenta, laser_yellow, laser_white]);
+      reflector, lens]);
   return (
     <ImagesContext.Provider value={images}>
       {children}

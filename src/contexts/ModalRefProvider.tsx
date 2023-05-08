@@ -3,8 +3,8 @@ import WarningModal from '../components/modal/WarningModal';
 import AccountModal from '../components/modal/AccountModal';
 import UploadConfirmModal from '../components/modal/UploadConfirmModal';
 import ShouldSignInModal from '../components/modal/ShouldSignInModal';
-import LevelClearModal from '../components/modal/LevelClearModal';
-import PublicLevelClearModal from '../components/modal/PublicLevelClearModal';
+import {LevelClearModal, PublicLevelClearModal} from '@features/level/modals/level-clear';
+
 
 type ModalRefContextInterface = any;
 

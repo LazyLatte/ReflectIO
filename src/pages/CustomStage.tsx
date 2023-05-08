@@ -1,13 +1,12 @@
 import {FC} from 'react'
-import Stage from '../components/stage/Stage';
-import StageButtonGroup from '../components/stage/StageButtonGroup';
+import {Stage, StageButtonGroup, Mode} from '@features/stage';
 import {useLocation} from "react-router-dom";
 import { AxiosInstance } from 'axios';
 import {useLevel} from '../hooks/useLevel';
 import useAuth from '../hooks/useAuth';
-import useImages from '../hooks/useImages';
-import useModalRef from '../hooks/useModalRef';
-import useStageConfig from '../hooks/useStageConfig';
+import useImages from '../features/stage/hooks/useImages';
+import useModalRef from '../features/modal/useModalRef';
+import useStageConfig from '../features/stage/hooks/useStageConfig';
 import { Level, LevelInfo, UserLevelInfo } from '../Interfaces';
 interface LocationState {userLevelInfo: UserLevelInfo};
 interface CustomStageProps {axiosPrivate: AxiosInstance}
@@ -91,7 +90,7 @@ const CustomStage: FC<CustomStageProps> = ({axiosPrivate}) => {
   }
   
   return (
-    <Stage level={level} clearCallback={()=>{}}>
+    <Stage mode={Mode.Custom} level={level} onClear={()=>{}}>
       <StageButtonGroup 
         gridHeight={levelState.height} 
         gridWidth={levelState.width} 

@@ -1,29 +1,29 @@
 import {FC} from 'react';
-import Stage from '../components/stage/Stage';
-import StageButtonGroup from '../components/stage/StageButtonGroup';
-import {BuiltInLevels} from '../Interfaces';
+import useImage from 'use-image';
 import {useLocation} from "react-router-dom";
-import useImages from '../hooks/useImages';
-import useModalRef from '../hooks/useModalRef';
+import {Stage, StageButtonGroup, Mode} from '@features/stage';
+import useModalRef from '@features/modal';
+import BulbImg from '@images/icons/bulb.svg';
+import RestartImg from '@images/icons/restart.svg';
+import {BuiltInLevels} from '@features/level';
 interface LocationState {difficulty: Difficulty; levelIdx: number};
 interface DefaultStageProps {levels: BuiltInLevels};
 const DefaultStage: FC<DefaultStageProps> = ({levels}) => {
   const {state} = useLocation();
   const {difficulty, levelIdx} = state as LocationState || {difficulty: 'easy', levelIdx: 0};
   const level = levels[difficulty][levelIdx];
-  const [levelState, mirrorActions, setTargetClear, setLevelClear, customizationTools] = level;
+  const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
 
-  const {restartImg, bulbImg} = useImages()?.StageButtonImages || {};
+
   const {levelClearModalRef} = useModalRef();
-  const clearCallback = () => {
-    if(!levelState.clear){
-      setLevelClear(true);
-      levelClearModalRef.current.open(mirrorActions.resetMirrors, difficulty, levelIdx, 3);
-    }
+  const onClear = () => {
+    !levelState.clear && levelClearModalRef.current.open(mirrorActions.resetMirrors, difficulty, levelIdx, 3);
   }
-  
+
+  const [restartImg] = useImage(RestartImg);
+  const [bulbImg] = useImage(BulbImg);
   return (
-    <Stage level={level} clearCallback={clearCallback}>
+    <Stage mode={Mode.BuiltIn} level={level} onClear={onClear}>
       <StageButtonGroup 
         gridHeight={levelState.height} 
         gridWidth={levelState.width} 

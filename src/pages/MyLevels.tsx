@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import {UserLevelInfo} from '../Interfaces';
 import useAuth from '../hooks/useAuth';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
-import useModalRef from '../hooks/useModalRef';
+import useModalRef from '../features/modal/useModalRef';
 
 const myLevelsShape = {height: 2, width: 4};
 const maxLevelNumber = myLevelsShape.height * myLevelsShape.width;
@@ -89,7 +89,7 @@ const MyLevels: FC<MyLevelsProps> = ({}) => {
               <Box height={250} width={250} flexShrink={0} margin={5} border='2px solid pink' boxShadow='0 0 .2rem pink, 0 0 .2rem pink' key={j}>
                   {i*myLevelsShape.width+j < myLevels.length &&
                     <Button component={Link} to='/custom' state={{userLevelInfo: myLevels[i*myLevelsShape.width+j]}} sx={styles.btn}>
-                        <StageThumbnail height={myLevels[i*myLevelsShape.width+j].height} width={myLevels[i*myLevelsShape.width+j].width} lasers={myLevels[i*myLevelsShape.width+j].lasers} targets={myLevels[i*myLevelsShape.width+j].targets}/>
+                        <StageThumbnail/>
                     </Button>
                   }
                   {i*myLevelsShape.width+j === myLevels.length &&
