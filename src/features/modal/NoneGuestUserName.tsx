@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {useState, useEffect, useContext, FC} from 'react';
-import ModalFrame from './ModalFrame';
+import ModalFrame from '../ui/box/ModalBox';
 import ModalInput from './ModalInput';
-import ModalButton from './ModalButton';
-import SerparationLine from './SerparationLine';
+import ModalButton from '../ui/button/ModalButton';
+import SerparationLine from '../ui/separator/SerparationLine';
 import Typography from '@mui/material/Typography';
 import useAuth from '../../hooks/useAuth';
 import {findUser} from '../../api/user';

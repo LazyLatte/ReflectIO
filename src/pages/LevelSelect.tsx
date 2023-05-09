@@ -1,18 +1,14 @@
-import * as React from 'react';
-import {useState, useEffect, FC, Dispatch, SetStateAction} from "react";
-import {DefaultLevels} from '../Interfaces';
-import DifficultyDisplay from '../components/DifficultyDisplay';
-import LevelDisplay from '../components/LevelDisplay';
+import {FC, Dispatch, SetStateAction} from "react";
+import { Difficulty, BuiltInLevelClearRecordsInterface, DifficultyDisplay, LevelDisplay } from '@features/level';
 import Box from '@mui/material/Box';
 import { motion  } from "framer-motion"
 interface LevelSelectProps {
-  difficulty: string;
-  setDifficulty: Dispatch<SetStateAction<string>>;
-  levels: DefaultLevels;
+  difficulty: Difficulty;
+  setDifficulty: Dispatch<SetStateAction<Difficulty>>;
+  clearRecords: BuiltInLevelClearRecordsInterface;
 }
 
-const LevelSelect: FC<LevelSelectProps> = ({difficulty, setDifficulty, levels}) => {  
-  
+const LevelSelect: FC<LevelSelectProps> = ({difficulty, setDifficulty, clearRecords}) => {  
   return (
     <motion.div
       initial={{opacity: 0}}
@@ -22,7 +18,7 @@ const LevelSelect: FC<LevelSelectProps> = ({difficulty, setDifficulty, levels}) 
     >
       <Box position='absolute' display='flex' flexDirection='column' flex={1} justifyContent='flex-start' alignItems='center' width='100%' >
         <DifficultyDisplay difficulty={difficulty} setDifficulty={setDifficulty}/>
-        <LevelDisplay difficulty={difficulty} levels={levels}/>
+        <LevelDisplay difficulty={difficulty} clearRecords={clearRecords}/>
       </Box>
     </motion.div>
   );

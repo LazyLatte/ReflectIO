@@ -4,9 +4,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import LevelInfoCard from '../components/LevelInfoCard';
+import {LevelInfoCard, UserLevelInfo} from '@features/level';
 import {getLevelByID} from '../api/level';
-import { UserLevelInfo } from '../Interfaces';
 import UuidEncoder from 'uuid-encoder';
 const encoder = new UuidEncoder('base64url');
 //2ECbKQ9Ff4Fuer5n7KvhJo

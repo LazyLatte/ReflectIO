@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import { Group, Rect } from 'react-konva';
 import {colorMap, mirrorNormalVectorToDegree} from '../gameHelpers';
-
 import {useStageConfig} from '../hooks';
 import {ObjectType, CellRay} from '../interfaces';
 interface CellProps {

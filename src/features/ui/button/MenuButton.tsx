@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {FC, ReactNode} from 'react';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';

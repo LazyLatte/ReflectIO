@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {forwardRef, useImperativeHandle, useState, useRef, useEffect, useContext, FC} from 'react';
 import { motion, AnimatePresence  } from "framer-motion"
-import BackDrop from './BackDrop';
+import BackDrop from '../ui/backdrop/BackDrop';
 import Typography from '@mui/material/Typography';
-import ModalFrame from './ModalFrame';
-import ModalButton from './ModalButton';
-import SerparationLine from './SerparationLine';
+import ModalFrame from '../ui/box/ModalBox';
+import ModalButton from '../ui/button/ModalButton';
+import SerparationLine from '../ui/separator/SerparationLine';
 
 
 const appear = {

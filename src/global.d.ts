@@ -1,4 +1,4 @@
-type Difficulty = 'easy' | 'normal' | 'hard';
+interface Size2D {height: number, width: number}
 interface Provider {
     children: import('react').ReactNode;
 }

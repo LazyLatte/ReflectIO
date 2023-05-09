@@ -1,4 +1,4 @@
-import {useState, useEffect, FC, ReactNode} from 'react';
+import {useState, useEffect, useLayoutEffect, FC, ReactNode} from 'react';
 import {Stage as Wrap, Layer} from 'react-konva';
 import { motion } from "framer-motion"
 import Grid from './Grid';
@@ -30,8 +30,8 @@ const Stage: FC<StageProps> = ({mode, level, onClear, children}) => {
   const boardOrigin: Vector2D = {x: (window.innerWidth-gridWidth*cellWidth) >> 1, y: 56};
 
   const isEmptyCell = (pos: Vector2D): boolean => (gridRay.grid[pos.y][pos.x].object.type === ObjectType.None);
-  useEffect(()=>{
-    mirrorActions.updateMirrorResetPos(shouldRearrange);
+  useLayoutEffect(()=>{
+    mirrorActions.updateMirrorsResetPos(shouldRearrange);
   }, [shouldRearrange]);
   useEffect(()=>{
     let isClear = true;

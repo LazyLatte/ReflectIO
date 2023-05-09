@@ -1,4 +1,4 @@
-import { FC, createRef, useEffect } from 'react';
+import { FC, createRef, useEffect, useLayoutEffect } from 'react';
 import { Group, Image } from 'react-konva';
 import Konva from 'konva';
 import {useStageConfig, useImages} from '../hooks';
@@ -15,10 +15,10 @@ const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isEmp
   const { type, idx, pos, resetPos, deg } = mirror;
   const {rotateMirror, updateMirrorPos, deleteMirror} = mirrorActions;
 
-  const {cellWidth} = useStageConfig();
+  const {cellWidth, shouldRearrange} = useStageConfig();
 
   const mirrorRef = createRef<Konva.Group>();
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (pos.x >= validRange.x || pos.y >= validRange.y) {
       updateMirrorPos(type, idx, resetPos);
     }
@@ -54,7 +54,7 @@ const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isEmp
           rotateMirror(type, idx, 45);
         }else if(e.evt.button === 2){
           if(mode === Mode.Custom){
-            deleteMirror(type, idx);
+            deleteMirror(type, idx, shouldRearrange);
           }else{
             rotateMirror(type, idx, 315);
           }

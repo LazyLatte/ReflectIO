@@ -1,4 +1,13 @@
-import {LevelInfo, Level} from '@features/stage';
+import {Laser, Target} from '@features/stage';
+
+export interface LevelInfo {
+    height: number;
+    width: number;
+    lasers: Laser[];
+    targets: Target[];
+    reflectorNum: number;
+    lensNum: number;
+  }
 
 export type UserLevelInfo = LevelInfo & {
     id: string;
@@ -10,11 +19,5 @@ export type UserLevelInfo = LevelInfo & {
     timestamp: string;
     personal_best?: number | null;
     isFavorite?: number;
-}
-  
-export interface BuiltInLevels {
-    easy: Level[];
-    normal: Level[];
-    hard: Level[];
 }
   

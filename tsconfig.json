@@ -24,8 +24,10 @@
     "paths": {
       "@features/*": ["src/features/*"],
       "@contexts/*": ["src/contexts/*"],
-      "@images/*": ["src/images/*"],
-    }
+      "@images/*": ["src/assets/images/*"],
+    },
+
+    "forceConsistentCasingInFileNames": false,
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

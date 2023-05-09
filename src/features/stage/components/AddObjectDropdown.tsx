@@ -2,7 +2,7 @@ import { FC, Dispatch, SetStateAction, useState } from 'react';
 import { Group, Rect, Text } from 'react-konva';
 import ObjectAlternativesDropdown from './ObjectAlternativesDropdown';
 import {useStageConfig} from '../hooks';
-import { Mode, Vector2D, Size2D, AddObjects} from '../interfaces';
+import { Mode, Vector2D, AddObjects} from '../interfaces';
 interface AddObjectDropdownProps {
   mode: Mode;
   dropdownCellPos: Vector2D | null;

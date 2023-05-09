@@ -1,9 +1,9 @@
 import {FC, useRef, createContext} from 'react';
-import WarningModal from '../components/modal/WarningModal';
-import AccountModal from '../components/modal/AccountModal';
-import UploadConfirmModal from '../components/modal/UploadConfirmModal';
-import ShouldSignInModal from '../components/modal/ShouldSignInModal';
-import {LevelClearModal, PublicLevelClearModal} from '@features/level/modals/level-clear';
+import WarningModal from '@features/modal/WarningModal';
+import AccountModal from '@features/authentication/components/AccountModal';
+import UploadConfirmModal from '@features/modal/UploadConfirmModal';
+import ShouldSignInModal from '@features/authentication/components/ShouldSignInModal';
+import {PublicLevelClearModal} from '@features/level/modals/level-clear';
 
 
 type ModalRefContextInterface = any;
@@ -15,16 +15,14 @@ export const ModalRefProvider: FC<Provider> = ({children}) => {
   const warningModalRef = useRef(null);
   const uploadConfirmModalRef = useRef(null);
   const shouldSignInModalRef = useRef(null);
-  const levelClearModalRef = useRef(null);
   const publicLevelClearModalRef = useRef(null);
   return (
-    <ModalRefContext.Provider value={{loginRef, warningModalRef, uploadConfirmModalRef, shouldSignInModalRef, levelClearModalRef, publicLevelClearModalRef}}>
+    <ModalRefContext.Provider value={{loginRef, warningModalRef, uploadConfirmModalRef, shouldSignInModalRef, publicLevelClearModalRef}}>
       {children}
       <AccountModal ref={loginRef}/>
       <WarningModal ref={warningModalRef}/>
       <UploadConfirmModal ref={uploadConfirmModalRef}/>
       <ShouldSignInModal ref={shouldSignInModalRef}/>
-      <LevelClearModal ref={levelClearModalRef}/>
       <PublicLevelClearModal ref={publicLevelClearModalRef}/>
     </ModalRefContext.Provider>
   )

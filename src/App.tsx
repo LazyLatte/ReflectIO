@@ -1,15 +1,13 @@
 import { useRef, useEffect, useState} from "react";
-import {useLevel} from "./hooks/useLevel";
-import TopBar from './components/TopBar';
-import BackButton from './components/BackButton';
+import { Difficulty, BuiltInLevelClearRecordsInterface, getClearRecords } from "@features/level";
+import TopBar from '@features/layout';
+import { BackButton } from "@features/ui";
 
 
 import Layout from './pages/Layout';
 import Home from "./pages/Home";
 import MoreLevels from './pages/MoreLevels';
-import CustomStage from "./pages/CustomStage";
-import DefaultStage from './pages/DefaultStage';
-import PublicStage from './pages/PublicStage';
+import Play from "./pages/Play";
 import MyLevels from "./pages/MyLevels";
 import GlobalLevels from "./pages/GlobalLevels";
 import Search from "./pages/Search";
@@ -20,35 +18,36 @@ import AboutUs from "./pages/AboutUs";
 
 
 import { Route, Routes, useLocation} from "react-router-dom";
-import {AllLevels} from './gameHelpers';
-import {BuiltInLevels} from './Interfaces';
 import { AnimatePresence  } from "framer-motion"
-import useAxiosPrivate from './hooks/useAxiosPrivate';
-import useStageConfig from './features/stage/hooks/useStageConfig';
+import {Mode} from './features/stage';
 import useModalRef from './features/modal/useModalRef';
 import useRefreshToken from './hooks/useRefreshToken';
+import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import './style.css';
 
 
 
 export default function App() {
-  const {shouldRearrange} = useStageConfig();
-  const [difficulty, setDifficulty] = useState<string>('easy');
+  
   const location = useLocation();
+  const [difficulty, setDifficulty] = useState<Difficulty>('easy');
+  const [builtInLevelClearRecords, setBuiltInLevelClearRecords] = useState<BuiltInLevelClearRecordsInterface>({
+    easy: 0,
+    normal: 0,
+    hard: 0
+  })
 
-  const builtInLevels: BuiltInLevels = {
-    'easy': AllLevels['easy'].map(level => useLevel(level, shouldRearrange, false)),
-    'normal': AllLevels['normal'].map(level => useLevel(level, shouldRearrange, false)),
-    'hard': AllLevels['hard'].map(level => useLevel(level,shouldRearrange, false))
-  }
 
 
   const {loginRef, warningModalRef, uploadConfirmModalRef, shouldSignInModalRef, levelClearModalRef, publicLevelClearModalRef} = useModalRef();
   const refresh = useRefreshToken();
+  const axiosPrivate = useAxiosPrivate();
   useEffect(()=>{
     const initRequest = async () => {
       try{
         const accessToken = await refresh();
+        const data = await getClearRecords(axiosPrivate);
+        setBuiltInLevelClearRecords(data);
       }catch(err){
         //publicLevelClearModalRef.current.open(()=>{}, 'Personal best : 5 >> 4', 3);
         loginRef.current.open();
@@ -57,10 +56,9 @@ export default function App() {
     initRequest();
    
   }, [])
-  const axiosPrivate = useAxiosPrivate();
   return (
     <div id="app">
-      <TopBar levels={builtInLevels}/>
+      <TopBar/>
       <BackButton/>
       
       <div id='main'>
@@ -72,14 +70,14 @@ export default function App() {
               <Route path="instructions" element={<Instructions/>} />
               <Route path="about" element={<AboutUs/>} />
               <Route path="play">
-                <Route index={true}  element={<LevelSelect difficulty={difficulty} setDifficulty={setDifficulty} levels={builtInLevels}/>} />
-                <Route path="level/:id" element={<PublicStage axiosPrivate={axiosPrivate}/>}/>
-                <Route path=":difficulty/:id" element={<DefaultStage levels={builtInLevels}/>}/>
+                <Route index={true}  element={<LevelSelect difficulty={difficulty} setDifficulty={setDifficulty} clearRecords={builtInLevelClearRecords}/>} />
+                <Route path="level/:id" element={<Play mode={Mode.Public} />}/>
+                <Route path=":difficulty/:id" element={<Play mode={Mode.BuiltIn}/>}/>
               </Route>
 
               <Route path="explore" element={<GlobalLevels/>}/>
               <Route path="mylevels" element={<MyLevels/>}/>
-              <Route path="custom" element={<CustomStage axiosPrivate={axiosPrivate}/>} />
+              <Route path="custom" element={<Play mode={Mode.Custom} />} />
               <Route path="search" element={<Search/>}/>
             </Route>
           </Routes>

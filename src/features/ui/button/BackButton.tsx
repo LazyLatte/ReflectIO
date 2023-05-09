@@ -1,6 +1,6 @@
 import {useLocation, useNavigate} from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import Button from '@mui/material/Button';
-import { motion, AnimatePresence } from "framer-motion"
 const BackButton = ({}) => {
   const location = useLocation();
   const navigate = useNavigate();

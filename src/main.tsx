@@ -5,6 +5,7 @@ import {ImagesProvider} from './contexts/ImagesProvider';
 import {StageConfigProvider} from './contexts/StageConfigProvider';
 import {ModalRefProvider} from './contexts/ModalRefProvider';
 import {ColorModeProvider} from './contexts/ColorModeProvider';
+import { AxiosPrivateProvider } from '@contexts/AxiosPrivateProvider';
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 
 import App from './App';
@@ -16,17 +17,19 @@ root.render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <ColorModeProvider>
-          <ImagesProvider>
-            <StageConfigProvider>
-              <ModalRefProvider>
-                <Routes>
-                  <Route path='/*' element={<App />} />
-                </Routes>
-              </ModalRefProvider>
-            </StageConfigProvider>
-          </ImagesProvider>
-        </ColorModeProvider>
+        <AxiosPrivateProvider>
+          <ColorModeProvider>
+            <ImagesProvider>
+              <StageConfigProvider>
+                <ModalRefProvider>
+                  <Routes>
+                    <Route path='/*' element={<App />} />
+                  </Routes>
+                </ModalRefProvider>
+              </StageConfigProvider>
+            </ImagesProvider>
+          </ColorModeProvider>
+        </AxiosPrivateProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>

@@ -4,7 +4,7 @@ import { motion, AnimatePresence  } from "framer-motion"
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import BackDrop from '../../../modal/BackDrop';
+import BackDrop from '../../../ui/backdrop/BackDrop';
 
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ForwardIcon from '@mui/icons-material/Forward';

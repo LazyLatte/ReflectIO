@@ -15,8 +15,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import useAuth from '../../hooks/useAuth';
 import useModalRef from '../modal/useModalRef';
-import { BuiltInLevels, UserLevelInfo } from '../../Interfaces';
-interface TopBarProps {levels: BuiltInLevels};
+import { BuiltInLevelInfo, UserLevelInfo } from '@features/level';
+
 const styles = {
   pfpBtn: {
     height: '50px',
@@ -46,28 +46,28 @@ const path_name_pair = {
   'instructions': 'INSTRUTIONS',
   'mylevels': 'MY LEVELS'
 }
-const getDisplayText = (paths: string[], levels: BuiltInLevels, userLevelInfo: UserLevelInfo) => {
+const getDisplayText = (paths: string[], userLevelInfo: UserLevelInfo) => {
   if(paths[1]==='') return 'HOME';
-  if(paths.length === 2) return path_name_pair[paths[1]];
+  if(paths.length === 2) return path_name_pair[paths[1] as keyof typeof path_name_pair];
   if(paths.length === 3) return '';
   if(paths.length === 4 && paths[1] === 'play'){
-    if(paths[2] === 'easy' || paths[2] === 'normal' || paths[2] === 'hard' && Number(paths[3]) <= levels[paths[2]].length){
+    if(paths[2] === 'easy' || paths[2] === 'normal' || paths[2] === 'hard' && Number(paths[3]) <= BuiltInLevelInfo[paths[2]].length){
       return paths[2].toUpperCase() + '-' + paths[3];
     }
     if(paths[2] === 'level'){
       const worldRecord = userLevelInfo?.record;
       const personal_best = userLevelInfo?.personal_best;
-      return [`World Record : ${worldRecord >= 0 ? worldRecord : '--'}`,  `Personal Best : ${Number.isInteger(personal_best) && personal_best >= 0 ? personal_best : '--'}`].join('   ');
+      return [`World Record : ${worldRecord >= 0 ? worldRecord : '--'}`,  `Personal Best : ${Number.isInteger(personal_best) && personal_best! >= 0 ? personal_best : '--'}`].join('   ');
     }
   }
   return '';
 }
-const TopBar: FC<TopBarProps> = ({levels}) => {
+const TopBar = () => {
   const {auth} = useAuth()!;
   const navigate = useNavigate();
   const location = useLocation();
   const paths = location.pathname.split('/');
-  const displayText = getDisplayText(paths, levels, location?.state?.userLevelInfo);
+  const displayText = getDisplayText(paths, location?.state?.userLevelInfo);
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);

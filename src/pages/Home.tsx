@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import { motion } from "framer-motion";
-import MenuButton from '../components/MenuButton';
+import {MenuButton} from '@features/ui';
 interface HomeProps {};
 
 const Home: FC<HomeProps> = () => {

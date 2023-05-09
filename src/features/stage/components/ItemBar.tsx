@@ -2,7 +2,7 @@ import {FC, memo} from 'react';
 import { Group, Rect} from 'react-konva';
 import {useStageConfig} from '../hooks';
 import {ITEMS_BAR_HEIGHT, ITEMS_BAR_WIDTH} from '../gameHelpers';
-import {Vector2D, Size2D} from '../interfaces';
+import {Vector2D} from '../interfaces';
 
 interface ItemBarProps {
   gridHeight: number;

@@ -1,12 +1,10 @@
-import * as React from 'react';
-import {useState, useEffect, useCallback, FC} from 'react'
-import {StageThumbnail} from '../components/StageThumbnail';
+import {useState, useEffect, FC} from 'react'
 import {Link, useNavigate} from "react-router-dom";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { motion } from "framer-motion";
-import {UserLevelInfo} from '../Interfaces';
+import {UserLevelInfo} from '@features/level';
 import useAuth from '../hooks/useAuth';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import useModalRef from '../features/modal/useModalRef';
@@ -89,7 +87,7 @@ const MyLevels: FC<MyLevelsProps> = ({}) => {
               <Box height={250} width={250} flexShrink={0} margin={5} border='2px solid pink' boxShadow='0 0 .2rem pink, 0 0 .2rem pink' key={j}>
                   {i*myLevelsShape.width+j < myLevels.length &&
                     <Button component={Link} to='/custom' state={{userLevelInfo: myLevels[i*myLevelsShape.width+j]}} sx={styles.btn}>
-                        <StageThumbnail/>
+                        A
                     </Button>
                   }
                   {i*myLevelsShape.width+j === myLevels.length &&

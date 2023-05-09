@@ -1,21 +1,18 @@
-import * as React from 'react';
 import {useState, useEffect, FC} from 'react'
 import Box from '@mui/material/Box';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import LevelInfoCard from '../components/LevelInfoCard';
-import OrderOptionsBar from '../components/OrderOptionsBar';
-import SearchButton from '../components/SearchButton';
-import ScrollTopButton from '../components/ScrollTopButton';
+
+import { OrderOptionsBar, SearchButton, ScrollTopButton } from '@features/ui';
 import {listGlobalLevels} from '../api/level';
 
 import { motion } from "framer-motion"
-import {UserLevelInfo} from '../Interfaces';
+import {LevelInfoCard, UserLevelInfo} from '@features/level';
 import useAuth from '../hooks/useAuth';
 import useModalRef from '../features/modal/useModalRef';
 const orderByOptions = ['clears', 'likes', 'timestamp'];
 interface GlobalLevelsProps {};
 const GlobalLevels: FC<GlobalLevelsProps> = ({}) => {
-  const {auth} = useAuth();
+  const {auth} = useAuth()!;
 
   //const {shouldSignInModalRef} = useModalRef();
   const [value, setValue] = useState<number>(0);
