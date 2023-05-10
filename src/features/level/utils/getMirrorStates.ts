@@ -1,7 +1,7 @@
-import { Degree, Vector2D, LevelState } from "@features/stage";
+import { Vector2D, LevelState } from "@features/stage";
 interface mirrorState {
     pos: Vector2D;
-    deg: Degree;
+    deg: number;
 }
 export const getMirrorStates = (levelState: LevelState): {
     reflectors: mirrorState[];

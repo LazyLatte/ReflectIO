@@ -3,21 +3,18 @@ import useImage from 'use-image';
 import {useLocation} from "react-router-dom";
 import {Stage, StageButtonGroup, Mode} from '@features/stage';
 import {Difficulty, BuiltInLevelInfo, useLevel} from '@features/level';
-import {useAuth, useAxiosPrivate} from '@features/authentication';
 import {usePatchClears} from '../api/use-patch-clears';
 import LevelClearModal, {LevelClearModalHandle} from './LevelClearModal';
 import BulbImg from '@images/icons/bulb.svg';
 import RestartImg from '@images/icons/restart.svg';
 
 
-interface LocationState {difficulty: Difficulty, levelIdx: number};
+interface LocationState {difficulty: Difficulty, levelIdx: number, clear: boolean};
 const BuiltInLevel = () => {
-  const {auth} = useAuth()!;
- 
   const {state} = useLocation();
-  const {difficulty, levelIdx} = state as LocationState || {difficulty: 'easy', levelIdx: 0};
+  const {difficulty, levelIdx, clear} = state as LocationState || {difficulty: 'easy', levelIdx: 0, clear: false};
   const levelInfo = BuiltInLevelInfo[difficulty][levelIdx];
-  const level = useLevel(levelInfo);
+  const level = useLevel(levelInfo, clear);
   const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
 
 
@@ -26,9 +23,7 @@ const BuiltInLevel = () => {
   const onClear = async () => {
     if(!levelState.clear){
       levelClearModalRef.current?.open(mirrorActions.resetMirrors, difficulty, levelIdx, 3);
-      if(auth?.accessToken){
-        patchClearsMutation.mutate();
-      }
+      patchClearsMutation.mutate();
     }
   }
 

@@ -105,7 +105,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
                     <Button 
                       component={Link}
                       to={`./${difficulty}/${i*shape.width+j+1}`} 
-                      state={{difficulty, levelIdx: i*shape.width+j}}
+                      state={{difficulty, levelIdx: i*shape.width+j, clear: clears![difficulty] & (1 << (i*shape.width+j))}}
                       variant='outlined'
                       sx={{
                         ...styles.levelBtn, 
