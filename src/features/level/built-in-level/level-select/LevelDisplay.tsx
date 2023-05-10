@@ -1,12 +1,12 @@
 import {useState, useEffect, FC} from "react";
-import {Difficulty, BuiltInLevelClearRecordsInterface, BuiltInLevelInfo} from '@features/level';
+import {Difficulty, BuiltInLevelInfo} from '@features/level';
 import {Link} from "react-router-dom";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import StarWhite from '@images/icons/star-white.svg';
 import StarYellow from '@images/icons/star-yellow.svg';
 import { motion, AnimatePresence } from "framer-motion"
-
+import { useGetClears } from "../api/use-get-clears";
 
 const theme = {
   "frame": {
@@ -43,9 +43,9 @@ const styles = {
 }
 interface LevelDisplayProps {
   difficulty: Difficulty;
-  clearRecords: BuiltInLevelClearRecordsInterface;
 }
-export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty, clearRecords}) => {  
+export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => { 
+  const {data: clears, isLoading, isError} = useGetClears();
   const [shape, setShape] = useState<Size2D>(window.innerWidth >= 1430 ? {height: 3, width: 5} : {height: 5, width: 3});
   const reshapeLevelArray: null[][] = Array.from(Array(shape.height).fill(
     Array(shape.width).fill(null)
@@ -63,8 +63,8 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty, clearRecords}) 
     window.addEventListener('resize', handleResize);
  
   }, []);
+ 
   return (
-
     <motion.div 
       animate={{boxShadow: `0 0 .2rem #fff, 0 0 .2rem #fff, 0 0 2rem ${frameColor}, 0 0 0.8rem ${frameColor}, 0 0 2rem ${frameColor}, inset 0 0 1.3rem ${frameColor}`}}
       transition= { {duration: 0.7 }}
@@ -114,7 +114,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty, clearRecords}) 
                       }}
                     >
                       <img 
-                        src={(clearRecords[difficulty] & (1 << i*shape.width+j)) ? StarYellow : StarWhite}
+                        src={(clears![difficulty] & (1 << (i*shape.width+j))) ? StarYellow : StarWhite}
                         style={{
                           position: 'absolute',
                           bottom: '4rem',

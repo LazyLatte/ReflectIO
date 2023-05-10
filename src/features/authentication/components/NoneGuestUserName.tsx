@@ -1,23 +1,22 @@
-import {useState, useEffect, FC, MouseEvent, Dispatch, SetStateAction} from 'react';
+import {useState, useEffect, FC, Dispatch, SetStateAction, MouseEvent} from 'react';
+import {ModalBox, ModalInput, ModalButton, Separator} from '@features/ui';
 import Typography from '@mui/material/Typography';
-import { ModalBox, ModalButton, ModalInput, Separator } from '@features/ui';
-import {useAuth, findUser} from '@features/authentication';
+import {findUser} from '@features/authentication';
 import { isAxiosError } from 'axios';
-interface UserNameProps {
+interface NoneGuestUserNameProps {
   username: string;
   setUsername: Dispatch<SetStateAction<string>>;
   setPage: Dispatch<SetStateAction<string>>;
-  closeModal: () => void;
+  isGuest: boolean;
 }
-
 const USER_REGEX = /^[A-z][A-z0-9-_]{2,14}$/;
-const UserName: FC<UserNameProps> = ({username, setUsername, setPage, closeModal}) => {
-  const {setAuth} = useAuth()!;
-  const [validName, setValidName] = useState(false);
-  const [errMsg, setErrMsg] = useState('');
+const NoneGuestUserName: FC<NoneGuestUserNameProps> = ({username, setUsername, setPage, isGuest}) => {
+
+  const [validName, setValidName] = useState<boolean>(false);
+  const [errMsg, setErrMsg] = useState<string>('');
 
   useEffect(() => {
-    setValidName(USER_REGEX.test(username) || username==='');
+    setValidName(USER_REGEX.test(username)  || username==='');
   }, [username]);
 
   useEffect(() => {
@@ -25,23 +24,20 @@ const UserName: FC<UserNameProps> = ({username, setUsername, setPage, closeModal
   }, [username, validName]);
 
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) =>{
+    e.stopPropagation();
     e.preventDefault();
     if(username === ''){
-      const guest_name = "GUEST-" + Math.floor((Math.random()*10000)).toString();
-      setAuth({name: guest_name, accessToken: null})
-      setUsername(guest_name);
-      setTimeout(closeModal, 500);
+      setErrMsg('Username cannot be empty!')
     }else{
       try{
         const userExisted = await findUser(username);
         setPage(userExisted?'login':'register');
-        
       }catch(err){
         if(isAxiosError(err)){
           if(err.response){
             switch(err.response.status){
               case 400:
-                setErrMsg('Name and password are required!');
+                setErrMsg('Name is required!');
                 break;
               default:
                 console.error(err)
@@ -54,29 +50,28 @@ const UserName: FC<UserNameProps> = ({username, setUsername, setPage, closeModal
         }else{
           console.error(err);
         }
+
       }
     }
   }
 
   return (
-      <ModalBox height={300} width={700}>
-        <Typography variant='caption' >WELCOME TO REFLECT.IO</Typography>
+    <ModalBox height={300} width={700}>
+        <Typography variant='caption'>{isGuest ? 'SIGN IN TO HAVE YOUR OWN LEVEL!' : 'TOKEN EXPIRED! PLEASE LOGIN AGAIN'}</Typography>
         <Separator/>
-        <Typography variant='h6' sx={{marginBottom: '10px'}}>ENTER A USERNAME, OR LEAVE IT BLANK TO PLAY AS A GUEST.</Typography>
         <ModalInput
           type="text"
           id="username"
           placeholder='USERNAME'
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          autoFocus={true}
-          required={false}
+          autoFocus
+          required
           errMsg={errMsg}
         />
         <ModalButton width='100%' disabled={!validName} onClick={handleSubmit}>JOIN</ModalButton>
-      </ModalBox>
+    </ModalBox>
   )
 }
 
-export default UserName;
-
+export default NoneGuestUserName;

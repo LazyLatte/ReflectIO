@@ -1,10 +1,9 @@
-import * as React from 'react';
-import {forwardRef, useImperativeHandle, useState, useRef, useEffect, useContext, FC} from 'react';
+import {forwardRef, useImperativeHandle, useState, ForwardRefRenderFunction} from 'react';
 import { motion, AnimatePresence  } from "framer-motion"
-import NoneGuestUserName from '../../modal/NoneGuestUserName';
+import NoneGuestUserName from './NoneGuestUserName';
 import Login from './Login';
 import Register from './Register';
-import BackDrop from '../../ui/backdrop/BackDrop';
+import {BackDrop} from '@features/ui';
 
 
 const appear = {
@@ -18,11 +17,15 @@ const appear = {
     scale: 0
   }
 }
-const ShouldSignInModal = (props, ref) => {
-  const [username, setUsername] = useState('');
+interface ReLoginModalProps {};
+export interface ReLoginModalHandle {
+  open: (isGuest: boolean) => void;
+}
+const ReLoginModal: ForwardRefRenderFunction<ReLoginModalHandle, ReLoginModalProps> = (props, ref) => {
+  const [username, setUsername] = useState<string>('');
   const [page, setPage] = useState<string>('username'); 
   const [open, setOpen] = useState(false);
-  const [isGuest, setIsGuest] = useState(true);
+  const [isGuest, setIsGuest] = useState<boolean>(true);
   useImperativeHandle(ref, ()=>({
     open: (isGuest) => {
       setOpen(true);
@@ -35,9 +38,9 @@ const ShouldSignInModal = (props, ref) => {
   return (
     <AnimatePresence>
       {open &&
-        <BackDrop handleOnClick={closeModal}>
+        <BackDrop onClick={closeModal}>
           <motion.div
-            variant={appear}
+            variants={appear}
             initial='hidden'
             animate='visible'
             exit='exit'
@@ -54,4 +57,4 @@ const ShouldSignInModal = (props, ref) => {
   );
 }
 
-export default forwardRef(ShouldSignInModal);
+export default forwardRef(ReLoginModal);

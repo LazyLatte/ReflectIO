@@ -1,4 +1,4 @@
-import {useState, FC, Dispatch, SetStateAction, memo} from 'react';
+import {useState, FC, memo} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -8,8 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import { motion } from "framer-motion"
 import {Link} from "react-router-dom";
 import {StageThumbnail} from './StageThumbnail';
-import {UserLevelInfo} from '../interfaces';
-import {MAX_MIRROR_NUM} from '../utils';
+import {UserLevelInfo, MAX_MIRROR_NUM} from '@features/level';
 import moment from 'moment';
 import UuidEncoder from 'uuid-encoder';
 const encoder = new UuidEncoder('base64url');

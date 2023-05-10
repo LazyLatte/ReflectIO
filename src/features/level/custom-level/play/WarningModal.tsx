@@ -1,12 +1,7 @@
-import * as React from 'react';
-import {forwardRef, useImperativeHandle, useState, useRef, useEffect, useContext, FC} from 'react';
+import {forwardRef, useImperativeHandle, useState, ForwardRefRenderFunction} from 'react';
 import { motion, AnimatePresence  } from "framer-motion"
-import BackDrop from '../ui/backdrop/BackDrop';
+import {BackDrop, ModalBox, ModalButton, Separator} from '@features/ui';
 import Typography from '@mui/material/Typography';
-import ModalFrame from '../ui/box/ModalBox';
-import ModalButton from '../ui/button/ModalButton';
-import SerparationLine from '../ui/separator/SerparationLine';
-
 
 const appear = {
   hidden: {
@@ -19,9 +14,13 @@ const appear = {
     scale: 0
   }
 }
-const WarningModal = (props, ref) => {
-  const [errMsg, setErrMsg] = useState('');
-  const [open, setOpen] = useState(false);
+interface WarningModalProps {};
+export interface WarningModalHandle {
+  open: (msg: string) => void;
+}
+const WarningModal: ForwardRefRenderFunction<WarningModalHandle, WarningModalProps> = (props, ref) => {
+  const [errMsg, setErrMsg] = useState<string>('');
+  const [open, setOpen] = useState<boolean>(false);
   
   useImperativeHandle(ref, ()=>({
     open: (msg) => {
@@ -35,20 +34,20 @@ const WarningModal = (props, ref) => {
   return (
     <AnimatePresence>
       {open &&
-        <BackDrop handleOnClick={closeModal}>
+        <BackDrop onClick={closeModal}>
           <motion.div
             className='warning_modal'
-            variant={appear}
+            variants={appear}
             initial='hidden'
             animate='visible'
             exit='exit'
             onClick={(e)=>e.stopPropagation()}
           >
-            <ModalFrame height={250} width={600}>
+            <ModalBox height={250} width={600}>
               <Typography variant='caption' sx={{textAlign: 'center'}}>{errMsg}</Typography>
-              <SerparationLine/>
-              <ModalButton width='100%' onClick={closeModal}>OK</ModalButton>
-            </ModalFrame>
+              <Separator/>
+              <ModalButton width='100%' disabled={false} onClick={closeModal}>OK</ModalButton>
+            </ModalBox>
           </motion.div>
         </BackDrop>
       }

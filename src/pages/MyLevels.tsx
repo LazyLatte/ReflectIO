@@ -5,8 +5,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { motion } from "framer-motion";
 import {UserLevelInfo} from '@features/level';
-import useAuth from '../hooks/useAuth';
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import useAuth from '../features/authentication/hooks/useAuth';
+import useAxiosPrivate from '../features/authentication/hooks/useAxiosPrivate';
 import useModalRef from '../features/modal/useModalRef';
 
 const myLevelsShape = {height: 2, width: 4};

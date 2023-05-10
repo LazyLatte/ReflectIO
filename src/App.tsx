@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState} from "react";
-import { Difficulty, BuiltInLevelClearRecordsInterface, getClearRecords } from "@features/level";
+import { Difficulty} from "@features/level";
 import TopBar from '@features/layout';
 import { BackButton } from "@features/ui";
 
@@ -21,8 +21,7 @@ import { Route, Routes, useLocation} from "react-router-dom";
 import { AnimatePresence  } from "framer-motion"
 import {Mode} from './features/stage';
 import useModalRef from './features/modal/useModalRef';
-import useRefreshToken from './hooks/useRefreshToken';
-import useAxiosPrivate from "./hooks/useAxiosPrivate";
+import useRefreshToken from './features/authentication/hooks/useRefreshToken';
 import './style.css';
 
 
@@ -31,23 +30,15 @@ export default function App() {
   
   const location = useLocation();
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
-  const [builtInLevelClearRecords, setBuiltInLevelClearRecords] = useState<BuiltInLevelClearRecordsInterface>({
-    easy: 0,
-    normal: 0,
-    hard: 0
-  })
 
 
 
   const {loginRef, warningModalRef, uploadConfirmModalRef, shouldSignInModalRef, levelClearModalRef, publicLevelClearModalRef} = useModalRef();
   const refresh = useRefreshToken();
-  const axiosPrivate = useAxiosPrivate();
   useEffect(()=>{
     const initRequest = async () => {
       try{
         const accessToken = await refresh();
-        const data = await getClearRecords(axiosPrivate);
-        setBuiltInLevelClearRecords(data);
       }catch(err){
         //publicLevelClearModalRef.current.open(()=>{}, 'Personal best : 5 >> 4', 3);
         loginRef.current.open();
@@ -70,7 +61,7 @@ export default function App() {
               <Route path="instructions" element={<Instructions/>} />
               <Route path="about" element={<AboutUs/>} />
               <Route path="play">
-                <Route index={true}  element={<LevelSelect difficulty={difficulty} setDifficulty={setDifficulty} clearRecords={builtInLevelClearRecords}/>} />
+                <Route index={true}  element={<LevelSelect difficulty={difficulty} setDifficulty={setDifficulty}/>} />
                 <Route path="level/:id" element={<Play mode={Mode.Public} />}/>
                 <Route path=":difficulty/:id" element={<Play mode={Mode.BuiltIn}/>}/>
               </Route>

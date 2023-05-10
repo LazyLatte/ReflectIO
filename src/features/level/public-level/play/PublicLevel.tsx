@@ -3,13 +3,13 @@ import { AxiosInstance, isAxiosError } from 'axios';
 import {useLocation, useNavigate} from "react-router-dom";
 import {Stage, StageButtonGroup, Mode, useStageConfig} from '@features/stage';
 import { LevelInfo, UserLevelInfo, useLevel } from '@features/level';
-import useAuth from '../../../hooks/useAuth';
+import useAuth from '../../../authentication/hooks/useAuth';
 import useImage from 'use-image';
-import useModalRef from '../../modal/useModalRef';
+import useModalRef from '../../../modal/useModalRef';
 import RestartImg from '@images/icons/restart.svg';
 interface LocationState {userLevelInfo: UserLevelInfo};
 interface PublicLevelProps {axiosPrivate: AxiosInstance}
-export const PublicLevel: FC<PublicLevelProps> = ({axiosPrivate}) => {
+const PublicLevel: FC<PublicLevelProps> = ({axiosPrivate}) => {
   const {auth} = useAuth()!;
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -109,4 +109,4 @@ export const PublicLevel: FC<PublicLevelProps> = ({axiosPrivate}) => {
   )
 }
 
-
+export default PublicLevel;

@@ -1,6 +1,6 @@
-import axios from '../api/axios';
+import axios from '@api/axios';
 import useAuth from './useAuth';
-import {Auth} from '../contexts/AuthProvider'
+import {Auth} from '@contexts/AuthProvider'
 const useRefreshToken = () => {
   const {setAuth} = useAuth()!;
 

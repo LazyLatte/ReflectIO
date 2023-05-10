@@ -1,9 +1,9 @@
 import {FC, useRef, createContext} from 'react';
-import WarningModal from '@features/modal/WarningModal';
+import WarningModal from '@features/level/custom-level/play/WarningModal';
 import AccountModal from '@features/authentication/components/AccountModal';
-import UploadConfirmModal from '@features/modal/UploadConfirmModal';
-import ShouldSignInModal from '@features/authentication/components/ShouldSignInModal';
-import {PublicLevelClearModal} from '@features/level/modals/level-clear';
+import UploadConfirmModal from '@features/level/custom-level/play/UploadConfirmModal';
+import ShouldSignInModal from '@features/authentication/components/ReLoginModal';
+import { PublicLevelClearModal } from '@features/level';
 
 
 type ModalRefContextInterface = any;

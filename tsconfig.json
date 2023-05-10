@@ -24,7 +24,9 @@
     "paths": {
       "@features/*": ["src/features/*"],
       "@contexts/*": ["src/contexts/*"],
+      "@api/*": ["src/api/*"],
       "@images/*": ["src/assets/images/*"],
+      
     },
 
     "forceConsistentCasingInFileNames": false,

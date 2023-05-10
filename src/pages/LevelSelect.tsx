@@ -5,10 +5,9 @@ import { motion  } from "framer-motion"
 interface LevelSelectProps {
   difficulty: Difficulty;
   setDifficulty: Dispatch<SetStateAction<Difficulty>>;
-  clearRecords: BuiltInLevelClearRecordsInterface;
 }
 
-const LevelSelect: FC<LevelSelectProps> = ({difficulty, setDifficulty, clearRecords}) => {  
+const LevelSelect: FC<LevelSelectProps> = ({difficulty, setDifficulty}) => {  
   return (
     <motion.div
       initial={{opacity: 0}}
@@ -18,7 +17,7 @@ const LevelSelect: FC<LevelSelectProps> = ({difficulty, setDifficulty, clearReco
     >
       <Box position='absolute' display='flex' flexDirection='column' flex={1} justifyContent='flex-start' alignItems='center' width='100%' >
         <DifficultyDisplay difficulty={difficulty} setDifficulty={setDifficulty}/>
-        <LevelDisplay difficulty={difficulty} clearRecords={clearRecords}/>
+        <LevelDisplay difficulty={difficulty}/>
       </Box>
     </motion.div>
   );

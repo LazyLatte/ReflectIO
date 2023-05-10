@@ -13,7 +13,7 @@ import ExtensionIcon from '@mui/icons-material/Extension';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../authentication/hooks/useAuth';
 import useModalRef from '../modal/useModalRef';
 import { BuiltInLevelInfo, UserLevelInfo } from '@features/level';
 

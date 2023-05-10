@@ -1,13 +1,8 @@
-import * as React from 'react';
-import {forwardRef, useImperativeHandle, useState, useRef, useEffect, useContext, FC} from 'react';
+import {forwardRef, useImperativeHandle, useState, ForwardRefRenderFunction} from 'react';
 import { motion, AnimatePresence  } from "framer-motion"
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import BackDrop from '../ui/backdrop/BackDrop';
-import ModalFrame from '../ui/box/ModalBox';
-import ModalInput from './ModalInput';
-import ModalButton from '../ui/button/ModalButton';
-import SerparationLine from '../ui/separator/SerparationLine';
+import {BackDrop, ModalBox, ModalButton, Separator} from '@features/ui';
 
 
 const appear = {
@@ -21,9 +16,13 @@ const appear = {
     scale: 0
   }
 }
-const UploadConfirmModal = (props, ref) => {
+interface UploadConfirmModalProps {};
+export interface UploadConfirmModalHandle {
+  open: (upload: () => Promise<void>) => void;
+}
+const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, UploadConfirmModalProps> = (props, ref) => {
   const [open, setOpen] = useState<boolean>(false);
-  const [uploadFunc, setUploadFunc] = useState(() => ()=>{});
+  const [uploadFunc, setUploadFunc] = useState<() => void>(() => ()=>{});
   useImperativeHandle(ref, ()=>({
     open: (upload) => {
       setOpen(true);
@@ -39,23 +38,23 @@ const UploadConfirmModal = (props, ref) => {
   return (
     <AnimatePresence>
       {open &&
-        <BackDrop handleOnClick={closeModal}>
+        <BackDrop onClick={closeModal}>
           <motion.div
             className='upload_confirm_modal'
-            variant={appear}
+            variants={appear}
             initial='hidden'
             animate='visible'
             exit='exit'
             onClick={(e)=>e.stopPropagation()}
           >
-            <ModalFrame height={150} width={650}>
+            <ModalBox height={150} width={650}>
               <Typography variant='caption' sx={{textAlign: 'center'}}>UPLOAD THE LEVEL TO PUBLIC?</Typography>
-              <SerparationLine/>
+              <Separator/>
               <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' width='100%'>
-                <ModalButton width='45%' onClick={uploadFunc}>YES</ModalButton>
-                <ModalButton width='45%' onClick={closeModal}>NO</ModalButton>
+                <ModalButton width='45%' disabled={false} onClick={uploadFunc}>YES</ModalButton>
+                <ModalButton width='45%' disabled={false} onClick={closeModal}>NO</ModalButton>
               </Box>
-            </ModalFrame>
+            </ModalBox>
           </motion.div>
         </BackDrop>
       }

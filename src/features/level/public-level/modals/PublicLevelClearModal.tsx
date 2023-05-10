@@ -3,12 +3,11 @@ import { motion, AnimatePresence  } from "framer-motion"
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import BackDrop from '../../../ui/backdrop/BackDrop';
+import {BackDrop} from '@features/ui';
 
 import RefreshIcon from '@mui/icons-material/Refresh';
-import ForwardIcon from '@mui/icons-material/Forward';
 import MenuIcon from '@mui/icons-material/Menu';
-
+import ErrorIcon from '@mui/icons-material/Error';
 //import Lottie from 'react-lottie';
 
 import OneStarLottie from '../../../../img/one-star.json';
@@ -17,9 +16,7 @@ import ThreeStarLottie from '../../../../img/three-star.json';
 import ThreeStarPurpleLottie from '../../../../img/three-star-purple.json';
 import ThreeStarCrimsonLottie from '../../../../img/three-star-crimson.json';
 
-
 import {useNavigate} from "react-router-dom";
-import { Difficulty, BuiltInLevelInfo } from '..';
 const styles = {
   btn: {
     width: '60px',
@@ -46,25 +43,25 @@ const appear = {
   }
 }
 const lottieData = [null, OneStarLottie, TwoStarLottie, ThreeStarLottie, ThreeStarPurpleLottie, ThreeStarCrimsonLottie];
-interface LevelClearModalProps {};
-interface LevelClearModalHandle {
-  open: (reset: ()=>void, difficulty: Difficulty, levelIdx: number, star: number) => void;
+interface PublicLevelClearModalProps {};
+export interface PublicLevelClearModalHandle {
+  open: (reset: () => void, clearText: string, star: number, warning: boolean) => void;
 }
-const LevelClearModal: ForwardRefRenderFunction<LevelClearModalHandle, LevelClearModalProps> = (props, ref) => {
+const PublicLevelClearModal: ForwardRefRenderFunction<PublicLevelClearModalHandle, PublicLevelClearModalProps> = (props, ref) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
   const [reset, setReset] = useState(()=>()=>{});
-  const [difficulty, setDifficulty] = useState<Difficulty>('easy');
-  const [levelIdx, setLevelIdx] = useState<number>(0);
-
   const [star, setStar] = useState<number>(3);
+  const [clearText, setClearText] = useState<string>('');
+  const [warning, setWarning] = useState<boolean>(false);
   useImperativeHandle(ref, ()=>({
-    open: (reset: ()=>void, difficulty: Difficulty, levelIdx: number, star: number) => {
-      setReset(()=>reset);
-      setDifficulty(difficulty);
-      setLevelIdx(levelIdx);
+    open: (reset, clearText, star, warning=false) => {
+      setWarning(warning);
+      setReset(() => reset);
+      setClearText(clearText);
       setStar(star);
       setOpen(true);
+     
     }
   }))
 
@@ -76,11 +73,6 @@ const LevelClearModal: ForwardRefRenderFunction<LevelClearModalHandle, LevelClea
 
   const restart = () => {
     reset();
-    closeModal();
-  }
-
-  const toNextLevel = () => {
-    (levelIdx+1 < BuiltInLevelInfo[difficulty].length) && navigate(`/play/${difficulty}/${levelIdx+2}`, {state: {difficulty, levelIdx: levelIdx+1}, replace: true});
     closeModal();
   }
   const clearAnimationOptions = {
@@ -104,21 +96,40 @@ const LevelClearModal: ForwardRefRenderFunction<LevelClearModalHandle, LevelClea
             onClick={(e)=>e.stopPropagation()}
           >
 
-            <Box position='relative' height='170px' width='420px' display='flex' flexDirection='column' justifyContent='space-around' alignItems='center' padding='16px' 
+            <Box position='relative' height='230px' width='420px' display='flex' flexDirection='column' justifyContent='space-around' alignItems='center' padding='16px' 
                     backgroundColor='#40E0D0' border='5px solid gold' borderRadius='5px'
             >
                 <Box position='absolute' top={0} left={0} right={0} bottom={0} border='5px solid #F8F8FF'/>
                 <Box position='absolute' top='4px' left='4px' right='4px' bottom='4px' border='5px solid gold'/>
-                <Box position='absolute'bottom='10px' height='120px' width='380px' backgroundColor='#00b3b3' borderRadius='5px'/>
-                <Box display='flex' flexDirection='row' justifyContent='space-around' alignItems='center'>
+                <Box position='absolute'bottom='10px' height='180px' width='380px' backgroundColor='#00b3b3' borderRadius='5px'/>
+                <Box display='flex' flexDirection='column' justifyContent='flex-start' alignItems='center'>
                   {/*<Lottie options={clearAnimationOptions}/>*/}
+                  <motion.div
+                    initial={{x: '200px', opacity: 0}}
+                    animate={{x: 0, opacity: 1}}
+                    transition={{duration: 0.8}}
+                    style={{
+                      position: 'relative', 
+                      bottom: '20px', 
+                      alignSelf: 'center', 
+                      zIndex: 99
+                    }}
+                  > 
+                    {warning ? 
+                      <Typography variant='p' sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#ab2121', fontWeight: 'bold'}}>
+                        <ErrorIcon sx={{fontSize: 16 }}/>
+                        &nbsp;
+                        {clearText}
+                      </Typography>
+                      :
+                      <Typography variant='h4' sx={{color: star === 3 ? '#fff280' : '#6A5ACD', fontWeight: 'bold'}}>{clearText}</Typography>
+                    }
+                    
+                  </motion.div>
                 </Box>
-                <Box position='absolute' left={0} right={0} top='125px' display='flex' flexDirection='row' justifyContent='space-around' alignItems='center'>
+                <Box position='absolute' left={0} right={0} top='185px' display='flex' flexDirection='row' justifyContent='space-around' alignItems='center'>
                   <Button sx={styles.btn} onClick={toLevelSelect}><MenuIcon sx={{ fontSize: 40 }} /></Button>
                   <Button sx={styles.btn} onClick={restart}><RefreshIcon sx={{ fontSize: 40 }} /></Button>
-                  <Button sx={styles.btn} disabled={levelIdx+1 >= BuiltInLevelInfo[difficulty].length} onClick={toNextLevel}>
-                  <ForwardIcon sx={{ fontSize: 40 }} />
-                  </Button>
                 </Box>
               </Box>
 
@@ -129,4 +140,4 @@ const LevelClearModal: ForwardRefRenderFunction<LevelClearModalHandle, LevelClea
   );
 }
 
-export default forwardRef(LevelClearModal);
+export default forwardRef(PublicLevelClearModal);

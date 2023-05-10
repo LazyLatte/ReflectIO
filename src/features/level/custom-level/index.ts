@@ -1,1 +1,1 @@
-export {default as CustomLevel} from './CustomLevel';
+export * from './play';

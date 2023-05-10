@@ -1,1 +1,1 @@
-export * from './SerparationLine';
+export * from './Separator';

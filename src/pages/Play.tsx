@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {BuiltInLevel, CustomLevel, PublicLevel } from '@features/level';
 import { Mode } from '@features/stage';
-import useAxiosPrivate from 'src/hooks/useAxiosPrivate';
+import useAxiosPrivate from '@features/authentication/hooks/useAxiosPrivate';
 interface PlayProps {
     mode: Mode;
 };

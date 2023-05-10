@@ -1,17 +1,17 @@
-import * as React from 'react';
-import {useState, useRef, useEffect, useContext, FC} from 'react';
+import {useState, MouseEvent, useEffect, FC, Dispatch, SetStateAction} from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import ModalFrame from '../../ui/box/ModalBox';
-import ModalInput from '../../modal/ModalInput';
-import ModalButton from '../../ui/button/ModalButton';
-import SerparationLine from '../../ui/separator/SerparationLine';
-import useAuth from '../../../hooks/useAuth';
-import {userRegister} from '../../../api/user';
-
+import {ModalBox, ModalInput, ModalButton, Separator} from '@features/ui';
+import { useAuth, userRegister } from '@features/authentication';
+import { isAxiosError } from 'axios';
+interface RegisterProps {
+  username: string;
+  closeModal: () => void;
+  setPage: Dispatch<SetStateAction<string>>;
+}
 const PWD_REGEX = /^[a-zA-Z0-9]{8,24}$/;
-const Register = ({username, closeModal, setPage}) => {
-  const {setAuth} = useAuth();
+const Register: FC<RegisterProps> = ({username, closeModal, setPage}) => {
+  const {setAuth} = useAuth()!;
 
   const [pwd, setPwd] = useState('');
   const [validPwd, setValidPwd] = useState(false);
@@ -35,32 +35,44 @@ const Register = ({username, closeModal, setPage}) => {
   useEffect(() => {
     (validMatch || matchPwd === '') ? setErrMsg2('') : setErrMsg2('Password is not matched');
   }, [matchPwd, validMatch]);
-  const handleSubmit = async (e) =>{
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) =>{
     e.preventDefault();
     try{
       const {name, accessToken} = await userRegister(username, pwd);
       console.log({name, accessToken});
-      setAuth(prev => ({name, accessToken, refresh: !prev?.refresh}));
+      setAuth({name, accessToken});
       closeModal();
     }catch(err){
-      if(!err?.response) {
-        setErrMsg2('No Server Response');
-      }else if (err.response?.status === 400) {
-        setErrMsg2('Name and password are required!');
-      }else if (err.response?.status === 409){
-        setErrMsg2(`Username ${username} have already been taken`)
-      }else if (err.response?.status === 500){
-        setErrMsg2('server error');
+      if(isAxiosError(err)){
+        if(err.response){
+          switch(err.response.status){
+            case 400:
+              setErrMsg2('Name and password are required!');
+              break;
+            case 409:
+              setErrMsg2(`Username ${username} have already been taken`)
+              break;
+            case 500:
+              setErrMsg2('server error');
+              break;
+            default:
+              console.error(err)
+              break;
+          }
+        }else{
+          setErrMsg2('No Server Response');
+          console.log(err.config);
+        }
       }else{
-        setErrMsg2('Unkown error');
+        console.error(err);
       }
     }
   }
   
   return (
-      <ModalFrame height={300} width={700}>
+      <ModalBox height={300} width={700}>
         <Typography  variant='caption'>{`USERNAME ${username} IS AVAILABLE`}</Typography>
-        <SerparationLine/>
+        <Separator/>
         <ModalInput
           type="password"
           id="password"
@@ -78,14 +90,15 @@ const Register = ({username, closeModal, setPage}) => {
           value={matchPwd}
           onChange={(e) => setMatchPwd(e.target.value)}
           errMsg={errMsg2}
-          required
+          autoFocus={false}
+          required={true}
         />
         <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' width='100%' >
-          <ModalButton width='25%' onClick={()=>setPage('username')}>BACK</ModalButton>
+          <ModalButton width='25%' disabled={false} onClick={()=>setPage('username')}>BACK</ModalButton>
           <ModalButton width='70%' disabled={!validPwd || !validMatch} onClick={handleSubmit}>CREATE ACCOUNT</ModalButton>
         </Box>
 
-      </ModalFrame>
+      </ModalBox>
   )
 }
 export default Register;

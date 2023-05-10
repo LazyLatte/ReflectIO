@@ -7,7 +7,7 @@ import {listGlobalLevels} from '../api/level';
 
 import { motion } from "framer-motion"
 import {LevelInfoCard, UserLevelInfo} from '@features/level';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../features/authentication/hooks/useAuth';
 import useModalRef from '../features/modal/useModalRef';
 const orderByOptions = ['clears', 'likes', 'timestamp'];
 interface GlobalLevelsProps {};

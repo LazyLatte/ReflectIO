@@ -1,4 +1,4 @@
-import { LevelInfo, BuiltInLevelInfoInterface } from "@features/level";
+import { LevelInfo } from "@features/level";
 //------------------------
 
 // easy levels
@@ -38,7 +38,11 @@ const normalLevels: LevelInfo[] = [n1, n2, n3, n4, n5, n6, n7, n8, n9, n10];
 const hardLevels: LevelInfo[] = [h1, h2, h3, h4, h5];
 
 
-export const BuiltInLevelInfo: BuiltInLevelInfoInterface = {
+export const BuiltInLevelInfo: {
+  easy: LevelInfo[];
+  normal: LevelInfo[];
+  hard: LevelInfo[];
+} = {
   easy: easyLevels,
   normal: normalLevels,
   hard: hardLevels

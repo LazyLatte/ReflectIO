@@ -3,3 +3,4 @@ export * from './custom-level';
 export * from './public-level';
 export * from './hooks';
 export * from './interfaces';
+export * from './utils';

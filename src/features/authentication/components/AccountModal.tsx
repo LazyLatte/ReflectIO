@@ -1,6 +1,5 @@
-import {forwardRef, useImperativeHandle, useState, useRef, useEffect, useContext, FC} from 'react';
+import {forwardRef, useImperativeHandle, useState, ForwardRefRenderFunction} from 'react';
 import { motion, AnimatePresence  } from "framer-motion"
-import useAuth from '../../../hooks/useAuth';
 import UserName from './UserName';
 import Login from './Login';
 import Register from './Register';
@@ -18,7 +17,11 @@ const appear = {
     scale: 0
   }
 }
-const AccountModal = (props, ref) => {
+interface AccountModalProps {};
+export interface AccountModalHandle {
+  open: () => void;
+}
+const AccountModal: ForwardRefRenderFunction<AccountModalHandle, AccountModalProps> = (props, ref) => {
   const [username, setUsername] = useState('');
   const [page, setPage] = useState<string>('username'); 
   const [open, setOpen] = useState(false);
@@ -31,9 +34,9 @@ const AccountModal = (props, ref) => {
   return (
     <AnimatePresence>
       {open &&
-        <BackDrop handleOnClick={()=>{}}>
+        <BackDrop onClick={()=>{}}>
           <motion.div
-            variant={appear}
+            variants={appear}
             initial='hidden'
             animate='visible'
             exit='exit'

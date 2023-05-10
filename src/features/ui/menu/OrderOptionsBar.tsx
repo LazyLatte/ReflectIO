@@ -9,7 +9,7 @@ import Tab from '@mui/material/Tab';
 import AppBar from '@mui/material/AppBar';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import useAuth from 'src/hooks/useAuth';
+import useAuth from '@features/authentication/hooks/useAuth';
 import { listGlobalLevels } from 'src/api/level';
 
 const UpDownIcon = ({ascend}) => (

@@ -1,1 +1,1 @@
-export {BuiltInLevel} from './BuiltInLevel';
+export {default as BuiltInLevel} from './BuiltInLevel';

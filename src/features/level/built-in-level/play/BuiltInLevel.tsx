@@ -1,19 +1,19 @@
-import { useRef, ElementRef } from 'react';
+import { useRef } from 'react';
 import useImage from 'use-image';
 import {useLocation} from "react-router-dom";
 import {Stage, StageButtonGroup, Mode} from '@features/stage';
-import {Difficulty, BuiltInLevelInfo, useLevel, LevelClearModal} from '@features/level';
-import { updateClearRecords } from '../api/clear-records';
-import useAuth from 'src/hooks/useAuth';
-import useAxiosPrivate from "src/hooks/useAxiosPrivate";
+import {Difficulty, BuiltInLevelInfo, useLevel} from '@features/level';
+import {useAuth, useAxiosPrivate} from '@features/authentication';
+import {usePatchClears} from '../api/use-patch-clears';
+import LevelClearModal, {LevelClearModalHandle} from './LevelClearModal';
 import BulbImg from '@images/icons/bulb.svg';
 import RestartImg from '@images/icons/restart.svg';
 
-type LevelClearModalHandle = ElementRef<typeof LevelClearModal>;
-interface LocationState {difficulty: Difficulty; levelIdx: number};
-export const BuiltInLevel = () => {
+
+interface LocationState {difficulty: Difficulty, levelIdx: number};
+const BuiltInLevel = () => {
   const {auth} = useAuth()!;
-  const axiosPrivate = useAxiosPrivate(); 
+ 
   const {state} = useLocation();
   const {difficulty, levelIdx} = state as LocationState || {difficulty: 'easy', levelIdx: 0};
   const levelInfo = BuiltInLevelInfo[difficulty][levelIdx];
@@ -22,13 +22,12 @@ export const BuiltInLevel = () => {
 
 
   const levelClearModalRef = useRef<LevelClearModalHandle>(null);
+  const patchClearsMutation = usePatchClears(difficulty, levelIdx);
   const onClear = async () => {
     if(!levelState.clear){
-      
       levelClearModalRef.current?.open(mirrorActions.resetMirrors, difficulty, levelIdx, 3);
       if(auth?.accessToken){
-        const data = await updateClearRecords(axiosPrivate, difficulty, levelIdx);
-        console.log(data);
+        patchClearsMutation.mutate();
       }
     }
   }
@@ -52,4 +51,4 @@ export const BuiltInLevel = () => {
   )
 }
 
-
+export default BuiltInLevel;

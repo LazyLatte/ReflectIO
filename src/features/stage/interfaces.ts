@@ -1,8 +1,9 @@
 export enum ObjectType {None, Laser, Target, Reflector, Lens};
 export enum Mode {BuiltIn, Custom, Public};
+export type Degree = 0 | 45 | 90 | 135 | 180 | 225 | 270 | 315;
 export interface Vector2D {x: number, y: number}
 export interface Laser {pos: Vector2D, dir: Vector2D, color: number} 
-export interface Mirror {type: ObjectType.Reflector | ObjectType.Lens, idx: number, pos: Vector2D, resetPos: Vector2D, deg: number}
+export interface Mirror {type: ObjectType.Reflector | ObjectType.Lens, idx: number, pos: Vector2D, resetPos: Vector2D, deg: Degree}
 export interface Target {pos: Vector2D, color: number, clear?: boolean}
 export interface Object {type: ObjectType, nv?: Vector2D} 
 export interface CellRay {object: Object, color: number}

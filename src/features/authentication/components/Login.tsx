@@ -1,20 +1,20 @@
-import * as React from 'react';
-import {useState, useRef, useEffect, useContext, FC} from 'react';
-import ModalFrame from '../../ui/box/ModalBox';
-import ModalInput from '../../modal/ModalInput';
-import ModalButton from '../../ui/button/ModalButton';
-import SerparationLine from '../../ui/separator/SerparationLine';
+import {useState, useEffect, FC, Dispatch, SetStateAction, MouseEvent} from 'react';
+import {ModalBox, ModalInput, ModalButton, Separator} from '@features/ui';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import useAuth from '../../../hooks/useAuth';
-import {userLogin} from '../../../api/user';
-
+import {useAuth, userLogin} from '@features/authentication';
+import { isAxiosError } from 'axios';
+interface LoginProps {
+  username: string;
+  closeModal: () => void;
+  setPage: Dispatch<SetStateAction<string>>;
+}
 const PWD_REGEX = /^[a-zA-Z0-9]{8,24}$/;
-const Login = ({username, closeModal, setPage}) => {
-  const {setAuth} = useAuth();
-  const [pwd, setPwd] = useState('');
-  const [validPwd, setValidPwd] = useState(false);
-  const [errMsg, setErrMsg] = useState('');
+const Login: FC<LoginProps> = ({username, closeModal, setPage}) => {
+  const {setAuth} = useAuth()!;
+  const [pwd, setPwd] = useState<string>('');
+  const [validPwd, setValidPwd] = useState<boolean>(false);
+  const [errMsg, setErrMsg] = useState<string>('');
   
   useEffect(() => {
     setValidPwd(PWD_REGEX.test(pwd));
@@ -24,30 +24,41 @@ const Login = ({username, closeModal, setPage}) => {
     (validPwd || pwd === '') ? setErrMsg('') : setErrMsg('Invalid password format');
   }, [pwd, validPwd]);
 
-  const handleSubmit = async (e) =>{
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) =>{
     e.preventDefault();
     try{
       const {name, accessToken} = await userLogin(username, pwd);
       console.log({name, accessToken});
-      setAuth(prev => ({name, accessToken, refresh: !prev?.refresh}));
+      setAuth({name, accessToken});
       closeModal();
     }catch(err){
-      if(!err?.response) {
-        setErrMsg('No Server Response');
-      }else if (err.response?.status === 400) {
-        setErrMsg('Name and password are required!');
-      }else if (err.response?.status === 401){
-        setErrMsg('Wrong username or password')
+      if(isAxiosError(err)){
+        if(err.response){
+          switch(err.response.status){
+            case 400:
+              setErrMsg('Name and password are required!');
+              break;
+            case 401:
+              setErrMsg('Wrong username or password')
+              break;
+            default:
+              console.error(err)
+              break;
+          }
+        }else{
+          setErrMsg('No Server Response');
+          console.log(err.config);
+        }
       }else{
-        setErrMsg('Unkown error');
+        console.error(err);
       }
     }
   }
 
   return (
-      <ModalFrame height={300} width={700}>
+      <ModalBox height={300} width={700}>
         <Typography  variant='caption'>{`WELCOME BACK ${username}`}</Typography>
-        <SerparationLine/>
+        <Separator/>
         <Typography variant='h6' sx={{marginBottom: '10px'}}>PLEASE ENTER YOUR PASSWORD TO LOGIN.</Typography>
         <ModalInput
           type="password"
@@ -56,15 +67,15 @@ const Login = ({username, closeModal, setPage}) => {
           value={pwd}
           onChange={(e) => setPwd(e.target.value)}
           errMsg={errMsg}
-          autoFocus
-          required
+          autoFocus={true}
+          required={true}
         />
         <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' width='100%' >
-          <ModalButton width='32%' onClick={()=>setPage('username')} >BACK</ModalButton>
-          <ModalButton width='32%' onClick={()=>{}} >FORGOT</ModalButton>
+          <ModalButton width='32%' disabled={false} onClick={()=>setPage('username')} >BACK</ModalButton>
+          <ModalButton width='32%' disabled={false} onClick={()=>{}} >FORGOT</ModalButton>
           <ModalButton width='32%' disabled={!validPwd} onClick={handleSubmit} >LOGIN</ModalButton>
         </Box>
-      </ModalFrame>
+      </ModalBox>
   )
 }
 
