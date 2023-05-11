@@ -43,7 +43,7 @@ const AccountModal: ForwardRefRenderFunction<AccountModalHandle, AccountModalPro
             onClick={(e)=>e.stopPropagation()}
           >
             {page === 'username' && <UserName username={username} setUsername={setUsername} setPage={setPage} closeModal={closeModal}/>}
-            {page === 'login' && <Login username={username} closeModal={closeModal} setPage={setPage}/>}
+            {page === 'login' && <Login username={username} closeModal={closeModal} setPage={setPage} onLogin={() => {}}/>}
             {page === 'register' && <Register username={username} closeModal={closeModal} setPage={setPage}/>}
           </motion.div>
         </BackDrop>

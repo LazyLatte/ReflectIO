@@ -1,12 +1,13 @@
 import {FC, useRef} from 'react';
 import useImage from 'use-image';
+import { isAxiosError, isCancel } from 'axios';
 import {useLocation} from "react-router-dom";
 import {Stage, StageButtonGroup, Mode} from '@features/stage';
 import { UserLevelInfo, useLevel, state2info, getMirrorStates } from '@features/level';
-import {useAuth, useAxiosPrivate, ReLoginModal, ReLoginModalHandle} from '@features/authentication';
+import { ReLoginModal, ReLoginModalHandle} from '@features/authentication';
 import UploadConfirmModal, {UploadConfirmModalHandle} from './UploadConfirmModal';
 import WarningModal, {WarningModalHandle} from './WarningModal';
-
+import { useUpdateLevel, useUploadLevel } from '../api/use-put-level';
 interface CustomLevelProps {}
 interface LocationState {userLevelInfo: UserLevelInfo};
 const emptyStage: UserLevelInfo = {
@@ -22,12 +23,11 @@ const emptyStage: UserLevelInfo = {
   record: 8,
   public: false,
   creator: '',
-  timestamp: ''
+  timestamp: '',
+  personal_best: null
 }
 
 const CustomLevel: FC<CustomLevelProps> = () => {
-  const {auth} = useAuth()!;
-  const axiosPrivate = useAxiosPrivate();
   const { state } = useLocation();
   const {userLevelInfo} = state as LocationState || {userLevelInfo: emptyStage};
   const {id} = userLevelInfo;
@@ -37,41 +37,64 @@ const CustomLevel: FC<CustomLevelProps> = () => {
   const levelInfo = state2info(levelState);
   const mirrorStates = getMirrorStates(levelState);
 
-  const reLoginModalRef = useRef<ReLoginModalHandle>(null);
+  const reLoginModalRefForUpdate = useRef<ReLoginModalHandle>(null);
+  const reLoginModalRefForUpload = useRef<ReLoginModalHandle>(null);
   const uploadConfirmModalRef = useRef<UploadConfirmModalHandle>(null);
   const warningModalRef = useRef<WarningModalHandle>(null);
   
-  const update = async () => {
-    try{
-      const {data} = await axiosPrivate.put<UserLevelInfo>(`/levels/${id}`, {levelInfo});
-      console.log(data);
-    }catch(err){
-      if(auth?.accessToken){
-        reLoginModalRef.current?.open(false);
-      }else{
-        reLoginModalRef.current?.open(true);
+
+
+  const updateMutation = useUpdateLevel();
+  const uploadMutation = useUploadLevel();
+
+  const update = () => {
+    updateMutation.mutate({id, levelInfo}, {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (error) => {
+        if(isCancel(error)){
+          alert("Sign in to have your own level!");
+        }else if(isAxiosError(error)){
+          switch(error.response?.status){
+            case 401:
+              reLoginModalRefForUpdate.current?.open();
+              break;
+            default:
+              break;
+          }
+        }
       }
-    }
+    })
   }
-  const upload = async () => {
-    try{
-      const {data} = await axiosPrivate.put<UserLevelInfo>(`/levels/upload/${id}`, {levelInfo, mirrorStates});
-      console.log(data);
-    }catch(err){
-      if(auth?.accessToken){
-        reLoginModalRef.current?.open(false);
-      }else{
-        reLoginModalRef.current?.open(true);
+
+  const upload = () => {
+    uploadMutation.mutate({id, levelInfo, mirrorStates}, {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (error) => {
+        if(isCancel(error)){
+          alert("Sign in to have your own level!");
+        }else if(isAxiosError(error)){
+          switch(error.response?.status){
+            case 401:
+              reLoginModalRefForUpload.current?.open();
+              break;
+            default:
+              break;
+          }
+        }
       }
-    }
+    })
   }
-  const handleOnUpload = async () => {
+  const uploadConfirm = () => {
     if(levelInfo.lasers.length <= 0 || levelInfo.targets.length <= 0){
       warningModalRef.current?.open('The level should contain at least 1 laser and 1 target');
     }else if(!levelState.clear){
       warningModalRef.current?.open('Level is not clear');
     }else{
-      uploadConfirmModalRef.current?.open(upload);
+      uploadConfirmModalRef.current?.open();
     }
   }
   
@@ -86,12 +109,14 @@ const CustomLevel: FC<CustomLevelProps> = () => {
           btnImg1={saveImg}
           btnImg2={uploadImg} 
           onClick1={update} 
-          onClick2={handleOnUpload}
+          onClick2={uploadConfirm}
         />
       </Stage>
-      <ReLoginModal ref={reLoginModalRef}/>
-      <UploadConfirmModal ref={uploadConfirmModalRef}/>
+     
       <WarningModal ref={warningModalRef}/>
+      <UploadConfirmModal upload={upload} ref={uploadConfirmModalRef}/>
+      <ReLoginModal onLogin={update} ref={reLoginModalRefForUpdate}/>
+      <ReLoginModal onLogin={upload} ref={reLoginModalRefForUpload}/>
     </>
   )
 }

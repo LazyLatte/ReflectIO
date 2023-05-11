@@ -1,10 +1,12 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { isAxiosError, isCancel } from 'axios';
 import useImage from 'use-image';
 import {useLocation} from "react-router-dom";
 import {Stage, StageButtonGroup, Mode} from '@features/stage';
 import {Difficulty, BuiltInLevelInfo, useLevel} from '@features/level';
 import {usePatchClears} from '../api/use-patch-clears';
 import LevelClearModal, {LevelClearModalHandle} from './LevelClearModal';
+import {ReLoginModal, ReLoginModalHandle} from '@features/authentication';
 import BulbImg from '@images/icons/bulb.svg';
 import RestartImg from '@images/icons/restart.svg';
 
@@ -14,16 +16,34 @@ const BuiltInLevel = () => {
   const {state} = useLocation();
   const {difficulty, levelIdx, clear} = state as LocationState || {difficulty: 'easy', levelIdx: 0, clear: false};
   const levelInfo = BuiltInLevelInfo[difficulty][levelIdx];
-  const level = useLevel(levelInfo, clear);
+  const level = useLevel(levelInfo);
   const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
-
+  const [historyClear, setHistoryClear] = useState<boolean>(clear);
 
   const levelClearModalRef = useRef<LevelClearModalHandle>(null);
-  const patchClearsMutation = usePatchClears(difficulty, levelIdx);
-  const onClear = async () => {
-    if(!levelState.clear){
-      levelClearModalRef.current?.open(mirrorActions.resetMirrors, difficulty, levelIdx, 3);
-      patchClearsMutation.mutate();
+  const reLoginModalRef = useRef<ReLoginModalHandle>(null);
+  const patchClearsMutation = usePatchClears();
+  const onClear = () => {
+    if(!historyClear){
+      patchClearsMutation.mutate({difficulty, idx: levelIdx}, {
+        onSuccess: () => {
+          levelClearModalRef.current?.open();
+          setHistoryClear(true);
+        },
+        onError: (error) => {
+          if(isCancel(error)){
+            console.log("Guest is playing!")
+          }else if(isAxiosError(error)){
+              switch(error?.response?.status){
+                case 401:
+                    reLoginModalRef.current?.open();
+                    break;
+                default:
+                    break;
+              }
+            }
+        }
+      });
     }
   }
 
@@ -41,7 +61,8 @@ const BuiltInLevel = () => {
           onClick2={()=>alert('Not support yet')}
         />
       </Stage>
-      <LevelClearModal ref={levelClearModalRef}/>
+      <LevelClearModal reset={mirrorActions.resetMirrors} difficulty={difficulty} levelIdx={levelIdx} star={3} ref={levelClearModalRef}/>
+      <ReLoginModal onLogin={onClear} ref={reLoginModalRef}/>
     </>
   )
 }

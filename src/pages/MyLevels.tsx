@@ -1,18 +1,23 @@
-import {useState, useEffect, FC} from 'react'
+import {useRef, FC, ReactNode} from 'react'
+import { isAxiosError, isCancel } from 'axios';
+import { motion } from "framer-motion";
+import { ClipLoader } from 'react-spinners';
 import {Link, useNavigate} from "react-router-dom";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { motion } from "framer-motion";
-import {UserLevelInfo} from '@features/level';
-import useAuth from '../features/authentication/hooks/useAuth';
-import useAxiosPrivate from '../features/authentication/hooks/useAxiosPrivate';
-import useModalRef from '../features/modal/useModalRef';
+
+
+import { ReLoginModal, ReLoginModalHandle } from '@features/authentication';
+import { useGetUserLevels } from '@features/level/custom-level/api/use-get-levels';
+import { useCreateLevel } from '@features/level/custom-level/api/use-post-level';
 
 const myLevelsShape = {height: 2, width: 4};
-const maxLevelNumber = myLevelsShape.height * myLevelsShape.width;
-
-
+interface DisplayCellProps {
+  idx: number;
+  levelNum: number;
+  children: (idx: number, levelNum: number) => ReactNode;
+}
+interface MyLevelsProps {};
 const styles = {
   btn: {
     height: '100%',
@@ -23,46 +28,42 @@ const styles = {
     }
   }
 }
-interface MyLevelsProps {};
-const MyLevels: FC<MyLevelsProps> = ({}) => {
+const DisplayCell: FC<DisplayCellProps> = ({idx, levelNum,  children}) => {
+  return (
+    <Box height={250} width={250} flexShrink={0} margin={5} border='2px solid pink' boxShadow='0 0 .2rem pink, 0 0 .2rem pink' >
+      {children(idx, levelNum)}
+    </Box>
+  )
+}
+
+const MyLevels: FC<MyLevelsProps> = () => {
   const navigate = useNavigate();
-  const {auth} = useAuth()!;
-  const axiosPrivate = useAxiosPrivate();
-  const {shouldSignInModalRef} = useModalRef();
-  const [myLevels, setMyLevels] = useState<UserLevelInfo[]>([]);
-  const myLevelsArray = Array(myLevelsShape.height).fill(Array(myLevelsShape.width).fill(0));
+  const {data: myLevels, isLoading, isError} = useGetUserLevels();
+  const createLevelMutation = useCreateLevel();
+  const reLoginModalRef = useRef<ReLoginModalHandle>(null)
+  const myLevelsArray: null[][] = Array(myLevelsShape.height).fill(Array(myLevelsShape.width).fill(null));
+  const createLevel = () => {
+    createLevelMutation.mutate({height: 10, width: 10}, {
+      onSuccess: (data) => {
+        reLoginModalRef.current?.open();
+        //navigate('/custom', {state: {userLevelInfo: data}});
+      },
+      onError: (error) => {
+        if(isCancel(error)){
+          navigate('/custom')
+        }else if(isAxiosError(error)){
+          switch(error.response?.status){
+            case 401:
+              reLoginModalRef.current?.open();
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    })
+  };
   
-  const createLevel = async () => {
-    if(auth?.accessToken){
-      try{
-        const response = await axiosPrivate.post('/levels');
-        
-        console.log('New level created!');
-        navigate('/custom', {state: {userLevelInfo: response.data}});
-      }catch(err){
-        shouldSignInModalRef.current.open(false);
-      }
-    }else{
-      navigate('/custom')
-    }
-
-  };
-
-  const getUserLevels = async () => {
-    if(auth?.accessToken){
-      try{
-        const response = await axiosPrivate.get(`/levels/custom`);
-        setMyLevels([...response.data]);
-      }catch(err){
-        shouldSignInModalRef.current.open(false);
-        //should resend req
-      }
-    }
-
-  };
-  useEffect(()=>{
-    getUserLevels();
-  }, [auth?.refresh])
   return (
     <motion.div 
       initial={{x: '100vw', opacity: 0}}
@@ -84,23 +85,39 @@ const MyLevels: FC<MyLevelsProps> = ({}) => {
         {myLevelsArray.map((row, i)=>(
           <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' key={i}>
             {row.map((_, j)=>(
-              <Box height={250} width={250} flexShrink={0} margin={5} border='2px solid pink' boxShadow='0 0 .2rem pink, 0 0 .2rem pink' key={j}>
-                  {i*myLevelsShape.width+j < myLevels.length &&
-                    <Button component={Link} to='/custom' state={{userLevelInfo: myLevels[i*myLevelsShape.width+j]}} sx={styles.btn}>
-                        A
-                    </Button>
-                  }
-                  {i*myLevelsShape.width+j === myLevels.length &&
-                    <Button onClick={createLevel} sx={styles.btn}>
-                      <img src={'https://stackblitz.com/files/react-ts-mirrorgame/github/LazyLatte/MirrorGame/main/src/img/icons/plus.svg'} style={{height: '100%', width: '100%'}}/>
-                    </Button>
-                  }
-                
-              </Box>
+                <DisplayCell idx={i*myLevelsShape.width+j} levelNum={myLevels?.length || 0} key={i*myLevelsShape.width+j}>
+                  {(idx, levelNum) => {
+                    if(isLoading){
+                      return (
+                        <ClipLoader
+                          color={'green'}
+                          loading={true}
+                          size={250}
+                          aria-label="Loading Spinner"
+                          data-testid="loader"
+                        />
+                      )   
+                    }else if(idx < levelNum){
+                      return (
+                        <Button component={Link} to='/custom' state={{userLevelInfo: myLevels![idx]}} sx={styles.btn}>
+                          A
+                        </Button>
+                      )
+                    }else if(idx === levelNum){
+                      return (
+                        <Button onClick={createLevel} sx={styles.btn}>
+                          <img src={'https://stackblitz.com/files/react-ts-mirrorgame/github/LazyLatte/MirrorGame/main/src/img/icons/plus.svg'} style={{height: '100%', width: '100%'}}/>
+                        </Button>
+                      )
+                    }
+                    return null;
+                  }}   
+              </DisplayCell>
             ))}
           </Box>
         ))}
       </Box>
+      <ReLoginModal onLogin={createLevel} ref={reLoginModalRef}/>
     </motion.div>
       
   )

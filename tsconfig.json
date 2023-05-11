@@ -26,6 +26,7 @@
       "@contexts/*": ["src/contexts/*"],
       "@api/*": ["src/api/*"],
       "@images/*": ["src/assets/images/*"],
+      "@lotties/*": ["src/assets/lotties/*"],
       
     },
 

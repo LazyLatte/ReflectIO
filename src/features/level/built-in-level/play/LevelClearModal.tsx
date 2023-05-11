@@ -1,23 +1,22 @@
 import {forwardRef, useImperativeHandle, useState} from 'react';
-import { motion, AnimatePresence  } from "framer-motion"
+import { motion, AnimatePresence  } from "framer-motion";
+import {useNavigate} from "react-router-dom";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { BackDrop } from '@features/ui';
-
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ForwardIcon from '@mui/icons-material/Forward';
 import MenuIcon from '@mui/icons-material/Menu';
 
-//import Lottie from 'react-lottie';
-
-import OneStarLottie from '../../../../img/one-star.json';
-import TwoStarLottie from '../../../../img/two-star.json';
-import ThreeStarLottie from '../../../../img/three-star.json';
-import ThreeStarPurpleLottie from '../../../../img/three-star-purple.json';
-import ThreeStarCrimsonLottie from '../../../../img/three-star-crimson.json';
 
 
-import {useNavigate} from "react-router-dom";
+
+import Lottie from 'lottie-react';
+import OneStarLottie from '@lotties/one-star.json';
+import TwoStarLottie from '@lotties/two-star.json';
+import ThreeStarLottie from '@lotties/three-star.json';
+
+
+import { BackDrop } from '@features/ui';
 import { Difficulty, BuiltInLevelInfo } from '..';
 const styles = {
   btn: {
@@ -44,25 +43,22 @@ const appear = {
     scale: 0
   }
 }
-const lottieData = [null, OneStarLottie, TwoStarLottie, ThreeStarLottie, ThreeStarPurpleLottie, ThreeStarCrimsonLottie];
-interface LevelClearModalProps {};
+const lottieData = [null, OneStarLottie, TwoStarLottie, ThreeStarLottie];
+interface LevelClearModalProps {
+  reset: () => void;
+  difficulty: Difficulty;
+  levelIdx: number;
+  star: number;
+};
 export interface LevelClearModalHandle {
-  open: (reset: ()=>void, difficulty: Difficulty, levelIdx: number, star: number) => void;
+  open: () => void;
 }
-const LevelClearModal = forwardRef<LevelClearModalHandle, LevelClearModalProps>((props, ref) => {
+const LevelClearModal = forwardRef<LevelClearModalHandle, LevelClearModalProps>(({reset, difficulty, levelIdx, star}, ref) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
-  const [reset, setReset] = useState(()=>()=>{});
-  const [difficulty, setDifficulty] = useState<Difficulty>('easy');
-  const [levelIdx, setLevelIdx] = useState<number>(0);
 
-  const [star, setStar] = useState<number>(3);
   useImperativeHandle(ref, ()=>({
-    open: (reset: ()=>void, difficulty: Difficulty, levelIdx: number, star: number) => {
-      setReset(()=>reset);
-      setDifficulty(difficulty);
-      setLevelIdx(levelIdx);
-      setStar(star);
+    open: () => {
       setOpen(true);
     }
   }))
@@ -82,14 +78,7 @@ const LevelClearModal = forwardRef<LevelClearModalHandle, LevelClearModalProps>(
     (levelIdx+1 < BuiltInLevelInfo[difficulty].length) && navigate(`/play/${difficulty}/${levelIdx+2}`, {state: {difficulty, levelIdx: levelIdx+1}, replace: true});
     closeModal();
   }
-  const clearAnimationOptions = {
-    loop: false,
-    autoplay: true, 
-    animationData: lottieData[star],
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice'
-    }
-  };
+
   return (
     <AnimatePresence>
       {open &&
@@ -110,7 +99,7 @@ const LevelClearModal = forwardRef<LevelClearModalHandle, LevelClearModalProps>(
                 <Box position='absolute' top='4px' left='4px' right='4px' bottom='4px' border='5px solid gold'/>
                 <Box position='absolute'bottom='10px' height='120px' width='380px' backgroundColor='#00b3b3' borderRadius='5px'/>
                 <Box display='flex' flexDirection='row' justifyContent='space-around' alignItems='center'>
-                  {/*<Lottie options={clearAnimationOptions}/>*/}
+                  <Lottie animationData={lottieData[star]} loop={false}/>
                 </Box>
                 <Box position='absolute' left={0} right={0} top='125px' display='flex' flexDirection='row' justifyContent='space-around' alignItems='center'>
                   <Button sx={styles.btn} onClick={toLevelSelect}><MenuIcon sx={{ fontSize: 40 }} /></Button>

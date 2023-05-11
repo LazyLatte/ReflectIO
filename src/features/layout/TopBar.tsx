@@ -13,8 +13,7 @@ import ExtensionIcon from '@mui/icons-material/Extension';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import useAuth from '../authentication/hooks/useAuth';
-import useModalRef from '../modal/useModalRef';
+import { useAuth, AccountModal, AccountModalHandle } from '@features/authentication';
 import { BuiltInLevelInfo, UserLevelInfo } from '@features/level';
 
 const styles = {
@@ -69,6 +68,7 @@ const TopBar = () => {
   const paths = location.pathname.split('/');
   const displayText = getDisplayText(paths, location?.state?.userLevelInfo);
 
+  const accountModalRef = useRef<AccountModalHandle>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -76,10 +76,10 @@ const TopBar = () => {
   };
   const handleClose = () => setAnchorEl(null)
 
-  const {shouldSignInModalRef} = useModalRef();
+  
   const handleSignIn = () => {
     handleClose();
-    shouldSignInModalRef.current.open(true);
+    accountModalRef.current?.open();
   }
 
   const handleMyLevels = () => {
@@ -145,6 +145,7 @@ const TopBar = () => {
           </MenuItem>
         }
       </Menu>
+      <AccountModal ref={accountModalRef}/>
     </Box>
   );
 }

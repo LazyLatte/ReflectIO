@@ -4,3 +4,4 @@ interface Provider {
 }
 
 declare module 'uuid-encoder';
+declare module 'react-lottie';

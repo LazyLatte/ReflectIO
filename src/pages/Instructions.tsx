@@ -1,8 +1,6 @@
-import * as React from 'react';
 import './Instructions.css';
 
-const Instructions = (props) => {
-  const arr = Array.from(Array(100).fill('test'));
+const Instructions = () => {
   return (
     <div id="instructions">
       <div id='summary'>

@@ -1,22 +1,18 @@
 import { useQuery } from 'react-query';
-import { BuiltInLevelClearRecordsInterface } from "@features/level";
+import { ClearRecords } from './clears-type';
 import { useAxiosPrivate } from "@features/authentication";
 
 export const useGetClears = () => {
     const axiosPrivate = useAxiosPrivate();
-    return useQuery<BuiltInLevelClearRecordsInterface, Error>({
+    return useQuery<ClearRecords, Error>({
         queryKey: ["clears"], 
         queryFn: async () => {
-            const {data} = await axiosPrivate.get<BuiltInLevelClearRecordsInterface>('/levels/built-in');
-            console.log(data);
+            const {data} = await axiosPrivate.get<ClearRecords>('/levels/built-in');
             return data
         },
-        initialData: {
-            easy: 0,
-            normal: 0,
-            hard: 0
-        },
-        retry: 1
+        retry: false,
+        refetchOnMount: false,
+        //cacheTime: 1000
     })
 }
 

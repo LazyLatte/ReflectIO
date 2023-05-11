@@ -1,5 +1,5 @@
 import {FC, Dispatch, SetStateAction} from "react";
-import { Difficulty, BuiltInLevelClearRecordsInterface, DifficultyDisplay, LevelDisplay } from '@features/level';
+import { Difficulty, DifficultyDisplay, LevelDisplay } from '@features/level';
 import Box from '@mui/material/Box';
 import { motion  } from "framer-motion"
 interface LevelSelectProps {

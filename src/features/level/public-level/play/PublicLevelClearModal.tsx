@@ -8,13 +8,13 @@ import {BackDrop} from '@features/ui';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import MenuIcon from '@mui/icons-material/Menu';
 import ErrorIcon from '@mui/icons-material/Error';
-//import Lottie from 'react-lottie';
 
-import OneStarLottie from '../../../../img/one-star.json';
-import TwoStarLottie from '../../../../img/two-star.json';
-import ThreeStarLottie from '../../../../img/three-star.json';
-import ThreeStarPurpleLottie from '../../../../img/three-star-purple.json';
-import ThreeStarCrimsonLottie from '../../../../img/three-star-crimson.json';
+import Lottie from 'lottie-react';
+import OneStarLottie from '@lotties/one-star.json';
+import TwoStarLottie from '@lotties/two-star.json';
+import ThreeStarLottie from '@lotties/three-star.json';
+import ThreeStarPurpleLottie from '@lotties/three-star-purple.json';
+import ThreeStarCrimsonLottie from '@lotties/three-star-crimson.json';
 
 import {useNavigate} from "react-router-dom";
 const styles = {
@@ -43,25 +43,21 @@ const appear = {
   }
 }
 const lottieData = [null, OneStarLottie, TwoStarLottie, ThreeStarLottie, ThreeStarPurpleLottie, ThreeStarCrimsonLottie];
-interface PublicLevelClearModalProps {};
+interface PublicLevelClearModalProps {
+  reset: () => void;
+  clearText: string;
+  star: number;
+  warning: boolean;
+};
 export interface PublicLevelClearModalHandle {
-  open: (reset: () => void, clearText: string, star: number, warning: boolean) => void;
+  open: () => void;
 }
-const PublicLevelClearModal: ForwardRefRenderFunction<PublicLevelClearModalHandle, PublicLevelClearModalProps> = (props, ref) => {
+const PublicLevelClearModal: ForwardRefRenderFunction<PublicLevelClearModalHandle, PublicLevelClearModalProps> = ({reset, clearText, star, warning}, ref) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
-  const [reset, setReset] = useState(()=>()=>{});
-  const [star, setStar] = useState<number>(3);
-  const [clearText, setClearText] = useState<string>('');
-  const [warning, setWarning] = useState<boolean>(false);
   useImperativeHandle(ref, ()=>({
-    open: (reset, clearText, star, warning=false) => {
-      setWarning(warning);
-      setReset(() => reset);
-      setClearText(clearText);
-      setStar(star);
+    open: () => {
       setOpen(true);
-     
     }
   }))
 
@@ -86,7 +82,7 @@ const PublicLevelClearModal: ForwardRefRenderFunction<PublicLevelClearModalHandl
   return (
     <AnimatePresence>
       {open &&
-        <BackDrop handleOnClick={closeModal}>
+        <BackDrop onClick={closeModal}>
           <motion.div
             className='level_clear_modal'
             variants={appear}
@@ -103,7 +99,7 @@ const PublicLevelClearModal: ForwardRefRenderFunction<PublicLevelClearModalHandl
                 <Box position='absolute' top='4px' left='4px' right='4px' bottom='4px' border='5px solid gold'/>
                 <Box position='absolute'bottom='10px' height='180px' width='380px' backgroundColor='#00b3b3' borderRadius='5px'/>
                 <Box display='flex' flexDirection='column' justifyContent='flex-start' alignItems='center'>
-                  {/*<Lottie options={clearAnimationOptions}/>*/}
+                  <Lottie animationData={lottieData[star]} loop={false}/>
                   <motion.div
                     initial={{x: '200px', opacity: 0}}
                     animate={{x: 0, opacity: 1}}

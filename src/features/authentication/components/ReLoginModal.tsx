@@ -17,24 +17,23 @@ const appear = {
     scale: 0
   }
 }
-interface ReLoginModalProps {};
+interface ReLoginModalProps {
+  onLogin: () => void;
+};
 export interface ReLoginModalHandle {
-  open: (isGuest: boolean) => void;
+  open: () => void;
 }
-const ReLoginModal: ForwardRefRenderFunction<ReLoginModalHandle, ReLoginModalProps> = (props, ref) => {
+const ReLoginModal: ForwardRefRenderFunction<ReLoginModalHandle, ReLoginModalProps> = ({onLogin}, ref) => {
   const [username, setUsername] = useState<string>('');
   const [page, setPage] = useState<string>('username'); 
   const [open, setOpen] = useState(false);
-  const [isGuest, setIsGuest] = useState<boolean>(true);
   useImperativeHandle(ref, ()=>({
-    open: (isGuest) => {
+    open: () => {
       setOpen(true);
-      setIsGuest(isGuest);
     }
   }))
 
   const closeModal = () => setOpen(false);
-
   return (
     <AnimatePresence>
       {open &&
@@ -46,8 +45,8 @@ const ReLoginModal: ForwardRefRenderFunction<ReLoginModalHandle, ReLoginModalPro
             exit='exit'
             onClick={(e)=>e.stopPropagation()}
           >
-            {page === 'username' && <NoneGuestUserName username={username} setUsername={setUsername} setPage={setPage} isGuest={isGuest}/>}
-            {page === 'login' && <Login username={username} closeModal={closeModal} setPage={setPage}/>}
+            {page === 'username' && <NoneGuestUserName username={username} setUsername={setUsername} setPage={setPage} isGuest={false}/>}
+            {page === 'login' && <Login username={username} closeModal={closeModal} setPage={setPage} onLogin={onLogin}/>}
             {page === 'register' && <Register username={username} closeModal={closeModal} setPage={setPage}/>}
           </motion.div>
         </BackDrop>

@@ -8,9 +8,10 @@ interface LoginProps {
   username: string;
   closeModal: () => void;
   setPage: Dispatch<SetStateAction<string>>;
+  onLogin: () => void;
 }
 const PWD_REGEX = /^[a-zA-Z0-9]{8,24}$/;
-const Login: FC<LoginProps> = ({username, closeModal, setPage}) => {
+const Login: FC<LoginProps> = ({username, closeModal, setPage, onLogin}) => {
   const {setAuth} = useAuth()!;
   const [pwd, setPwd] = useState<string>('');
   const [validPwd, setValidPwd] = useState<boolean>(false);
@@ -30,6 +31,7 @@ const Login: FC<LoginProps> = ({username, closeModal, setPage}) => {
       const {name, accessToken} = await userLogin(username, pwd);
       console.log({name, accessToken});
       setAuth({name, accessToken});
+      onLogin();
       closeModal();
     }catch(err){
       if(isAxiosError(err)){

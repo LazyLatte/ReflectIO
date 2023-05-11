@@ -16,20 +16,17 @@ const appear = {
     scale: 0
   }
 }
-interface UploadConfirmModalProps {};
+interface UploadConfirmModalProps {
+  upload: () => void;
+};
 export interface UploadConfirmModalHandle {
-  open: (upload: () => Promise<void>) => void;
+  open: () => void;
 }
-const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, UploadConfirmModalProps> = (props, ref) => {
+const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, UploadConfirmModalProps> = ({upload}, ref) => {
   const [open, setOpen] = useState<boolean>(false);
-  const [uploadFunc, setUploadFunc] = useState<() => void>(() => ()=>{});
   useImperativeHandle(ref, ()=>({
-    open: (upload) => {
+    open: () => {
       setOpen(true);
-      setUploadFunc(()=>()=>{
-        upload();
-        setOpen(false);
-      });
     }
   }))
 
@@ -51,7 +48,7 @@ const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, Upl
               <Typography variant='caption' sx={{textAlign: 'center'}}>UPLOAD THE LEVEL TO PUBLIC?</Typography>
               <Separator/>
               <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' width='100%'>
-                <ModalButton width='45%' disabled={false} onClick={uploadFunc}>YES</ModalButton>
+                <ModalButton width='45%' disabled={false} onClick={upload}>YES</ModalButton>
                 <ModalButton width='45%' disabled={false} onClick={closeModal}>NO</ModalButton>
               </Box>
             </ModalBox>

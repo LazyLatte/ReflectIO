@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import {AuthProvider} from './contexts/AuthProvider';
 import {ImagesProvider} from './contexts/ImagesProvider';
 import {StageConfigProvider} from './contexts/StageConfigProvider';
-import {ModalRefProvider} from './contexts/ModalRefProvider';
 import {ColorModeProvider} from './contexts/ColorModeProvider';
 import { AxiosPrivateProvider } from '@contexts/AxiosPrivateProvider';
 import { BrowserRouter, Routes, Route} from "react-router-dom";
@@ -14,8 +13,7 @@ import App from './App';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect:false,
+      refetchOnWindowFocus: false
     },
   },
 });
@@ -24,25 +22,23 @@ const rootElement = document.getElementById('root') as HTMLElement;
 const root = createRoot(rootElement);
 root.render(
   <StrictMode>
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
         <AuthProvider>
           <AxiosPrivateProvider>
             <ColorModeProvider>
               <ImagesProvider>
                 <StageConfigProvider>
-                  <ModalRefProvider>
-                    <Routes>
-                      <Route path='/*' element={<App />} />
-                    </Routes>
-                  </ModalRefProvider>
+                  <Routes>
+                    <Route path='/*' element={<App />} />
+                  </Routes>
                 </StageConfigProvider>
               </ImagesProvider>
             </ColorModeProvider>
           </AxiosPrivateProvider>
         </AuthProvider>
-      <ReactQueryDevtools/>
-      </QueryClientProvider> 
-    </BrowserRouter>
+      </BrowserRouter>
+    <ReactQueryDevtools/>
+    </QueryClientProvider> 
   </StrictMode>
 );

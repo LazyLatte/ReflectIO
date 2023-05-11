@@ -3,7 +3,7 @@ import {laserDirectionToDegree, laserDegreeToDirection, ITEMS_BAR_HEIGHT, MAX_MI
 import {ObjectType, Vector2D, LevelState, LaserActions, TargetActions, MirrorActions, Level, AddObjects} from '@features/stage';
 import {UserLevelInfo, LevelInfo} from '@features/level'
 
-export const useLevel = (level: LevelInfo | UserLevelInfo, clear: boolean = false): Level => {
+export const useLevel = (level: LevelInfo | UserLevelInfo): Level => {
   const {height, width, lasers, targets, reflectorNum, lensNum} = level;
   const getMirrorResetPos = (mirrorIdx: number, shouldRearrange: boolean): Vector2D => {
     const itemBarPos: Vector2D = shouldRearrange ? {x: 0, y: height+1} : {x: width+1, y: 0};
@@ -38,7 +38,7 @@ export const useLevel = (level: LevelInfo | UserLevelInfo, clear: boolean = fals
         deg: 0
       }
     }),
-    clear
+    clear: false
   });
 
   const setLevelClear = (clear: boolean) => {

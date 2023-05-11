@@ -1,5 +1,8 @@
-import {Laser, Target} from '@features/stage';
-
+import {Laser, Target, Vector2D} from '@features/stage';
+export interface MirrorState {
+  pos: Vector2D;
+  deg: number;
+}
 export interface LevelInfo {
     height: number;
     width: number;
@@ -17,7 +20,7 @@ export type UserLevelInfo = LevelInfo & {
     record: number;
     creator: string;
     timestamp: string;
-    personal_best?: number | null;
+    personal_best: number | null;
     isFavorite?: number;
 }
   

@@ -45,7 +45,7 @@ interface LevelDisplayProps {
   difficulty: Difficulty;
 }
 export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => { 
-  const {data: clears, isLoading, isError} = useGetClears();
+  const {data: clears} = useGetClears();
   const [shape, setShape] = useState<Size2D>(window.innerWidth >= 1430 ? {height: 3, width: 5} : {height: 5, width: 3});
   const reshapeLevelArray: null[][] = Array.from(Array(shape.height).fill(
     Array(shape.width).fill(null)
@@ -105,7 +105,11 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
                     <Button 
                       component={Link}
                       to={`./${difficulty}/${i*shape.width+j+1}`} 
-                      state={{difficulty, levelIdx: i*shape.width+j, clear: clears![difficulty] & (1 << (i*shape.width+j))}}
+                      state={{
+                        difficulty, 
+                        levelIdx: i*shape.width+j, 
+                        clear: clears && (clears[difficulty] & (1 << (i*shape.width+j)))
+                      }}
                       variant='outlined'
                       sx={{
                         ...styles.levelBtn, 
@@ -114,7 +118,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
                       }}
                     >
                       <img 
-                        src={(clears![difficulty] & (1 << (i*shape.width+j))) ? StarYellow : StarWhite}
+                        src={clears &&  (clears[difficulty] & (1 << (i*shape.width+j))) ? StarYellow : StarWhite}
                         style={{
                           position: 'absolute',
                           bottom: '4rem',
