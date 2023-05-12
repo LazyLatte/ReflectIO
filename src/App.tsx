@@ -20,37 +20,25 @@ import AboutUs from "./pages/AboutUs";
 import { Route, Routes, useLocation} from "react-router-dom";
 import { AnimatePresence  } from "framer-motion"
 import {Mode} from './features/stage';
-import { AccountModal, AccountModalHandle } from "@features/authentication";
-import useRefreshToken from './features/authentication/hooks/useRefreshToken';
+
 import './style.css';
 
-
+import { StageSizeModal, StageSizeModalHandle } from "@features/level";
 
 export default function App() {
   
   const location = useLocation();
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
 
-
-  const accountModalRef = useRef<AccountModalHandle>(null);
-  const refresh = useRefreshToken();
+  const modalRef = useRef<StageSizeModalHandle>(null);
   useEffect(()=>{
-    const initRequest = async () => {
-      try{
-        const accessToken = await refresh();
-      }catch(err){
-        //publicLevelClearModalRef.current.open(()=>{}, 'Personal best : 5 >> 4', 3);
-        accountModalRef.current?.open();
-      }
-    }
-    initRequest();
-   
-  }, [])
+    //modalRef.current?.open();
+  }, []);
   return (
     <div id="app">
       <TopBar/>
       <BackButton/>
-      <AccountModal ref={accountModalRef}/>
+      <StageSizeModal ref={modalRef}/>
       <div id='main'>
         <AnimatePresence initial={false}>
           <Routes key={location.pathname} location={location}>

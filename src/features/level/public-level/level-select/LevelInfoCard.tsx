@@ -28,7 +28,7 @@ const styles = {
   }
 }
 export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
-  const {id, height, width, lasers, targets, reflectorNum, lensNum, clears, likes, record, creator, timestamp, personal_best, isFavorite} = userLevelInfo;
+  const {id, height, width, lasers, targets, reflectorNum, lensNum, clears, likes, record, creator, timestamp, personal_best, isFavorite, thumbnail} = userLevelInfo;
   const mirrors = Array(reflectorNum).fill('reflector').concat(Array(lensNum).fill('lens')).concat(Array(MAX_MIRROR_NUM-reflectorNum-lensNum).fill(null));
   const [toggle, setToggle] = useState(false);
   const mainInfoHeight = 300;
@@ -61,11 +61,12 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
             }}
             onClick={()=>setToggle(prev => !prev)}
           >
-            <Box  position='relative' top='10px' display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
-              <Box height='200px' width='200px'>
-                <StageThumbnail/>
+
+            <Box display='flex' flexDirection='column' justifyContent='flex-end' alignItems='center' height='200px' width='200px' position='relative' sx={{border: '2px solid white'}}>
+              <img src={'data:image/png;base64,' + thumbnail} height='100%' width='100%' style={{position: 'absolute'}}/>
+              <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' height='27px' width='100%' sx={{backgroundColor: '#141b2d', opacity: 0.7}}>
+                <Typography sx={{fontSize: '18px', color: '#F8F8FF', letterSpacing: '2px'}}>{moment(timestamp).format('L')}</Typography>
               </Box>
-              <Typography sx={{height: '20px', margin: '5px auto 0', fontSize: '1rem', color: '#dddddd'}}>{moment(timestamp).format('L')}</Typography>
             </Box>
             <Box display='flex' flex={1} height='200px' margin='0 20px' flexDirection='column' justifyContent='space-between' alignItems='flex-start' paddingTop='10px' paddingBottom='20px'>
               <Box className='clears_and_likes' display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' fontSize='1.5rem'>

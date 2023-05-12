@@ -20,6 +20,7 @@ export type UserLevelInfo = LevelInfo & {
     record: number;
     creator: string;
     timestamp: string;
+    thumbnail: string;
     personal_best: number | null;
     isFavorite?: number;
 }

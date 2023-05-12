@@ -1,0 +1,1 @@
+export {LevelInfoCard as CustomLevelInfoCard} from './LevelInfoCard';

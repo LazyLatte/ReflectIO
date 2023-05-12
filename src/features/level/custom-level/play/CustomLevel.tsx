@@ -2,38 +2,27 @@ import {FC, useRef} from 'react';
 import useImage from 'use-image';
 import { isAxiosError, isCancel } from 'axios';
 import {useLocation} from "react-router-dom";
-import {Stage, StageButtonGroup, Mode} from '@features/stage';
+import {Stage, StageButtonGroup, StageHandle, Mode} from '@features/stage';
 import { UserLevelInfo, useLevel, state2info, getMirrorStates } from '@features/level';
 import { ReLoginModal, ReLoginModalHandle} from '@features/authentication';
 import UploadConfirmModal, {UploadConfirmModalHandle} from './UploadConfirmModal';
 import WarningModal, {WarningModalHandle} from './WarningModal';
 import { useUpdateLevel, useUploadLevel } from '../api/use-put-level';
+import { defaultEmptyLevel } from '../utils';
+import SaveImg from '@images/icons/save.svg';
+import UploadImg from '@images/icons/upload.svg';
+
 interface CustomLevelProps {}
 interface LocationState {userLevelInfo: UserLevelInfo};
-const emptyStage: UserLevelInfo = {
-  id: '',
-  height: 10 ,
-  width: 10 ,
-  lasers: [] ,
-  targets: [] ,
-  reflectorNum: 0,
-  lensNum: 0,
-  clears: 0,
-  likes: 0,
-  record: 8,
-  public: false,
-  creator: '',
-  timestamp: '',
-  personal_best: null
-}
+
 
 const CustomLevel: FC<CustomLevelProps> = () => {
   const { state } = useLocation();
-  const {userLevelInfo} = state as LocationState || {userLevelInfo: emptyStage};
+  const {userLevelInfo} = state as LocationState || {userLevelInfo: defaultEmptyLevel};
   const {id} = userLevelInfo;
  
   const level = useLevel(userLevelInfo);
-  const [levelState] = level;
+  const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
   const levelInfo = state2info(levelState);
   const mirrorStates = getMirrorStates(levelState);
 
@@ -42,15 +31,17 @@ const CustomLevel: FC<CustomLevelProps> = () => {
   const uploadConfirmModalRef = useRef<UploadConfirmModalHandle>(null);
   const warningModalRef = useRef<WarningModalHandle>(null);
   
-
+  const stageRef = useRef<StageHandle>(null);
 
   const updateMutation = useUpdateLevel();
   const uploadMutation = useUploadLevel();
 
+
   const update = () => {
-    updateMutation.mutate({id, levelInfo}, {
+    const uri = stageRef.current?.getThumbnail() || '';
+    updateMutation.mutate({id, levelInfo, thumbnail: uri.split(',')[1]}, {
       onSuccess: (data) => {
-        console.log(data);
+        
       },
       onError: (error) => {
         if(isCancel(error)){
@@ -61,6 +52,7 @@ const CustomLevel: FC<CustomLevelProps> = () => {
               reLoginModalRefForUpdate.current?.open();
               break;
             default:
+              console.error(error);
               break;
           }
         }
@@ -69,7 +61,8 @@ const CustomLevel: FC<CustomLevelProps> = () => {
   }
 
   const upload = () => {
-    uploadMutation.mutate({id, levelInfo, mirrorStates}, {
+    const uri = stageRef.current?.getThumbnail() || '';
+    uploadMutation.mutate({id, levelInfo, mirrorStates, thumbnail: uri.split(',')[1]}, {
       onSuccess: (data) => {
         console.log(data);
       },
@@ -82,12 +75,16 @@ const CustomLevel: FC<CustomLevelProps> = () => {
               reLoginModalRefForUpload.current?.open();
               break;
             default:
+              console.error(error);
               break;
           }
         }
       }
     })
   }
+
+
+
   const uploadConfirm = () => {
     if(levelInfo.lasers.length <= 0 || levelInfo.targets.length <= 0){
       warningModalRef.current?.open('The level should contain at least 1 laser and 1 target');
@@ -97,24 +94,35 @@ const CustomLevel: FC<CustomLevelProps> = () => {
       uploadConfirmModalRef.current?.open();
     }
   }
-  
-  const [saveImg] = useImage('https://www.svgrepo.com/show/509215/save-alt.svg');
-  const [uploadImg] = useImage('https://www.svgrepo.com/show/502880/upload-2.svg');
+
+  const updatePreprocess = () => {
+    mirrorActions.resetMirrors();
+    setTimeout(update, 1000);
+  }
+
+  const uploadPreprocess = () => {
+    mirrorActions.resetMirrors();
+    setTimeout(upload, 1000);
+  }
+
+
+  const [saveImg] = useImage(SaveImg);
+  const [uploadImg] = useImage(UploadImg);
   return (
     <>
-      <Stage mode={Mode.Custom} level={level} onClear={()=>{}}>
+      <Stage mode={Mode.Custom} level={level} onClear={()=>{}} ref={stageRef}>
         <StageButtonGroup 
           gridHeight={levelState.height} 
           gridWidth={levelState.width} 
           btnImg1={saveImg}
           btnImg2={uploadImg} 
-          onClick1={update} 
+          onClick1={updatePreprocess} 
           onClick2={uploadConfirm}
         />
       </Stage>
      
       <WarningModal ref={warningModalRef}/>
-      <UploadConfirmModal upload={upload} ref={uploadConfirmModalRef}/>
+      <UploadConfirmModal uploadPreprocess={uploadPreprocess} ref={uploadConfirmModalRef}/>
       <ReLoginModal onLogin={update} ref={reLoginModalRefForUpdate}/>
       <ReLoginModal onLogin={upload} ref={reLoginModalRefForUpload}/>
     </>

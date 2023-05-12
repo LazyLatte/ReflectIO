@@ -1,4 +1,4 @@
-import {useState, useEffect, FC} from 'react'
+import {useState, FC} from 'react'
 import Box from '@mui/material/Box';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -7,14 +7,11 @@ import {listGlobalLevels} from '../api/level';
 
 import { motion } from "framer-motion"
 import {LevelInfoCard, UserLevelInfo} from '@features/level';
-import useAuth from '../features/authentication/hooks/useAuth';
-import useModalRef from '../features/modal/useModalRef';
+import { useAuth } from '@features/authentication';
 const orderByOptions = ['clears', 'likes', 'timestamp'];
 interface GlobalLevelsProps {};
 const GlobalLevels: FC<GlobalLevelsProps> = ({}) => {
   const {auth} = useAuth()!;
-
-  //const {shouldSignInModalRef} = useModalRef();
   const [value, setValue] = useState<number>(0);
   const [ascend, setAscend] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);

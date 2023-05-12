@@ -1,5 +1,6 @@
-import {useState, useEffect, useLayoutEffect, FC, ReactNode} from 'react';
+import {useState, useEffect, useLayoutEffect, FC, ReactNode, RefObject, forwardRef, useImperativeHandle, createRef} from 'react';
 import {Stage as Wrap, Layer} from 'react-konva';
+import Konva from 'konva';
 import { motion } from "framer-motion"
 import Grid from './Grid';
 import CustomGrid from './CustomGrid';
@@ -13,14 +14,26 @@ import AddObjectDropdown from './AddObjectDropdown';
 import {useGridRay, useStageConfig} from '../hooks';
 import {ObjectType, Level, Vector2D, Target, Mode} from '../interfaces';
 
+function downloadURI(uri: string, name: string) {
+  var link = document.createElement('a');
+  link.download = name;
+  link.href = uri;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 interface StageProps {
   mode: Mode;
   level: Level;
   onClear: () => void;
   children: ReactNode;
 }
-
-const Stage: FC<StageProps> = ({mode, level, onClear, children}) => {
+export interface StageHandle {
+  getThumbnail: () => string | undefined;
+}
+export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, onClear, children}, ref) => {
+  const stageRef = createRef<Konva.Stage>()
   const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
   const {height: gridHeight, width: gridWidth, lasers, targets, reflectors, lens} = levelState;
   
@@ -42,6 +55,18 @@ const Stage: FC<StageProps> = ({mode, level, onClear, children}) => {
     setLevelClear(isClear);
   }, [gridRay])
 
+  useImperativeHandle(ref, ()=>({
+    getThumbnail: () => {
+      return stageRef.current?.toDataURL({
+        x: boardOrigin.x-2,
+        y: boardOrigin.y-2,
+        width: gridWidth * cellWidth + 4,
+        height: gridHeight * cellWidth + 4,
+        pixelRatio: 200.0 / (gridWidth * cellWidth),
+      });
+    }
+  }))
+
   const [mouseOnTarget, setMouseOnTarget] = useState<Target | null>(null);
   const [dropdownCellPos, setDropdownCellPos] = useState<Vector2D | null>(null);
   return (
@@ -49,7 +74,7 @@ const Stage: FC<StageProps> = ({mode, level, onClear, children}) => {
         style={{position: 'absolute'}}
         onContextMenu={e => e.preventDefault()}
       >
-        <Wrap width={window.innerWidth} height={window.innerHeight - 100} >
+        <Wrap width={window.innerWidth} height={window.innerHeight - 100} ref={stageRef}>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
             <Grid gridHeight={gridHeight} gridWidth={gridWidth}/>
             <ItemBar gridHeight={gridHeight} gridWidth={gridWidth}/>
@@ -74,7 +99,6 @@ const Stage: FC<StageProps> = ({mode, level, onClear, children}) => {
         </Wrap>
       </motion.div>
   );
-}
+})
 
-export default Stage;
 

@@ -17,12 +17,12 @@ const appear = {
   }
 }
 interface UploadConfirmModalProps {
-  upload: () => void;
+  uploadPreprocess: () => void;
 };
 export interface UploadConfirmModalHandle {
   open: () => void;
 }
-const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, UploadConfirmModalProps> = ({upload}, ref) => {
+const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, UploadConfirmModalProps> = ({uploadPreprocess}, ref) => {
   const [open, setOpen] = useState<boolean>(false);
   useImperativeHandle(ref, ()=>({
     open: () => {
@@ -31,7 +31,10 @@ const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, Upl
   }))
 
   const closeModal = () => setOpen(false);
-
+  const handleOnClick = () => {
+    uploadPreprocess();
+    closeModal();
+  }
   return (
     <AnimatePresence>
       {open &&
@@ -48,7 +51,7 @@ const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, Upl
               <Typography variant='caption' sx={{textAlign: 'center'}}>UPLOAD THE LEVEL TO PUBLIC?</Typography>
               <Separator/>
               <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' width='100%'>
-                <ModalButton width='45%' disabled={false} onClick={upload}>YES</ModalButton>
+                <ModalButton width='45%' disabled={false} onClick={handleOnClick}>YES</ModalButton>
                 <ModalButton width='45%' disabled={false} onClick={closeModal}>NO</ModalButton>
               </Box>
             </ModalBox>

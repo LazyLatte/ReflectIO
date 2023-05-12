@@ -13,7 +13,7 @@ import ExtensionIcon from '@mui/icons-material/Extension';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useAuth, AccountModal, AccountModalHandle } from '@features/authentication';
+import { useAuth, useRefreshToken, AccountModal, AccountModalHandle } from '@features/authentication';
 import { BuiltInLevelInfo, UserLevelInfo } from '@features/level';
 
 const styles = {
@@ -62,7 +62,7 @@ const getDisplayText = (paths: string[], userLevelInfo: UserLevelInfo) => {
   return '';
 }
 const TopBar = () => {
-  const {auth} = useAuth()!;
+  const {auth, setAuth} = useAuth()!;
   const navigate = useNavigate();
   const location = useLocation();
   const paths = location.pathname.split('/');
@@ -70,23 +70,36 @@ const TopBar = () => {
 
   const accountModalRef = useRef<AccountModalHandle>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget);
+ 
   const handleClose = () => setAnchorEl(null)
 
   
   const handleSignIn = () => {
-    handleClose();
     accountModalRef.current?.open();
+    handleClose();
   }
-
+  const handleSignOut = () => {
+    const guest_name = "GUEST-" + Math.floor((Math.random()*10000)).toString();
+    setAuth({name: guest_name, accessToken: null});
+    handleClose();
+  }
   const handleMyLevels = () => {
     handleClose();
     navigate('./mylevels');
   }
-
+  const refresh = useRefreshToken();
+  useEffect(()=>{
+    const initRequest = async () => {
+      try{
+        const accessToken = await refresh();
+      }catch(err){
+        accountModalRef.current?.open();
+      }
+    }
+    initRequest();
+   
+  }, [])
   return (
     <Box 
       display='flex' 
@@ -119,7 +132,7 @@ const TopBar = () => {
       <Menu
         id="pfp-menu"
         anchorEl={anchorEl}
-        open={open}
+        open={Boolean(anchorEl)}
         onClose={handleClose}
 
         sx={{

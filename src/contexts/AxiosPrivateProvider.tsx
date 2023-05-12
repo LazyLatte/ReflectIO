@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {useEffect, createContext} from 'react';
-import { AxiosInstance, isCancel } from 'axios';
+import { AxiosInstance } from 'axios';
 
 import {axiosPrivate} from '@api/axios';
 import {useAuth, useRefreshToken} from '@features/authentication';

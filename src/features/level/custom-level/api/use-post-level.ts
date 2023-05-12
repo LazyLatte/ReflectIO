@@ -3,9 +3,8 @@ import { useAxiosPrivate } from "@features/authentication";
 import { UserLevelInfo} from "@features/level";
 export const useCreateLevel = () => {
     const axiosPrivate = useAxiosPrivate();
-    return useMutation(async ({height, width}: {height: number, width: number}) => {
-        console.log(height, width);
-        const {data} = await axiosPrivate.post<UserLevelInfo>('/levels');
+    return useMutation(async ({height, width, thumbnail}: {height: number, width: number, thumbnail: string}) => {
+        const {data} = await axiosPrivate.post<UserLevelInfo>('/levels', {height, width, thumbnail});
         return data;
     })
 }

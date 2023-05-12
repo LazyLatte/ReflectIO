@@ -71,14 +71,6 @@ const PublicLevelClearModal: ForwardRefRenderFunction<PublicLevelClearModalHandl
     reset();
     closeModal();
   }
-  const clearAnimationOptions = {
-    loop: false,
-    autoplay: true, 
-    animationData: lottieData[star],
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice'
-    }
-  };
   return (
     <AnimatePresence>
       {open &&
