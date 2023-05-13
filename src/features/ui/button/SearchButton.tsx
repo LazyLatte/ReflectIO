@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
-
+ 
 const styles = {
   btn: {
     display:'flex',

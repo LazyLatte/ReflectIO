@@ -1,39 +1,37 @@
 import {useState, useEffect, ChangeEvent} from 'react';
+import axios from '@api/axios';
 import { motion, AnimatePresence  } from "framer-motion";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import {LevelInfoCard, UserLevelInfo} from '@features/level';
-import {getLevelByID} from '../api/level';
 import UuidEncoder from 'uuid-encoder';
 const encoder = new UuidEncoder('base64url');
 //2ECbKQ9Ff4Fuer5n7KvhJo
 //1z1bpxAKT5Nefv1T_RAYRB
+const ID_REGEX = /[a-zA-Z0-9_-]{22}/;
 const Search = () => {
   const [levelID, setLevelID] = useState<string>('');
   const [level, setLevel] = useState<UserLevelInfo | null>(null);
   const [errMsg, setErrMsg] = useState<string>('');
   const search = async () => {
-    if(levelID.length === 22){
-      const result = await getLevelByID(encoder.decode(levelID));
-      if(result){
+    const isValid = ID_REGEX.test(levelID);
+    if(isValid){
+      const {data} = await axios.get<UserLevelInfo | null>(`/levels/${encoder.decode(levelID)}`);
+      if(data){
         setErrMsg('');
-        setLevel(result);
+        setLevel(data);
       }else{
         setErrMsg('Level not found');
       }
     }else{
-      setErrMsg('ID should be 22 characters');
+      setErrMsg('Invalid ID');
     }
   }
 
   return (
-    <motion.div
-      initial={{opacity: 0}}
-      animate={{ opacity: 1}}
-      exit={{ opacity: 0 }}
-      transition= { {duration: 0.8 }}
+    <div
       style={{
         position: 'absolute',
         width: '100%',
@@ -81,7 +79,7 @@ const Search = () => {
             </motion.div>
         }
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
 

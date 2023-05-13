@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import Grid from './Grid';
 import CustomGrid from './CustomGrid';
 import ItemBar from './ItemBar';
+import CustomItemBar from './CustomItemBar';
 import Mirror from './Mirror';
 import Lasers from './Lasers';
 import Targets from './Targets';
@@ -14,14 +15,14 @@ import AddObjectDropdown from './AddObjectDropdown';
 import {useGridRay, useStageConfig} from '../hooks';
 import {ObjectType, Level, Vector2D, Target, Mode} from '../interfaces';
 
-function downloadURI(uri: string, name: string) {
-  var link = document.createElement('a');
-  link.download = name;
-  link.href = uri;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
+// function downloadURI(uri: string, name: string) {
+//   var link = document.createElement('a');
+//   link.download = name;
+//   link.href = uri;
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+// }
 
 interface StageProps {
   mode: Mode;
@@ -76,17 +77,19 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, onClear,
       >
         <Wrap width={window.innerWidth} height={window.innerHeight - 100} ref={stageRef}>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
-            <Grid gridHeight={gridHeight} gridWidth={gridWidth}/>
             <ItemBar gridHeight={gridHeight} gridWidth={gridWidth}/>
+            <CustomItemBar mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} mirrorNum={reflectors.length + lens.length} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
             {children}
           </Layer>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
+            <Grid gridHeight={gridHeight} gridWidth={gridWidth}/>
             <GridRay grid={gridRay.grid} Dgrid={gridRay.Dgrid}/>
             <CustomGrid mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
-          </Layer>
-          <Layer x={boardOrigin.x} y={boardOrigin.y}>
             <Lasers mode={mode} lasers={lasers} laserActions={laserActions}/>
             <Targets mode={mode} targets={targets} setMouseOnTarget={setMouseOnTarget} targetActions={targetActions}/>
+          </Layer>
+          <Layer x={boardOrigin.x} y={boardOrigin.y}>
+
             {reflectors.map((m, idx) => (
               <Mirror mode={mode} mirror={m}  mirrorActions={mirrorActions} validRange={{x: gridWidth, y: gridHeight}} isEmptyCell = {isEmptyCell} key={idx}/>
             ))}
@@ -94,7 +97,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, onClear,
               <Mirror mode={mode} mirror={m}  mirrorActions={mirrorActions} validRange={{x: gridWidth, y: gridHeight}} isEmptyCell = {isEmptyCell} key={idx}/>
             ))}
             <ColorMixingPopover target={mouseOnTarget}/>
-            <AddObjectDropdown mode={mode} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  
+            <AddObjectDropdown mode={mode}  gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  
           </Layer>
         </Wrap>
       </motion.div>

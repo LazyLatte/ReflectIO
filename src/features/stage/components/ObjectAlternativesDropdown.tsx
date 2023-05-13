@@ -6,20 +6,20 @@ import { ObjectType, Vector2D, AddObjects } from '../interfaces';
 interface ObjectAlternativesDropdownProps {
   origin: Vector2D;
   cellPos: Vector2D;
-  objType: 'Laser' | 'Target' | 'Mirror';
+  objType: 'Laser' | 'Target' | 'Reflect' | 'Lens';
   addObjects: AddObjects;
   closeDropdown: () => void;
 }
 
 const ObjectAlternativesDropdown: FC<ObjectAlternativesDropdownProps> = ({ origin, cellPos, objType, addObjects, closeDropdown}) => {
   const {addLaser, addTarget, addMirror} = addObjects;
-  const colorOptions = [4, 2, 1, 6, 3, 5, 7] as const;
-  const mirrorOptions = [ObjectType.Reflector, ObjectType.Lens] as const;
-
+  const colorOptions = (objType === 'Reflect' || objType === 'Lens') ? [7, 4, 2, 1, 6, 3, 5] : [4, 2, 1, 6, 3, 5, 7];
+  
   const laserImages = useImages()?.laserImages || [];
   const targetImages = useImages()?.targetImages || [];
-  const mirrorImages = useImages()?.mirrorImages || [];
-  
+  const reflectorImages = useImages()?.reflectorImages || [];
+  const lensImages = useImages()?.lensImages || [];
+
   const {shouldRearrange} = useStageConfig();
   return (
     <Group x={origin.x} y={origin.y} >
@@ -54,15 +54,31 @@ const ObjectAlternativesDropdown: FC<ObjectAlternativesDropdownProps> = ({ origi
         </Group>
       }
 
-      {objType === 'Mirror' &&
+      {objType === 'Reflect' &&
         <Group>
-          {mirrorOptions.map((type, i)=>(
+          {colorOptions.map((color, i)=>(
             <OptionCell 
               key={i}
               idx={i}
-              image={mirrorImages[i]} 
+              image={reflectorImages[color]} 
               onClick={()=>{
-                addMirror(type, cellPos, shouldRearrange);
+                addMirror(ObjectType.Reflector, cellPos, shouldRearrange);
+                closeDropdown();
+              }}
+            />
+          ))}
+        </Group>
+      }
+
+      {objType === 'Lens' &&
+        <Group>
+          {colorOptions.map((color, i)=>(
+            <OptionCell 
+              key={i}
+              idx={i}
+              image={lensImages[color]} 
+              onClick={()=>{
+                addMirror(ObjectType.Lens, cellPos, shouldRearrange);
                 closeDropdown();
               }}
             />

@@ -26,10 +26,25 @@ import TargetWhiteImg from '../assets/images/targets/target-white.svg';
 import TargetWhiteActiveImg from '../assets/images/targets/target-white-active.svg';
 
 
-import ReflectorImg from '../assets/images/mirrors/reflector-default-dark.png';
-import LensImg from '../assets/images/mirrors/lens-default-dark.png';
+
+import ReflectorRedImg from '../assets/images/mirrors/reflector-red-dark.png';
+import ReflectorGreenImg from '../assets/images/mirrors/reflector-green-dark.png';
+import ReflectorBlueImg from '../assets/images/mirrors/reflector-blue-dark.png';
+import ReflectorYellowImg from '../assets/images/mirrors/reflector-yellow-dark.png';
+import ReflectorCyanImg from '../assets/images/mirrors/reflector-cyan-dark.png';
+import ReflectorMagentaImg from '../assets/images/mirrors/reflector-magenta-dark.png';
+import ReflectorWhiteImg from '../assets/images/mirrors/reflector-default-dark.png';
+
+import LensRedImg from '../assets/images/mirrors/reflector-red-dark.png';
+import LensGreenImg from '../assets/images/mirrors/reflector-green-dark.png';
+import LensBlueImg from '../assets/images/mirrors/reflector-blue-dark.png';
+import LensYellowImg from '../assets/images/mirrors/reflector-yellow-dark.png';
+import LensCyanImg from '../assets/images/mirrors/reflector-cyan-dark.png';
+import LensMagentaImg from '../assets/images/mirrors/reflector-magenta-dark.png';
+import LensWhiteImg from '../assets/images/mirrors/lens-default-dark.png';
 interface ImagesInterface {
-  mirrorImages: (HTMLImageElement | undefined)[];
+  reflectorImages: (HTMLImageElement | undefined)[];
+  lensImages: (HTMLImageElement | undefined)[];
   laserImages: (HTMLImageElement | undefined)[];
   targetImages: (HTMLImageElement | undefined)[][];
 }
@@ -40,14 +55,22 @@ export const ImagesProvider: FC<Provider> = ({children}) => {
 
 
   
-  // const [saveImg] = useImage('https://www.svgrepo.com/show/509215/save-alt.svg');
-  // const [uploadImg] = useImage('https://www.svgrepo.com/show/502880/upload-2.svg');
+  const [reflector_red] = useImage(ReflectorRedImg);
+  const [reflector_green] = useImage(ReflectorGreenImg);
+  const [reflector_blue] = useImage(ReflectorBlueImg);
+  const [reflector_yellow] = useImage(ReflectorYellowImg);
+  const [reflector_cyan] = useImage(ReflectorCyanImg);
+  const [reflector_magenta] = useImage(ReflectorMagentaImg);
+  const [reflector_white] = useImage(ReflectorWhiteImg);
 
-  // const [emptyHeartImg] = useImage('https://www.svgrepo.com/show/433523/heart-so.svg');
-  // const [fullHeartImg] = useImage('https://www.svgrepo.com/show/503037/heart.svg');
-
-  const [reflector] = useImage(ReflectorImg);
-  const [lens] = useImage(LensImg);
+  const [lens_red] = useImage(LensRedImg);
+  const [lens_green] = useImage(LensGreenImg);
+  const [lens_blue] = useImage(LensBlueImg);
+  const [lens_yellow] = useImage(LensYellowImg);
+  const [lens_cyan] = useImage(LensCyanImg);
+  const [lens_magenta] = useImage(LensMagentaImg);
+  const [lens_white] = useImage(LensWhiteImg);
+  
 
   const [laser_blue] = useImage(LaserBlueImg);
   const [laser_green] = useImage(LaserGreenImg);
@@ -82,14 +105,16 @@ export const ImagesProvider: FC<Provider> = ({children}) => {
     const targetImages = [[undefined, undefined], [target_blue, target_blue_active], [target_green, target_green_active], [target_cyan, target_cyan_active], [target_red, target_red_active], 
                         [target_magenta, target_magenta_active], [target_yellow, target_yellow_active], [target_white, target_white_active]];
     setImages({
-      mirrorImages: [reflector, lens],
+      reflectorImages: [undefined, reflector_blue, reflector_green, reflector_cyan, reflector_red, reflector_magenta, reflector_yellow, reflector_white],
+      lensImages: [undefined, lens_blue, lens_green, lens_cyan, lens_red, lens_magenta, lens_yellow, lens_white],
       laserImages: [undefined, laser_blue, laser_green, laser_cyan, laser_red, laser_magenta, laser_yellow, laser_white],
       targetImages: targetImages
     })
   }, [laser_blue, laser_green, laser_cyan, laser_red, laser_magenta, laser_yellow, laser_white,
+      reflector_blue, reflector_green, reflector_cyan, reflector_red, reflector_magenta, reflector_yellow, reflector_white,
+      lens_blue, lens_green, lens_cyan, lens_red, lens_magenta, lens_yellow, lens_white,
       target_blue, target_blue_active, target_red, target_red_active, target_green, target_green_active, 
-      target_yellow, target_yellow_active, target_cyan, target_cyan_active, target_white, target_white_active,
-      reflector, lens]);
+      target_yellow, target_yellow_active, target_cyan, target_cyan_active, target_white, target_white_active]);
   return (
     <ImagesContext.Provider value={images}>
       {children}

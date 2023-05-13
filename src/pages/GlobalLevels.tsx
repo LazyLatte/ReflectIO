@@ -1,4 +1,4 @@
-import {useState, FC} from 'react'
+import {useState, useEffect, FC} from 'react'
 import Box from '@mui/material/Box';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -26,13 +26,11 @@ const GlobalLevels: FC<GlobalLevelsProps> = ({}) => {
       console.error(err);
     }
   };
+  useEffect(() => {
+    fetchGlobalLevels();
+  }, [])
   return (
-    <motion.div
-      initial={{opacity: 0}}
-      animate={{opacity: 1}}
-      exit={{opacity: 0}}
-      transition= { {duration: 0.8 }}
-      onAnimationComplete={fetchGlobalLevels}
+    <div
       style={{
         position: 'absolute', 
         width: '100%', 
@@ -77,7 +75,7 @@ const GlobalLevels: FC<GlobalLevelsProps> = ({}) => {
           <ScrollTopButton/>
         </Box>
       </Box>
-    </motion.div>
+    </div>
   )
 }
 

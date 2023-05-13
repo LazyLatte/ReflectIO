@@ -5,26 +5,28 @@ import {useStageConfig} from '../hooks';
 import { Mode, Vector2D, AddObjects} from '../interfaces';
 interface AddObjectDropdownProps {
   mode: Mode;
+  gridHeight: number;
+  gridWidth: number;
   dropdownCellPos: Vector2D | null;
   setDropdownCellPos: Dispatch<SetStateAction<Vector2D | null>>;
   addObjects: AddObjects;
 }
 interface colorDropdownInterface {
   pos: Vector2D;
-  objType: 'Laser' | 'Target' | 'Mirror';
+  objType: 'Laser' | 'Target' | 'Reflect' | 'Lens';
 }
-const AddObjectDropdown: FC<AddObjectDropdownProps> = ({mode, dropdownCellPos, setDropdownCellPos, addObjects}) => {
+const AddObjectDropdown: FC<AddObjectDropdownProps> = ({mode, gridHeight, gridWidth, dropdownCellPos, setDropdownCellPos, addObjects}) => {
   if(!dropdownCellPos || mode !== Mode.Custom) return null;
   
   const cellPos = dropdownCellPos;
-  const objectOptions: ['Laser', 'Target', 'Mirror'] = ['Laser', 'Target', 'Mirror'];
+  const {cellWidth} = useStageConfig();
+  const objectOptions = (dropdownCellPos.x < gridWidth && dropdownCellPos.y < gridHeight) ? ['Laser', 'Target'] as const : ['Reflect', 'Lens'] as const;
   const objectOptionSize: Size2D = { height: 50, width: 120 };
   const [colorDropdown, setColorDropdown] = useState<colorDropdownInterface | null>(null);
   const closeDropdown = () =>{
     setDropdownCellPos(null);
     setColorDropdown(null);
   }
-  const {cellWidth} = useStageConfig();
   return (
     <Group x={(cellPos.x + 1.2) * cellWidth} y={cellPos.y * cellWidth}>
       {objectOptions.map((objType, i) => (

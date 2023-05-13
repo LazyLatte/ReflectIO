@@ -86,16 +86,6 @@ export const useLevel = (level: LevelInfo | UserLevelInfo): Level => {
   }
 
 
-  //--------------------------------------------------------------
-  // const changeStageSize = (size: number) => {
-  //   setLevelState((prev) => ({
-  //     ...prev,
-  //     height: size,
-  //     width: size
-  //   }));
-  // };
-
-
   const addLaser = (pos: Vector2D, color: number) => {
     setLevelState((prev) => ({
       ...prev,
