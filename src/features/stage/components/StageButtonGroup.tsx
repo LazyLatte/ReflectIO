@@ -4,33 +4,48 @@ import StageButton from './StageButton';
 import {useStageConfig} from '../hooks';
 import {ITEMS_BAR_HEIGHT} from '../gameHelpers';
 import {Vector2D} from '../interfaces';
-const btnWidthFactor = 1.2;
+interface BTN {
+  img:  HTMLImageElement | undefined;
+  onClick: () => void;
+}
 interface StageButtonGroupProps{
   gridHeight: number;
   gridWidth: number;
-  btnImg1: HTMLImageElement | undefined;
-  btnImg2: HTMLImageElement | undefined;
-  onClick1: () => void;
-  onClick2: () => void;
+  btn: BTN[];
 }
 
-const StageButtonGroup: FC<StageButtonGroupProps> = memo(({gridHeight, gridWidth, btnImg1, btnImg2, onClick1, onClick2}) => {
+const StageButtonGroup: FC<StageButtonGroupProps> = memo(({gridHeight, gridWidth, btn}) => {
   const {cellWidth, shouldRearrange} = useStageConfig();
-  const btnGroupPos: Vector2D = shouldRearrange ? {x: ITEMS_BAR_HEIGHT+1.5, y: gridHeight+1.4} : {x: gridWidth+1.4, y: ITEMS_BAR_HEIGHT+1.5};
-  return (
-    <Group x={btnGroupPos.x*cellWidth} y={btnGroupPos.y*cellWidth}>
-        <StageButton 
-          image={btnImg1} 
-          position={{x: 0, y: 0}}
-          onClick={onClick1}
-        />
-        <StageButton 
-          image={btnImg2} 
-          position={shouldRearrange ? {x: cellWidth*(btnWidthFactor+1), y: 0} : {x: 0, y:cellWidth*(btnWidthFactor+1)}}
-          onClick={onClick2}
-        />
-    </Group>
-  );
+  switch (btn.length){
+    case 1: 
+      let btnPos: Vector2D = shouldRearrange ? {x: ITEMS_BAR_HEIGHT+2.5, y: gridHeight+1.4} : {x: gridWidth+1.4, y: ITEMS_BAR_HEIGHT+2.5};
+      return (
+        <Group x={btnPos.x*cellWidth} y={btnPos.y*cellWidth}>
+          <StageButton 
+            image={btn[0].img} 
+            position={{x: 0, y: 0}}
+            onClick={btn[0].onClick}
+          />
+        </Group>
+      );
+    case 2 : 
+      let btnGroupPos: Vector2D = shouldRearrange ? {x: ITEMS_BAR_HEIGHT+1.5, y: gridHeight+1.4} : {x: gridWidth+1.4, y: ITEMS_BAR_HEIGHT+1.5};
+      return (
+        <Group x={btnGroupPos.x*cellWidth} y={btnGroupPos.y*cellWidth}>
+            <StageButton 
+              image={btn[0].img} 
+              position={{x: 0, y: 0}}
+              onClick={btn[0].onClick}
+            />
+            <StageButton 
+              image={btn[1].img} 
+              position={shouldRearrange ? {x: cellWidth*2.2, y: 0} : {x: 0, y:cellWidth*2.2}}
+              onClick={btn[1].onClick}
+            />
+        </Group>
+      );
+    default: return null;
+  }
 })
 
 export default StageButtonGroup;

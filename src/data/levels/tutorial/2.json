@@ -1,0 +1,30 @@
+{
+    "height": 10,
+    "width": 10,
+    "lasers": [
+        {
+        "pos": {"x": 2, "y": 4},
+        "dir": {"x": 1, "y": 0},
+        "color": 2
+        }    
+    ],
+    "targets": [
+        {
+        "pos": {"x": 4, "y": 7},
+        "color": 2
+        },
+        {
+        "pos": {"x": 7, "y": 4},
+        "color": 2
+        }
+    ],
+    "reflectorNum": 0,
+    "lensNum": 1,
+    "answer": [
+        {
+            "pos": {"x": 5, "y": 5},
+            "deg": 45
+        }
+    ],
+    "text": "The goal of this game is to activate all _ "
+}

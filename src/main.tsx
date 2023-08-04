@@ -22,8 +22,8 @@ const rootElement = document.getElementById('root') as HTMLElement;
 const root = createRoot(rootElement);
 root.render(
   <>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <AxiosPrivateProvider>
             <ColorModeProvider>
@@ -37,8 +37,8 @@ root.render(
             </ColorModeProvider>
           </AxiosPrivateProvider>
         </AuthProvider>
-      </BrowserRouter>
-    <ReactQueryDevtools/>
-    </QueryClientProvider> 
+      <ReactQueryDevtools/>
+      </QueryClientProvider> 
+    </BrowserRouter>
   </>
 );

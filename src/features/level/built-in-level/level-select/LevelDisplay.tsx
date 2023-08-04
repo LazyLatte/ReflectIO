@@ -108,7 +108,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
                       state={{
                         difficulty, 
                         levelIdx: i*shape.width+j, 
-                        clear: clears && (clears[difficulty] & (1 << (i*shape.width+j)))
+                        clear: clears!==undefined && Boolean((clears[difficulty] & (1 << (i*shape.width+j))))
                       }}
                       variant='outlined'
                       sx={{
@@ -118,7 +118,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
                       }}
                     >
                       <img 
-                        src={clears &&  (clears[difficulty] & (1 << (i*shape.width+j))) ? StarYellow : StarWhite}
+                        src={clears!==undefined && Boolean((clears[difficulty] & (1 << (i*shape.width+j)))) ? StarYellow : StarWhite}
                         style={{
                           position: 'absolute',
                           bottom: '4rem',

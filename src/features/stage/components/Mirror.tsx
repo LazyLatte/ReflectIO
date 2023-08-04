@@ -8,10 +8,11 @@ interface MirrorProps {
   mirror: MirrorState;
   mirrorActions: MirrorActions;
   validRange: Vector2D;
-  isEmptyCell: (pos: Vector2D) => boolean;
+  isValidCell: (type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, idx: number) => boolean;
+  disabled: boolean;
 }
 
-const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isEmptyCell}) => {
+const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isValidCell, disabled}) => {
   const { type, idx, pos, resetPos, deg } = mirror;
   const {rotateMirror, updateMirrorPos, deleteMirror} = mirrorActions;
 
@@ -40,7 +41,7 @@ const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isEmp
       draggable
       onDragEnd={(e) => {
         const newPos: Vector2D = {x: Math.round(e.target.x() / cellWidth), y: Math.round(e.target.y() / cellWidth)};
-        if (newPos.x >= 0 && newPos.x < validRange.x && newPos.y >= 0 && newPos.y < validRange.y && isEmptyCell(newPos)) {
+        if (newPos.x >= 0 && newPos.x < validRange.x && newPos.y >= 0 && newPos.y < validRange.y && isValidCell(type, newPos, idx)) {
           updateMirrorPos(type, idx, newPos);
         } else {
           mirrorRef.current?.position({
@@ -50,6 +51,7 @@ const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isEmp
         }
       }}
       onClick={(e) => {
+        if(disabled) return;
         if(e.evt.button === 0){
           rotateMirror(type, idx, 45);
         }else if(e.evt.button === 2){

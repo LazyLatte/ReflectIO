@@ -1,5 +1,5 @@
 export enum ObjectType {None, Laser, Target, Reflector, Lens};
-export enum Mode {BuiltIn, Custom, Public};
+export enum Mode {BuiltIn, Custom, Public, Tutorial};
 export interface Vector2D {x: number, y: number}
 export interface Laser {pos: Vector2D, dir: Vector2D, color: number} 
 export interface Mirror {type: ObjectType.Reflector | ObjectType.Lens, idx: number, pos: Vector2D, resetPos: Vector2D, deg: number}

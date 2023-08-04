@@ -29,7 +29,11 @@ const AccountModal: ForwardRefRenderFunction<AccountModalHandle, AccountModalPro
     open: () => setOpen(true)
   }))
 
-  const closeModal = () => setOpen(false);
+  const closeModal = () => {
+    setUsername('');
+    setPage('username');
+    setOpen(false);
+  };
 
   return (
     <AnimatePresence>

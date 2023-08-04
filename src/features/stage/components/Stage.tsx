@@ -1,7 +1,6 @@
-import {useState, useEffect, useLayoutEffect, FC, ReactNode, RefObject, forwardRef, useImperativeHandle, createRef} from 'react';
+import {useState, useEffect, useLayoutEffect, FC, ReactNode, forwardRef, useImperativeHandle, createRef} from 'react';
 import {Stage as Wrap, Layer} from 'react-konva';
 import Konva from 'konva';
-import { motion } from "framer-motion"
 import Grid from './Grid';
 import CustomGrid from './CustomGrid';
 import ItemBar from './ItemBar';
@@ -14,7 +13,7 @@ import ColorMixingPopover from './ColorMixingPopover';
 import AddObjectDropdown from './AddObjectDropdown';
 import {useGridRay, useStageConfig} from '../hooks';
 import {ObjectType, Level, Vector2D, Target, Mode} from '../interfaces';
-
+import { TutorialGoal } from '@features/level';
 // function downloadURI(uri: string, name: string) {
 //   var link = document.createElement('a');
 //   link.download = name;
@@ -27,13 +26,14 @@ import {ObjectType, Level, Vector2D, Target, Mode} from '../interfaces';
 interface StageProps {
   mode: Mode;
   level: Level;
+  tutorialGoal?: TutorialGoal;
   onClear: () => void;
-  children: ReactNode;
+  children?: ReactNode;
 }
 export interface StageHandle {
   getThumbnail: () => string | undefined;
 }
-export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, onClear, children}, ref) => {
+export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorialGoal, onClear, children}, ref) => {
   const stageRef = createRef<Konva.Stage>()
   const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
   const {height: gridHeight, width: gridWidth, lasers, targets, reflectors, lens} = levelState;
@@ -44,6 +44,13 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, onClear,
   const boardOrigin: Vector2D = {x: (window.innerWidth-gridWidth*cellWidth) >> 1, y: 56};
 
   const isEmptyCell = (pos: Vector2D): boolean => (gridRay.grid[pos.y][pos.x].object.type === ObjectType.None);
+  const isAnswerCell = (type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, idx: number): boolean => (
+    tutorialGoal?.type === type && tutorialGoal?.idx === idx && pos.x === tutorialGoal?.pos.x && pos.y === tutorialGoal?.pos.y
+  );
+  const isValidCell = (type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, idx: number): boolean => (mode!==Mode.Tutorial && isEmptyCell(pos)) || (mode===Mode.Tutorial && isAnswerCell(type, pos, idx));
+  const isDisabled = (type: ObjectType.Reflector | ObjectType.Lens, idx: number): boolean => (
+    mode===Mode.Tutorial && (tutorialGoal?.type !== type || tutorialGoal?.idx !== idx || tutorialGoal.match !== "deg")
+  );
   useLayoutEffect(()=>{
     mirrorActions.updateMirrorsResetPos(shouldRearrange);
   }, [shouldRearrange]);
@@ -71,7 +78,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, onClear,
   const [mouseOnTarget, setMouseOnTarget] = useState<Target | null>(null);
   const [dropdownCellPos, setDropdownCellPos] = useState<Vector2D | null>(null);
   return (
-      <motion.div 
+      <div 
         style={{position: 'absolute'}}
         onContextMenu={e => e.preventDefault()}
       >
@@ -89,18 +96,14 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, onClear,
             <Targets mode={mode} targets={targets} setMouseOnTarget={setMouseOnTarget} targetActions={targetActions}/>
           </Layer>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
-
-            {reflectors.map((m, idx) => (
-              <Mirror mode={mode} mirror={m}  mirrorActions={mirrorActions} validRange={{x: gridWidth, y: gridHeight}} isEmptyCell = {isEmptyCell} key={idx}/>
-            ))}
-            {lens.map((m, idx) => (
-              <Mirror mode={mode} mirror={m}  mirrorActions={mirrorActions} validRange={{x: gridWidth, y: gridHeight}} isEmptyCell = {isEmptyCell} key={idx}/>
+            {[...reflectors, ...lens].map((m, idx) => (
+              <Mirror mode={mode} mirror={m} mirrorActions={mirrorActions} validRange={{x: gridWidth, y: gridHeight}} isValidCell = {isValidCell} key={idx} disabled={isDisabled(m.type, m.idx)}/>
             ))}
             <ColorMixingPopover target={mouseOnTarget}/>
             <AddObjectDropdown mode={mode}  gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  
           </Layer>
         </Wrap>
-      </motion.div>
+      </div>
   );
 })
 

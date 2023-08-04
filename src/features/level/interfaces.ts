@@ -24,4 +24,8 @@ export type UserLevelInfo = LevelInfo & {
     personal_best: number | null;
     isFavorite?: number;
 }
-  
+
+export type TutorialLevelInfo = LevelInfo & {
+  answer: MirrorState[];
+  text: string;
+}

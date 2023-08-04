@@ -100,10 +100,16 @@ const PublicLevel: FC<PublicLevelProps> = () => {
         <StageButtonGroup 
           gridHeight={levelState.height} 
           gridWidth={levelState.width} 
-          btnImg1={restartImg}
-          btnImg2={isFavorite ? fullHeartImg : emptyHeartImg} 
-          onClick1={mirrorActions.resetMirrors} 
-          onClick2={like}
+          btn={[
+            {
+              img: restartImg,
+              onClick: mirrorActions.resetMirrors
+            },
+            {
+              img: isFavorite ? fullHeartImg : emptyHeartImg,
+              onClick: like
+            }
+          ]}
         />
       </Stage>
       <PublicLevelClearModal reset={mirrorActions.resetMirrors} clearText={clearText} star={star} warning={warning} ref={publicLevelClearModalRef}/>

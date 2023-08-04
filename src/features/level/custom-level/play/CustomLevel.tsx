@@ -114,10 +114,16 @@ const CustomLevel: FC<CustomLevelProps> = () => {
         <StageButtonGroup 
           gridHeight={levelState.height} 
           gridWidth={levelState.width} 
-          btnImg1={saveImg}
-          btnImg2={uploadImg} 
-          onClick1={updatePreprocess} 
-          onClick2={uploadConfirm}
+          btn={[
+            {
+              img: saveImg,
+              onClick: updatePreprocess
+            },
+            {
+              img: uploadImg,
+              onClick: uploadConfirm
+            }
+          ]}
         />
       </Stage>
      

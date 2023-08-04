@@ -25,14 +25,14 @@ const BuiltInLevel = () => {
   const patchClearsMutation = usePatchClears();
   const onClear = () => {
     if(!historyClear){
+      levelClearModalRef.current?.open();
       patchClearsMutation.mutate({difficulty, idx: levelIdx}, {
         onSuccess: () => {
-          levelClearModalRef.current?.open();
           setHistoryClear(true);
         },
         onError: (error) => {
           if(isCancel(error)){
-            console.log("Guest is playing!")
+            console.log("Guest is playing!");
           }else if(isAxiosError(error)){
               switch(error?.response?.status){
                 case 401:
@@ -55,10 +55,16 @@ const BuiltInLevel = () => {
         <StageButtonGroup 
           gridHeight={levelState.height} 
           gridWidth={levelState.width} 
-          btnImg1={restartImg}
-          btnImg2={bulbImg} 
-          onClick1={mirrorActions.resetMirrors} 
-          onClick2={()=>alert('Not support yet')}
+          btn={[
+            {
+              img: restartImg,
+              onClick: mirrorActions.resetMirrors
+            },
+            {
+              img: bulbImg,
+              onClick: ()=>alert('Not support yet')
+            }
+          ]}
         />
       </Stage>
       <LevelClearModal reset={mirrorActions.resetMirrors} difficulty={difficulty} levelIdx={levelIdx} star={3} ref={levelClearModalRef}/>

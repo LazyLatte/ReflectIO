@@ -12,9 +12,9 @@ import MyLevels from "./pages/MyLevels";
 import GlobalLevels from "./pages/GlobalLevels";
 import Search from "./pages/Search";
 import LevelSelect from './pages/LevelSelect';
-import Instructions from "./pages/Instructions";
+import Tutorial from "./pages/Tutorial";
 import AboutUs from "./pages/AboutUs";
-
+import Account from "./pages/Account";
 
 
 import { Route, Routes, useLocation} from "react-router-dom";
@@ -28,6 +28,7 @@ import { StageSizeModal, StageSizeModalHandle } from "@features/level";
 export default function App() {
   
   const location = useLocation();
+  //console.log(location.pathname.split('/'))
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
 
   const modalRef = useRef<StageSizeModalHandle>(null);
@@ -41,18 +42,22 @@ export default function App() {
       <StageSizeModal ref={modalRef}/>
       <div id='main'>
         <AnimatePresence initial={false}>
-          <Routes key={location.pathname} location={location}>
+          <Routes key={location.pathname.split('/')[1]} location={location}>
             <Route path='/' element={<Layout/>}>
               <Route path='/' element={<Home/>} />
               <Route path='more' element={<MoreLevels/>}/>
-              <Route path="instructions" element={<Instructions/>} />
+              
               <Route path="about" element={<AboutUs/>} />
+              <Route path="account" element={<Account/>} />
               <Route path="play">
                 <Route index={true}  element={<LevelSelect difficulty={difficulty} setDifficulty={setDifficulty}/>} />
                 <Route path="level/:id" element={<Play mode={Mode.Public} />}/>
                 <Route path=":difficulty/:id" element={<Play mode={Mode.BuiltIn}/>}/>
               </Route>
-
+              <Route path="tutorial">
+                <Route index={true} element={<Tutorial/>} />
+                <Route path=":id" element={<Play mode={Mode.Tutorial} />}/>
+              </Route>
               <Route path="explore" element={<GlobalLevels/>}/>
               <Route path="mylevels" element={<MyLevels/>}/>
               <Route path="custom" element={<Play mode={Mode.Custom} />} />

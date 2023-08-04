@@ -1,0 +1,26 @@
+{
+    "height": 10,
+    "width": 10,
+    "lasers": [
+      {
+        "pos": {"x": 1, "y": 5},
+        "dir": {"x": 1, "y": 0},
+        "color": 2
+      }    
+    ],
+    "targets": [
+      {
+        "pos": {"x": 5, "y": 3},
+        "color": 2
+      }
+    ],
+    "reflectorNum": 1,
+    "lensNum": 0,
+    "answer": [
+        {
+            "pos": {"x": 5, "y": 5},
+            "deg": 45
+        }
+    ],
+    "text": "The goal of this game is to activate all _ with the corresponding color of light.\n A reflector can reflect light. Move the reflector to the correct position and then rotate it to change the light direction."
+}

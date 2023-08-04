@@ -24,7 +24,7 @@ const Home: FC<HomeProps> = () => {
     >
       <MenuButton themeColor='magenta' to='/play'>START</MenuButton>
       <MenuButton themeColor='orange' to='/more'>MORE LEVEL</MenuButton>
-      <MenuButton themeColor='royalBlue' to='/instructions'>HOW TO PLAY</MenuButton>
+      <MenuButton themeColor='royalBlue' to='/tutorial'>HOW TO PLAY</MenuButton>
       <MenuButton themeColor='green' to='/about'>ABOUT US</MenuButton>
     </motion.div>
   );

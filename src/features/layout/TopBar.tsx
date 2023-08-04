@@ -2,18 +2,17 @@ import {FC, useState, useEffect, useRef} from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Menu, { MenuProps } from '@mui/material/Menu';
+import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
-import EditIcon from '@mui/icons-material/Edit';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ExtensionIcon from '@mui/icons-material/Extension';
-// import Lottie from 'react-lottie';
-// import clearStarLottie from '../img/clearStar-lottie.json';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useAuth, useRefreshToken, AccountModal, AccountModalHandle } from '@features/authentication';
+import { useAuth, useRefreshToken, AccountModal, AccountModalHandle, userSignOut} from '@features/authentication';
 import { BuiltInLevelInfo, UserLevelInfo } from '@features/level';
 
 const styles = {
@@ -42,7 +41,7 @@ const path_name_pair = {
   'explore': 'EXPLORE',
   'custom': 'CUSTOM',
   'about': 'ABOUT',
-  'instructions': 'INSTRUTIONS',
+  'tutorial': 'TUTORIAL',
   'mylevels': 'MY LEVELS'
 }
 const getDisplayText = (paths: string[], userLevelInfo: UserLevelInfo) => {
@@ -79,12 +78,19 @@ const TopBar = () => {
     accountModalRef.current?.open();
     handleClose();
   }
-  const handleSignOut = () => {
-    const guest_name = "GUEST-" + Math.floor((Math.random()*10000)).toString();
-    setAuth({name: guest_name, accessToken: null});
+  const handleSignOut = async () => {
+    const data = await userSignOut();
+    console.log(data);
+    setAuth({name: "", accessToken: null});
     handleClose();
   }
-  const handleMyLevels = () => {
+
+  const handleToAccount = () => {
+    handleClose();
+    navigate('./account');
+  }
+
+  const handleToMyLevels = () => {
     handleClose();
     navigate('./mylevels');
   }
@@ -98,7 +104,6 @@ const TopBar = () => {
       }
     }
     initRequest();
-   
   }, [])
   return (
     <Box 
@@ -141,22 +146,30 @@ const TopBar = () => {
         }}
       >
         {auth?.accessToken ?
-          <MenuItem onClick={handleClose} disableRipple sx={{letterSpacing: '2px'}}>
-            <EditIcon sx={{marginRight: '7px'}}/>
-            Edit
-          </MenuItem>
+          <MenuList>
+            <MenuItem onClick={handleToAccount} disableRipple sx={{letterSpacing: '2px'}}>
+              <ManageAccountsIcon sx={{marginRight: '7px'}}/>
+              Account
+            </MenuItem>
+            <MenuItem onClick={handleToMyLevels} disableRipple sx={{letterSpacing: '2px'}}>
+              <ExtensionIcon sx={{marginRight: '7px'}}/>
+              My Levels
+            </MenuItem>
+            <MenuItem onClick={handleSignOut} disableRipple sx={{letterSpacing: '2px'}}>
+              <LogoutIcon sx={{marginRight: '7px'}}/>
+              Sign out
+            </MenuItem>
+          </MenuList>
+
           :
-          <MenuItem onClick={handleSignIn} disableRipple sx={{letterSpacing: '2px'}}>
-            Sign in
-          </MenuItem>
+          <MenuList>
+            <MenuItem onClick={handleSignIn} disableRipple sx={{letterSpacing: '2px'}}>
+              <LoginIcon sx={{marginRight: '7px'}}/>
+              Sign in
+            </MenuItem>
+          </MenuList>
         }
 
-        {auth?.accessToken &&
-          <MenuItem onClick={handleMyLevels} disableRipple sx={{letterSpacing: '2px'}}>
-            <ExtensionIcon sx={{marginRight: '7px'}}/>
-            My Levels
-          </MenuItem>
-        }
       </Menu>
       <AccountModal ref={accountModalRef}/>
     </Box>
