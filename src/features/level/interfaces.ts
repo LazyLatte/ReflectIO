@@ -27,5 +27,5 @@ export type UserLevelInfo = LevelInfo & {
 
 export type TutorialLevelInfo = LevelInfo & {
   answer: MirrorState[];
-  text: string;
+  text: string[];
 }

@@ -3,28 +3,39 @@
     "width": 10,
     "lasers": [
         {
-        "pos": {"x": 2, "y": 4},
-        "dir": {"x": 1, "y": 0},
-        "color": 2
+            "pos": {"x": 2, "y": 1},
+            "dir": {"x": 0, "y": 1},
+            "color": 1
         }    
     ],
     "targets": [
         {
-        "pos": {"x": 4, "y": 7},
-        "color": 2
+            "pos": {"x": 2, "y": 8},
+            "color": 1
         },
         {
-        "pos": {"x": 7, "y": 4},
-        "color": 2
+            "pos": {"x": 8, "y": 5},
+            "color": 1
+        },
+        {
+            "pos": {"x": 5, "y": 1},
+            "color": 1
         }
     ],
     "reflectorNum": 0,
-    "lensNum": 1,
+    "lensNum": 2,
     "answer": [
+        {
+            "pos": {"x": 2, "y": 5},
+            "deg": 315
+        },
         {
             "pos": {"x": 5, "y": 5},
             "deg": 45
         }
     ],
-    "text": "The goal of this game is to activate all _ "
+    "text": [
+        "The goal of this game is to activate all ⚙️ with the corresponding color of light.", 
+        "A Lens can reflect light while holding a previous direction of light. Drag the lens to the correct position and then click it to rotate to create a new direction of light."
+    ]
 }

@@ -8,7 +8,7 @@ interface MirrorProps {
   mirror: MirrorState;
   mirrorActions: MirrorActions;
   validRange: Vector2D;
-  isValidCell: (type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, idx: number) => boolean;
+  isValidCell: (pos: Vector2D, idx: number) => boolean;
   disabled: boolean;
 }
 
@@ -31,6 +31,7 @@ const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isVal
 
 
   const image = type === ObjectType.Reflector ? useImages()?.reflectorImages[7] : useImages()?.lensImages[7];
+  
   return (
     <Group
       ref={mirrorRef}
@@ -41,7 +42,7 @@ const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isVal
       draggable
       onDragEnd={(e) => {
         const newPos: Vector2D = {x: Math.round(e.target.x() / cellWidth), y: Math.round(e.target.y() / cellWidth)};
-        if (newPos.x >= 0 && newPos.x < validRange.x && newPos.y >= 0 && newPos.y < validRange.y && isValidCell(type, newPos, idx)) {
+        if (newPos.x >= 0 && newPos.x < validRange.x && newPos.y >= 0 && newPos.y < validRange.y && isValidCell(newPos, idx)) {
           updateMirrorPos(type, idx, newPos);
         } else {
           mirrorRef.current?.position({

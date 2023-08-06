@@ -11,6 +11,7 @@ import Targets from './Targets';
 import GridRay from './GridRay';
 import ColorMixingPopover from './ColorMixingPopover';
 import AddObjectDropdown from './AddObjectDropdown';
+import TutorialHint from './TutorialHint';
 import {useGridRay, useStageConfig} from '../hooks';
 import {ObjectType, Level, Vector2D, Target, Mode} from '../interfaces';
 import { TutorialGoal } from '@features/level';
@@ -44,13 +45,9 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
   const boardOrigin: Vector2D = {x: (window.innerWidth-gridWidth*cellWidth) >> 1, y: 56};
 
   const isEmptyCell = (pos: Vector2D): boolean => (gridRay.grid[pos.y][pos.x].object.type === ObjectType.None);
-  const isAnswerCell = (type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, idx: number): boolean => (
-    tutorialGoal?.type === type && tutorialGoal?.idx === idx && pos.x === tutorialGoal?.pos.x && pos.y === tutorialGoal?.pos.y
-  );
-  const isValidCell = (type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, idx: number): boolean => (mode!==Mode.Tutorial && isEmptyCell(pos)) || (mode===Mode.Tutorial && isAnswerCell(type, pos, idx));
-  const isDisabled = (type: ObjectType.Reflector | ObjectType.Lens, idx: number): boolean => (
-    mode===Mode.Tutorial && (tutorialGoal?.type !== type || tutorialGoal?.idx !== idx || tutorialGoal.match !== "deg")
-  );
+  const isAnswerCell = (pos: Vector2D, idx: number): boolean => (tutorialGoal?.idx === idx && pos.x === tutorialGoal?.pos.x && pos.y === tutorialGoal?.pos.y);
+  const isValidCell = (pos: Vector2D, idx: number): boolean => (mode!==Mode.Tutorial && isEmptyCell(pos)) || (mode===Mode.Tutorial && isAnswerCell(pos, idx));
+  const isDisabled = (idx: number): boolean => (mode===Mode.Tutorial && (tutorialGoal?.idx !== idx || tutorialGoal.match !== "deg"));
   useLayoutEffect(()=>{
     mirrorActions.updateMirrorsResetPos(shouldRearrange);
   }, [shouldRearrange]);
@@ -96,8 +93,11 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
             <Targets mode={mode} targets={targets} setMouseOnTarget={setMouseOnTarget} targetActions={targetActions}/>
           </Layer>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
+            <TutorialHint mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} reflectorNum={reflectors.length} tutorialGoal={tutorialGoal}/>
+          </Layer>
+          <Layer x={boardOrigin.x} y={boardOrigin.y}>
             {[...reflectors, ...lens].map((m, idx) => (
-              <Mirror mode={mode} mirror={m} mirrorActions={mirrorActions} validRange={{x: gridWidth, y: gridHeight}} isValidCell = {isValidCell} key={idx} disabled={isDisabled(m.type, m.idx)}/>
+              <Mirror mode={mode} mirror={m} mirrorActions={mirrorActions} validRange={{x: gridWidth, y: gridHeight}} isValidCell = {isValidCell} key={idx} disabled={isDisabled(m.idx)}/>
             ))}
             <ColorMixingPopover target={mouseOnTarget}/>
             <AddObjectDropdown mode={mode}  gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  

@@ -1,75 +1,50 @@
-import {forwardRef, useImperativeHandle, useState, ForwardRefRenderFunction} from 'react';
-import { motion, AnimatePresence  } from "framer-motion"
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import {useState, FC, SetStateAction, Dispatch, useEffect} from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
 import Typography from '@mui/material/Typography';
-import {BackDrop} from '@features/ui';
 
-
-
-
-const styles = {
-  btn: {
-    width: '60px',
-    height: '60px',
-    backgroundColor: '#ff6d33',
-    border: '3px solid #FAFAD2',
-    borderRadius: '999px',
-    padding: 0,
-    '&:hover': {
-      backgroundColor: '#ffa07a'
-    }
-  }
-}
-
-const appear = {
-  hidden: {
-    scale: 0
-  },
-  visible: {
-    scale: 1
-  }
-}
 interface InstructionModalProps {
-  instructions: string[]
+  instructions: string[];
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  onDialogFinish: () => void;
 };
-export interface InstructionModalHandle {
-  open: () => void;
-}
-const InstructionModal: ForwardRefRenderFunction<InstructionModalHandle, InstructionModalProps> = ({instructions}, ref) => {
+const InstructionModal: FC<InstructionModalProps> = ({instructions, open, setOpen, onDialogFinish}) => {
   const [idx , setIdx] = useState(0);
-  const [open, setOpen] = useState<boolean>(false);
-  useImperativeHandle(ref, ()=>({
-    open: () => {
-      setIdx(0);
-      setOpen(true);
-    }
-  }))
 
-  const closeModal = () => setOpen(false);
+  const onClick = () => {
+    if(idx < instructions.length - 1){
+      setIdx(prev => prev + 1)
+    }else{
+      setOpen(false);
+    }
+  }
+  useEffect(()=>{
+    open ? setIdx(0) : onDialogFinish();
+  }, [open])
   return (
-    <AnimatePresence>
-      {open && 
-        <BackDrop onClick={(e)=>{
-            e.stopPropagation()
-            if(idx < instructions.length - 1){
-                setIdx(prev => prev + 1)
-            }else{
-                closeModal();
-            }
-        }}>
-          <motion.div
-            variants={appear}
-            initial='hidden'
-            animate='visible'
-            exit='hidden'
-          >
-            {idx < instructions.length ? instructions[idx] : ""}
-          </motion.div>
-        </BackDrop>
-      }
-    </AnimatePresence>
+    <Dialog 
+      open={open}
+      onClose={onClick}
+      PaperProps={{
+        elevation: 0,
+        sx: {
+          height: 200,
+          alignSelf: "flex-start",
+          backgroundColor: "#09092a",
+          border: "solid #7B68EE 2px",
+          userSelect: "none"
+        },
+        onClick
+      }}
+    >
+      <DialogContent>
+        <Typography>
+          {idx < instructions.length ? instructions[idx] : ""}
+        </Typography>
+      </DialogContent>
+    </Dialog>
   );
 }
 
-export default forwardRef(InstructionModal);
+export default InstructionModal;

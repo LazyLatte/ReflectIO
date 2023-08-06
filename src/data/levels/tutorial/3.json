@@ -36,7 +36,8 @@
         }
     ],
     "text": [
-      "The goal of this game is to activate all ⚙️ with the corresponding color of light.", 
-      "A reflector can reflect light. Drag the reflector to the correct position and then click it to rotate to change the light direction."
+        "Different colors of light could be mixed to create a new color of light.", 
+        "The mixing rule follows the RGB color model\n. 🔴 🔵 🟢 ⚪",
+        "Try to place a mirror at the intersection of two light.\nDifferent mirror's angles will lead to different results"
     ]
 }
