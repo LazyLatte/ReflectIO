@@ -31,7 +31,7 @@ const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isVal
 
 
   const image = type === ObjectType.Reflector ? useImages()?.reflectorImages[7] : useImages()?.lensImages[7];
-  
+  //console.log(deg);
   return (
     <Group
       ref={mirrorRef}

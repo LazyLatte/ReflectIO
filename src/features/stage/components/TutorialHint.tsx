@@ -14,10 +14,9 @@ interface TutorialHintProps {
   mode: Mode;
   gridHeight: number;
   gridWidth: number;
-  reflectorNum: number;
   tutorialGoal: TutorialGoal | undefined;
 }
-interface DegHintProps {pos: Vector2D, deg: number};
+interface DegHintProps {type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, deg: number};
 interface PosHintProps {type: ObjectType.Reflector | ObjectType.Lens, fromPos: Vector2D, toPos: Vector2D};
 const PosHint: FC<PosHintProps> = ({type, fromPos, toPos}) => {
   const [tapImg] = useImage(TapImg);
@@ -61,11 +60,12 @@ const PosHint: FC<PosHintProps> = ({type, fromPos, toPos}) => {
   )
 }
 
-const DegHint: FC<DegHintProps> = ({pos, deg}) => {
+const DegHint: FC<DegHintProps> = ({type, pos, deg}) => {
   const [mousImg] = useImage(MouseImg);
   const [leftClickImg] = useImage(LeftClickImg);
   const [rightClickImg] = useImage(RightClickImg);
-  const images = [mousImg, deg <= 180 ? leftClickImg : rightClickImg] as const;
+  const halfDeg = type === ObjectType.Reflector ? 180 : 90;
+  const images = [mousImg, deg <= halfDeg ? leftClickImg : rightClickImg] as const;
   const [imgIdx, setImgIdx] =useState(1);
   useEffect(()=>{
     const id1 = setInterval(() => setImgIdx(1), 1600);
@@ -91,21 +91,18 @@ const DegHint: FC<DegHintProps> = ({pos, deg}) => {
   )
 }
 
-const TutorialHint: FC<TutorialHintProps> = ({mode, gridHeight, gridWidth, reflectorNum, tutorialGoal}) => {
+const TutorialHint: FC<TutorialHintProps> = ({mode, gridHeight, gridWidth, tutorialGoal}) => {
   if(mode !== Mode.Tutorial || tutorialGoal === undefined) return null;
-  const {match, idx, pos, deg} = tutorialGoal;
-    
+  const {match, type, idx, pos, deg} = tutorialGoal;
   const {shouldRearrange} = useStageConfig();
-  
+
   const itemBarPos: Vector2D = shouldRearrange ? {x: 0, y: gridHeight+1} : {x: gridWidth+1, y: 0};
   const mirrorItemBarPos: Vector2D = shouldRearrange ? {x: idx % ITEMS_BAR_HEIGHT, y: Math.floor(idx / ITEMS_BAR_HEIGHT)} : {x: Math.floor(idx / ITEMS_BAR_HEIGHT), y: idx % ITEMS_BAR_HEIGHT} 
 
-  
   switch(match){
-    case "pos": return <PosHint type={idx < reflectorNum ? ObjectType.Reflector : ObjectType.Lens} fromPos={{x: itemBarPos.x + mirrorItemBarPos.x, y: itemBarPos.y + mirrorItemBarPos.y}} toPos={pos} />;
-    case "deg": return <DegHint pos={pos} deg={deg}/>;
+    case "pos": return <PosHint type={type} fromPos={{x: itemBarPos.x + mirrorItemBarPos.x, y: itemBarPos.y + mirrorItemBarPos.y}} toPos={pos} />;
+    case "deg": return <DegHint type={type} pos={pos} deg={deg}/>;
     default: return null;
-      
   }
 }
 

@@ -3,41 +3,62 @@
     "width": 10,
     "lasers": [
       {
-        "pos": {"x": 1, "y": 3},
-        "dir": {"x": 1, "y": 0},
+        "pos": {"x": 5, "y": 3},
+        "dir": {"x": -1, "y": 0},
+        "color": 1
+      },
+      {
+        "pos": {"x": 3, "y": 5},
+        "dir": {"x": 0, "y": -1},
         "color": 2
       },
       {
-        "pos": {"x": 7, "y": 8},
-        "dir": {"x": 0, "y": -1},
-        "color": 4
-      }   
+        "pos": {"x": 6, "y": 4},
+        "dir": {"x": 0, "y": 1},
+        "color": 2
+      },
+      {
+        "pos": {"x": 4, "y": 6},
+        "dir": {"x": 1, "y": 0},
+        "color": 1
+      }    
     ],
     "targets": [
       {
-        "pos": {"x": 4, "y": 1},
-        "color": 2
+        "pos": {"x": 3, "y": 1},
+        "color": 3
+      },
+      {
+        "pos": {"x": 1, "y": 3},
+        "color": 3
+      },
+      {
+        "pos": {"x": 6, "y": 5},
+        "color": 3
       },
       {
         "pos": {"x": 5, "y": 6},
-        "color": 4
+        "color": 3
       }
     ],
-    "reflectorNum": 2,
-    "lensNum": 0,
+    "reflectorNum": 0,
+    "lensNum": 2,
+    "title": "Color Mix",
     "answer": [
         {
-            "pos": {"x": 4, "y": 3},
-            "deg": 45
+            "idx": 0,
+            "pos": {"x": 3, "y": 3},
+            "deg": 135
         },
         {
-          "pos": {"x": 7, "y": 6},
-          "deg": 315
+          "idx": 1,
+          "pos": {"x": 6, "y": 6},
+          "deg": 45
         }
     ],
     "text": [
-        "Different colors of light could be mixed to create a new color of light.", 
-        "The mixing rule follows the RGB color model\n. 🔴 🔵 🟢 ⚪",
-        "Try to place a mirror at the intersection of two light.\nDifferent mirror's angles will lead to different results"
+        "Different colors of light can be mixed to create a new color of light", 
+        "#RULE#",
+        "Try to place a mirror at the intersection of two light. Different mirror's angles will lead to different results"
     ]
 }

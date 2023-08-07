@@ -1,9 +1,7 @@
 import {FC} from 'react';
 import {BuiltInLevel, CustomLevel, PublicLevel, TutorialLevel } from '@features/level';
 import { Mode } from '@features/stage';
-interface PlayProps {
-    mode: Mode;
-};
+interface PlayProps {mode: Mode};
 
 const Play: FC<PlayProps> = ({mode}) => {
     switch(mode){

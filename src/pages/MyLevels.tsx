@@ -1,5 +1,5 @@
-import {useRef, FC, ReactNode} from 'react'
-import { motion } from "framer-motion";
+import {useRef, FC, ReactNode} from 'react';
+import MotionPage from './MotionPage';
 import { ClipLoader } from 'react-spinners';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -44,22 +44,7 @@ const MyLevels: FC<MyLevelsProps> = () => {
     stageSizeModalRef.current?.open();
   }
   return (
-    <motion.div 
-      initial={{x: '100vw', opacity: 0}}
-      animate={{ x: 0, opacity: 1}}
-      exit={{ x: '100vw', opacity: 0 }}
-      transition= { {duration: 0.8 }}
-      style={{
-        position: 'absolute', 
-        width: '100%', 
-        flex: 1, 
-        paddingTop: '150px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
-    >
+    <MotionPage transitionType='slide' style={{paddingTop: '150px', justifyContent: 'center',alignItems: 'center'}}>
       <Box border='2px solid white' boxShadow='0 0 .2rem #fff, 0 0 .2rem #fff, 0 0 1rem #fff' borderRadius={3}>
         {myLevelsArray.map((row, i)=>(
           <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' key={i}>
@@ -103,7 +88,7 @@ const MyLevels: FC<MyLevelsProps> = () => {
         ))}
       </Box>
       <StageSizeModal ref={stageSizeModalRef}/>
-    </motion.div>
+    </MotionPage>
       
   )
 }

@@ -51,7 +51,7 @@ export const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): 
     setLevelState((prev) => ({
       ...prev,
       reflectors: type === ObjectType.Reflector ? prev.reflectors.map((e, i)=> i===idx ? {...e, deg: (e.deg+rotateDeg) % 360} : e) : prev.reflectors,
-      lens: type === ObjectType.Lens ? prev.lens.map((e, i)=> i + prev.reflectors.length === idx ? {...e, deg: (e.deg+rotateDeg) % 360} : e) : prev.lens
+      lens: type === ObjectType.Lens ? prev.lens.map((e, i)=> i + prev.reflectors.length === idx ? {...e, deg: (e.deg+rotateDeg) % 180} : e) : prev.lens
     }));
   };
 

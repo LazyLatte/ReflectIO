@@ -62,7 +62,6 @@ export const DifficultyDisplay: FC<DifficultyDisplayProps> = ({difficulty, setDi
       flexDirection='row'
       justifyContent='center'
       alignItems='center'
-      marginTop={12}
       marginBottom={15}
     >
       <Button 

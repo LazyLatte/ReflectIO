@@ -1,0 +1,48 @@
+{
+    "height": 10,
+    "width": 10,
+    "lasers": [
+      {
+        "pos": {"x": 5, "y": 1},
+        "dir": {"x": 0, "y": 1},
+        "color": 2
+      }  
+    ],
+    "targets": [
+      {
+        "pos": {"x": 5, "y": 7},
+        "color": 2
+      },
+      {
+        "pos": {"x": 2, "y": 5},
+        "color": 2
+      },
+      {
+        "pos": {"x": 7, "y": 5},
+        "color": 2
+      },
+      {
+        "pos": {"x": 5, "y": 3},
+        "color": 2
+      }
+    ],
+    "reflectorNum": 1,
+    "lensNum": 1,
+    "title": "Reverse Reflection",
+    "answer": [
+        {
+            "idx": 1,
+            "pos": {"x": 5, "y": 5},
+            "deg": 45
+        },
+        {
+            "idx": 0,
+            "pos": {"x": 5, "y": 9},
+            "deg": 90
+        }
+    ],
+    "text": [
+        "A reflector can reflect light with not only 90 but also 180 degrees", 
+        "Try to combine reflector and lens to complete this tutorial"
+    ]
+}

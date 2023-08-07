@@ -11,17 +11,29 @@ interface InstructionModalProps {
 };
 const InstructionModal: FC<InstructionModalProps> = ({instructions, open, setOpen, onDialogFinish}) => {
   const [idx , setIdx] = useState(0);
-
-  const onClick = () => {
-    if(idx < instructions.length - 1){
-      setIdx(prev => prev + 1)
-    }else{
-      setOpen(false);
-    }
-  }
+  const onClick = () => ((idx < instructions.length - 1) ? setIdx(prev => prev + 1) : setOpen(false));
   useEffect(()=>{
     open ? setIdx(0) : onDialogFinish();
   }, [open])
+  const colorMixingRule = <p style={{margin: 0}}>The mixing rule follows the RGB color model<br/>
+    <span style={{color: 'transparent', textShadow: '0 0 0 #ffff00'}}>⚪</span>&nbsp;= &nbsp; 
+    <span style={{color: 'transparent', textShadow: '0 0 0 #ff0000'}}>⚪</span>&nbsp;+ &nbsp; 
+    <span style={{color: 'transparent', textShadow: '0 0 0 #00ff00'}}>⚪</span>
+    <br/>
+    <span style={{color: 'transparent', textShadow: '0 0 0 #ff00ff'}}>⚪</span>&nbsp;= &nbsp; 
+    <span style={{color: 'transparent', textShadow: '0 0 0 #ff0000'}}>⚪</span>&nbsp;+ &nbsp; 
+    <span style={{color: 'transparent', textShadow: '0 0 0 #0000ff'}}>⚪</span>
+    <br/>
+    <span style={{color: 'transparent', textShadow: '0 0 0 #00ffff'}}>⚪</span>&nbsp;= &nbsp; 
+    <span style={{color: 'transparent', textShadow: '0 0 0 #00ff00'}}>⚪</span>&nbsp;+ &nbsp; 
+    <span style={{color: 'transparent', textShadow: '0 0 0 #0000ff'}}>⚪</span>
+    <br/>
+    <span style={{color: 'transparent', textShadow: '0 0 0 #ffffff'}}>⚪</span>&nbsp;= &nbsp; 
+    <span style={{color: 'transparent', textShadow: '0 0 0 #ff0000'}}>⚪</span>&nbsp;+ &nbsp; 
+    <span style={{color: 'transparent', textShadow: '0 0 0 #00ff00'}}>⚪</span>&nbsp;+ &nbsp; 
+    <span style={{color: 'transparent', textShadow: '0 0 0 #0000ff'}}>⚪</span>
+    <br/>
+  </p>
   return (
     <Dialog 
       open={open}
@@ -29,7 +41,8 @@ const InstructionModal: FC<InstructionModalProps> = ({instructions, open, setOpe
       PaperProps={{
         elevation: 0,
         sx: {
-          height: 200,
+          width: 600,
+          height: 300,
           alignSelf: "flex-start",
           backgroundColor: "#09092a",
           border: "solid #7B68EE 2px",
@@ -39,8 +52,8 @@ const InstructionModal: FC<InstructionModalProps> = ({instructions, open, setOpe
       }}
     >
       <DialogContent>
-        <Typography>
-          {idx < instructions.length ? instructions[idx] : ""}
+        <Typography sx={{fontFamily: "Edu SA Beginner, cursive", fontSize: 32}}>
+          {idx < instructions.length && (instructions[idx] === "#RULE#" ? colorMixingRule : instructions[idx])}
         </Typography>
       </DialogContent>
     </Dialog>

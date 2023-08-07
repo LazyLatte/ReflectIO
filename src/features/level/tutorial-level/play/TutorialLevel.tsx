@@ -1,7 +1,7 @@
-import { FC, useState, useEffect} from 'react';
+import { useState, useEffect} from 'react';
 import useImage from 'use-image';
 import {useLocation, useNavigate} from "react-router-dom";
-import {Stage, StageButtonGroup, Mode} from '@features/stage';
+import {Stage, StageButtonGroup, Mode, ObjectType} from '@features/stage';
 import { TutorialLevelInfo, TutorialGoal, useLevel } from '@features/level';
 import InstructionModal from './InstructionModal';
 import ExclamationImg from '@images/icons/exclamation.svg';
@@ -20,12 +20,13 @@ const TutorialLevel = () => {
   useEffect(()=>{
     if(step < answer.length * 2){
       let stepComplete: boolean;
-      const mirrorIdx = Math.floor(step / 2);
-      const mirrors = levelState.reflectors.concat(levelState.lens);
+      const answerIdx = Math.floor(step / 2);
+      const mirrorIdx = answer[answerIdx].idx;
+      const mirrors = [...levelState.reflectors, ...levelState.lens];
       if(step % 2 === 0){
-        stepComplete = mirrors[mirrorIdx].pos.x === answer[mirrorIdx].pos.x && mirrors[mirrorIdx].pos.y === answer[mirrorIdx].pos.y;
+        stepComplete = mirrors[mirrorIdx].pos.x === answer[answerIdx].pos.x && mirrors[mirrorIdx].pos.y === answer[answerIdx].pos.y;
       }else{
-        stepComplete = mirrors[mirrorIdx].deg === answer[mirrorIdx].deg;
+        stepComplete = mirrors[mirrorIdx].deg === answer[answerIdx].deg;
       }
       stepComplete && setStep(prev => prev+1);
     }
@@ -33,7 +34,7 @@ const TutorialLevel = () => {
 
   const tutorialGoal: TutorialGoal | undefined = (!open && step < answer.length * 2) ? {
     match: step % 2 === 0 ? "pos" : "deg",
-    idx: Math.floor(step / 2),
+    type: answer[Math.floor(step / 2)].idx < levelInfo.reflectorNum ? ObjectType.Reflector : ObjectType.Lens,
     ...answer[Math.floor(step / 2)]
   } : undefined;
 

@@ -93,7 +93,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
             <Targets mode={mode} targets={targets} setMouseOnTarget={setMouseOnTarget} targetActions={targetActions}/>
           </Layer>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
-            <TutorialHint mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} reflectorNum={reflectors.length} tutorialGoal={tutorialGoal}/>
+            <TutorialHint mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} tutorialGoal={tutorialGoal}/>
           </Layer>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
             {[...reflectors, ...lens].map((m, idx) => (

@@ -26,6 +26,7 @@ export type UserLevelInfo = LevelInfo & {
 }
 
 export type TutorialLevelInfo = LevelInfo & {
-  answer: MirrorState[];
+  title: string;
+  answer: (MirrorState & {idx: number})[];
   text: string[];
 }
