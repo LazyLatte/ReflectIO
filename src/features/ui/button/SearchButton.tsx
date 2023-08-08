@@ -24,12 +24,12 @@ const styles = {
 
 const SearchButton = ({}) => {
   return (
-        <Button variant="outlined" color='primary' sx={{...styles.btn}} component={Link} to='/search'>
-          <SearchIcon sx={{fontSize: 100}}/>
-          <Typography variant="h4" >
-            Search
-          </Typography>
-        </Button>
+    <Button variant="outlined" color='primary' sx={{...styles.btn}} component={Link} to='/search'>
+      <SearchIcon sx={{fontSize: 100}}/>
+      <Typography variant="h4" >
+        Search
+      </Typography>
+    </Button>
   );
 }
 

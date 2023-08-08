@@ -1,19 +1,7 @@
 import {forwardRef, useImperativeHandle, useState, ForwardRefRenderFunction} from 'react';
-import { motion, AnimatePresence  } from "framer-motion"
-import {BackDrop, ModalBox, ModalButton, Separator} from '@features/ui';
+import Modal, {ModalBox, ModalButton, ModalSeparator} from '@features/ui/modal';
 import Typography from '@mui/material/Typography';
 
-const appear = {
-  hidden: {
-    scale: 0
-  },
-  visible: {
-    scale: 1
-  },
-  exit: {
-    scale: 0
-  }
-}
 interface WarningModalProps {};
 export interface WarningModalHandle {
   open: (msg: string) => void;
@@ -32,26 +20,13 @@ const WarningModal: ForwardRefRenderFunction<WarningModalHandle, WarningModalPro
   const closeModal = () => setOpen(false);
 
   return (
-    <AnimatePresence>
-      {open &&
-        <BackDrop onClick={closeModal}>
-          <motion.div
-            className='warning_modal'
-            variants={appear}
-            initial='hidden'
-            animate='visible'
-            exit='exit'
-            onClick={(e)=>e.stopPropagation()}
-          >
-            <ModalBox height={250} width={600}>
-              <Typography variant='caption' sx={{textAlign: 'center'}}>{errMsg}</Typography>
-              <Separator/>
-              <ModalButton width='100%' disabled={false} onClick={closeModal}>OK</ModalButton>
-            </ModalBox>
-          </motion.div>
-        </BackDrop>
-      }
-    </AnimatePresence>
+    <Modal open={open} onBackDropClick={closeModal}>
+      <ModalBox height={250} width={600}>
+        <Typography variant='caption' sx={{textAlign: 'center'}}>{errMsg}</Typography>
+        <ModalSeparator/>
+        <ModalButton width='100%' disabled={false} onClick={closeModal}>OK</ModalButton>
+      </ModalBox>
+    </Modal>
   );
 }
 

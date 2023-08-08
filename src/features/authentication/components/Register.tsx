@@ -1,7 +1,7 @@
 import {useState, MouseEvent, useEffect, FC, Dispatch, SetStateAction} from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import {ModalBox, ModalInput, ModalButton, Separator} from '@features/ui';
+import { ModalBox, ModalButton, ModalInput, ModalSeparator} from '@features/ui/modal';
 import { useAuth, userRegister } from '@features/authentication';
 import { isAxiosError } from 'axios';
 interface RegisterProps {
@@ -72,7 +72,7 @@ const Register: FC<RegisterProps> = ({username, closeModal, setPage}) => {
   return (
       <ModalBox height={300} width={700}>
         <Typography  variant='caption'>{`USERNAME ${username} IS AVAILABLE`}</Typography>
-        <Separator/>
+        <ModalSeparator/>
         <ModalInput
           type="password"
           id="password"

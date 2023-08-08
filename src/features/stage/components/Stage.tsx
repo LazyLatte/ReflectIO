@@ -83,17 +83,13 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
             <ItemBar gridHeight={gridHeight} gridWidth={gridWidth}/>
             <CustomItemBar mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} mirrorNum={reflectors.length + lens.length} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
-            {children}
-          </Layer>
-          <Layer x={boardOrigin.x} y={boardOrigin.y}>
             <Grid gridHeight={gridHeight} gridWidth={gridWidth}/>
             <GridRay grid={gridRay.grid} Dgrid={gridRay.Dgrid}/>
             <CustomGrid mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
             <Lasers mode={mode} lasers={lasers} laserActions={laserActions}/>
             <Targets mode={mode} targets={targets} setMouseOnTarget={setMouseOnTarget} targetActions={targetActions}/>
-          </Layer>
-          <Layer x={boardOrigin.x} y={boardOrigin.y}>
             <TutorialHint mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} tutorialGoal={tutorialGoal}/>
+            {children}
           </Layer>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
             {[...reflectors, ...lens].map((m, idx) => (

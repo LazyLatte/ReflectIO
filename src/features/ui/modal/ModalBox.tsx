@@ -7,8 +7,18 @@ interface ModalBoxProps {
 }
 export const ModalBox: FC<ModalBoxProps> = ({height, width, children}) => {
   return (
-    <Box height={height} width={width} display='flex' flexDirection='column' justifyContent='space-around' padding='16px' 
-        backgroundColor='#dddddd' border='solid black' borderRadius='5px'
+    <Box 
+      height={height} 
+      width={width} 
+      display='flex' 
+      flexDirection='column' 
+      justifyContent='space-around' 
+      border='solid black' 
+      borderRadius='5px'
+      padding='16px' 
+      sx={{
+        backgroundColor: '#dddddd' 
+      }}
     >
       {children}
     </Box>

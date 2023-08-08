@@ -1,6 +1,6 @@
 import {useState, useEffect, FC, MouseEvent, Dispatch, SetStateAction} from 'react';
 import Typography from '@mui/material/Typography';
-import { ModalBox, ModalButton, ModalInput, Separator } from '@features/ui';
+import { ModalBox, ModalButton, ModalInput, ModalSeparator} from '@features/ui/modal';
 import {useAuth, findUser} from '@features/authentication';
 import { isAxiosError } from 'axios';
 interface UserNameProps {
@@ -61,7 +61,7 @@ const UserName: FC<UserNameProps> = ({username, setUsername, setPage, closeModal
   return (
       <ModalBox height={300} width={700}>
         <Typography variant='caption' >WELCOME TO REFLECT.IO</Typography>
-        <Separator/>
+        <ModalSeparator/>
         <Typography variant='h6' sx={{marginBottom: '10px'}}>ENTER A USERNAME, OR LEAVE IT BLANK TO PLAY AS A GUEST.</Typography>
         <ModalInput
           type="text"

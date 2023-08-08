@@ -7,7 +7,7 @@ interface ModalButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
   children: ReactNode;
 }
-const ModalButton: FC<ModalButtonProps> = ({width, disabled, onClick, children}) => {
+export const ModalButton: FC<ModalButtonProps> = ({width, disabled, onClick, children}) => {
   return (
     <Button 
       disabled={disabled}
@@ -26,5 +26,3 @@ const ModalButton: FC<ModalButtonProps> = ({width, disabled, onClick, children})
   )
 
 }
-
-export default ModalButton;

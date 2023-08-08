@@ -4,7 +4,7 @@ interface BackDropProps {
   onClick: MouseEventHandler<HTMLDivElement>;
   children: ReactNode;
 }
-export const BackDrop: FC<BackDropProps> = ({onClick, children}) => {
+const BackDrop: FC<BackDropProps> = ({onClick, children}) => {
   return (
     <motion.div 
       initial={{opacity: 0}}
@@ -28,3 +28,5 @@ export const BackDrop: FC<BackDropProps> = ({onClick, children}) => {
     </motion.div>
   )
 }
+
+export default BackDrop;

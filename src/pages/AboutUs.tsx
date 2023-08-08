@@ -1,19 +1,27 @@
-import {FC} from 'react';
-interface AboutUsProps {};
-const AboutUs: FC<AboutUsProps> = () => {
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import MotionPage from './MotionPage';
+const AboutUs = () => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '5rem'
-      }}
-    >
-      Contribution: Kuan-Fu Chen
-    </div>
+    <MotionPage transitionType='slide' style={{height: '100%', alignItems: 'center'}}>
+      <Paper 
+        sx={{
+          width: '50%',
+          maxWidth: 750,
+          height: 120,
+          padding: '10px 20px',
+          backgroundColor: '#17123b',
+          border: 'solid #7B68EE',
+          fontSize: '24px',
+          overflow: 'scroll'
+        }}
+      >
+        Reflect.io is an online puzzle game. You can challenge a variety of levels, or create one by yourself. 
+      </Paper>
+      <Box position="absolute" bottom="50px" display="flex" flexDirection="row" justifyContent="center" alignItems="center" fontSize='20px' color="#7f7fe6">
+        Contributor :&nbsp;<a href='https://github.com/LazyLatte' target="_blank" style={{color: '#aaaaee'}}>LazyLatte</a>
+      </Box>
+    </MotionPage>
   );
 }
 

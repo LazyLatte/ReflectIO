@@ -1,22 +1,9 @@
 import {forwardRef, useImperativeHandle, useState, ForwardRefRenderFunction} from 'react';
-import { motion, AnimatePresence  } from "framer-motion"
 import NoneGuestUserName from './NoneGuestUserName';
 import Login from './Login';
 import Register from './Register';
-import {BackDrop} from '@features/ui';
+import Modal from '@features/ui/modal';
 
-
-const appear = {
-  hidden: {
-    scale: 0
-  },
-  visible: {
-    scale: 1
-  },
-  exit: {
-    scale: 0
-  }
-}
 interface ReLoginModalProps {
   onLogin: () => void;
 };
@@ -35,24 +22,11 @@ const ReLoginModal: ForwardRefRenderFunction<ReLoginModalHandle, ReLoginModalPro
 
   const closeModal = () => setOpen(false);
   return (
-    <AnimatePresence>
-      {open &&
-        <BackDrop onClick={closeModal}>
-          <motion.div
-            variants={appear}
-            initial='hidden'
-            animate='visible'
-            exit='exit'
-            onClick={(e)=>e.stopPropagation()}
-          >
-            {page === 'username' && <NoneGuestUserName username={username} setUsername={setUsername} setPage={setPage} isGuest={false}/>}
-            {page === 'login' && <Login username={username} closeModal={closeModal} setPage={setPage} onLogin={onLogin}/>}
-            {page === 'register' && <Register username={username} closeModal={closeModal} setPage={setPage}/>}
-          </motion.div>
-        </BackDrop>
-      }
-
-    </AnimatePresence>
+    <Modal open={open} onBackDropClick={closeModal}>
+      {page === 'username' && <NoneGuestUserName username={username} setUsername={setUsername} setPage={setPage} isGuest={false}/>}
+      {page === 'login' && <Login username={username} closeModal={closeModal} setPage={setPage} onLogin={onLogin}/>}
+      {page === 'register' && <Register username={username} closeModal={closeModal} setPage={setPage}/>}
+    </Modal>
   );
 }
 

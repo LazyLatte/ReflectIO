@@ -1,5 +1,5 @@
 import {useState, useEffect, FC, Dispatch, SetStateAction, MouseEvent} from 'react';
-import {ModalBox, ModalInput, ModalButton, Separator} from '@features/ui';
+import { ModalBox, ModalButton, ModalInput, ModalSeparator} from '@features/ui/modal';
 import Typography from '@mui/material/Typography';
 import {findUser} from '@features/authentication';
 import { isAxiosError } from 'axios';
@@ -58,7 +58,7 @@ const NoneGuestUserName: FC<NoneGuestUserNameProps> = ({username, setUsername, s
   return (
     <ModalBox height={300} width={700}>
         <Typography variant='caption'>{isGuest ? 'SIGN IN TO HAVE YOUR OWN LEVEL!' : 'TOKEN EXPIRED! PLEASE LOGIN AGAIN'}</Typography>
-        <Separator/>
+        <ModalSeparator/>
         <ModalInput
           type="text"
           id="username"

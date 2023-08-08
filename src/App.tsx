@@ -28,7 +28,6 @@ import { StageSizeModal, StageSizeModalHandle } from "@features/level";
 export default function App() {
   
   const location = useLocation();
-  //console.log(location.pathname.split('/'))
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
 
   const modalRef = useRef<StageSizeModalHandle>(null);
@@ -42,18 +41,14 @@ export default function App() {
       <StageSizeModal ref={modalRef}/>
       <div id='main'>
         <AnimatePresence initial={false}>
-          <Routes key={location.pathname.split('/')[1]} location={location}>
+          <Routes key={location.key} location={location}>
             <Route path='/' element={<Layout/>}>
               <Route path='/' element={<Home/>} />
               <Route path='more' element={<MoreLevels/>}/>
               
               <Route path="about" element={<AboutUs/>} />
               <Route path="account" element={<Account/>} />
-              <Route path="play">
-                <Route index={true}  element={<LevelSelect difficulty={difficulty} setDifficulty={setDifficulty}/>} />
-                <Route path="level/:id" element={<Play mode={Mode.Public} />}/>
-                <Route path=":difficulty/:id" element={<Play mode={Mode.BuiltIn}/>}/>
-              </Route>
+
               <Route path="tutorial">
                 <Route index={true} element={<Tutorial/>} />
                 <Route path=":id" element={<Play mode={Mode.Tutorial} />}/>
@@ -62,6 +57,15 @@ export default function App() {
               <Route path="mylevels" element={<MyLevels/>}/>
               <Route path="custom" element={<Play mode={Mode.Custom} />} />
               <Route path="search" element={<Search/>}/>
+            </Route>
+          </Routes>
+        </AnimatePresence>
+        <AnimatePresence initial={false} mode='wait'>
+          <Routes key={location.key} location={location}>
+            <Route path="play">
+              <Route index={true}  element={<LevelSelect difficulty={difficulty} setDifficulty={setDifficulty}/>} />
+              <Route path="level/:id" element={<Play mode={Mode.Public} />}/>
+              <Route path=":difficulty/:id" element={<Play mode={Mode.BuiltIn}/>}/>
             </Route>
           </Routes>
         </AnimatePresence>

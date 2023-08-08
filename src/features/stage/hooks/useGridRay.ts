@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useState, useLayoutEffect} from "react";
 import { createGrid, mirrorDegreeToNormalVector} from "../gameHelpers";
 import {ObjectType, Vector2D, CellRay, GridRay, Laser, Mirror, Target, Object} from '../interfaces';
 interface LoopPotentialMirror{pos: Vector2D; dir: Vector2D;}
@@ -192,7 +192,7 @@ export const useGridRay = (height: number, width: number, lasers: Laser[], refle
   });
 
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     
     const calculateGridRay = () => {
       const newGrid = new Grid(height, width);

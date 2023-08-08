@@ -28,9 +28,9 @@ const ScrollTopButton = ({}) => {
     });
   }
   return (
-        <Button variant="outlined" color='primary' sx={{...styles.btn}} onClick={handleOnClick}>
-          <ForwardIcon sx={{fontSize: 80, transform: 'rotate(270deg)'}}/>
-        </Button>
+    <Button variant="outlined" color='primary' sx={{...styles.btn}} onClick={handleOnClick}>
+      <ForwardIcon sx={{fontSize: 80, transform: 'rotate(270deg)'}}/>
+    </Button>
   );
 }
 

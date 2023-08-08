@@ -1,5 +1,5 @@
 import {useState, useEffect, FC, Dispatch, SetStateAction, MouseEvent} from 'react';
-import {ModalBox, ModalInput, ModalButton, Separator} from '@features/ui';
+import { ModalBox, ModalButton, ModalInput, ModalSeparator} from '@features/ui/modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {useAuth, userLogin} from '@features/authentication';
@@ -60,7 +60,7 @@ const Login: FC<LoginProps> = ({username, closeModal, setPage, onLogin}) => {
   return (
       <ModalBox height={300} width={700}>
         <Typography  variant='caption'>{`WELCOME BACK ${username}`}</Typography>
-        <Separator/>
+        <ModalSeparator/>
         <Typography variant='h6' sx={{marginBottom: '10px'}}>PLEASE ENTER YOUR PASSWORD TO LOGIN.</Typography>
         <ModalInput
           type="password"
