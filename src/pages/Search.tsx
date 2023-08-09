@@ -1,12 +1,26 @@
-import {useState, useEffect, ChangeEvent} from 'react';
+import {useState, ChangeEvent} from 'react';
+import MotionPage from './MotionPage';
 import axios from '@api/axios';
-import { motion, AnimatePresence  } from "framer-motion";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import { TypographyVariantsOptions } from '@mui/material';
 import {LevelInfoCard, UserLevelInfo} from '@features/level';
+import { motion, AnimatePresence  } from "framer-motion";
 import UuidEncoder from 'uuid-encoder';
+
+declare module '@mui/material/styles' {
+  interface CustomTypography {search: TypographyVariantsOptions}
+  interface Typography extends CustomTypography {}
+  interface TypographyOptions extends CustomTypography {}
+}
+  
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {search: true}
+}
+
+
 const encoder = new UuidEncoder('base64url');
 //2ECbKQ9Ff4Fuer5n7KvhJo
 //1z1bpxAKT5Nefv1T_RAYRB
@@ -31,18 +45,7 @@ const Search = () => {
   }
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingTop: '64px'
-      }}
-    >
+    <MotionPage transitionType='slide' style={{alignItems: 'center'}}>
       <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' margin='0 0 100px'>
         <TextField
           id='search-level'
@@ -79,7 +82,7 @@ const Search = () => {
             </motion.div>
         }
       </AnimatePresence>
-    </div>
+    </MotionPage>
   );
 }
 

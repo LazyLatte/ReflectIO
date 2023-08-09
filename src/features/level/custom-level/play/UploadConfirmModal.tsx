@@ -25,7 +25,7 @@ const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, Upl
   return (
     <Modal open={open} onBackDropClick={closeModal}>
       <ModalBox height={150} width={650}>
-        <Typography variant='caption' sx={{textAlign: 'center'}}>UPLOAD THE LEVEL TO PUBLIC?</Typography>
+        <Typography variant='caption' sx={{textAlign: 'center'}}>UPLOAD THE LEVEL TO THE PUBLIC?</Typography>
         <ModalSeparator/>
         <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' width='100%'>
           <ModalButton width='45%' disabled={false} onClick={handleOnClick}>YES</ModalButton>

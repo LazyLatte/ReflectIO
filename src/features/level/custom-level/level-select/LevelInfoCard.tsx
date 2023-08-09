@@ -1,7 +1,6 @@
 import {useState, useRef, FC, memo} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { isAxiosError, isCancel } from 'axios';
@@ -59,79 +58,80 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
     })
   }
   return (
-    
-    <Box 
-      height='100%' 
-      width='100%'
-      onMouseOver={() => setOnHover(true)} 
-      onMouseLeave={() => setOnHover(false)}
-      sx={{
-        position: 'relative',
-        cursor: 'pointer'
-      }}
-    >
+    <>
+      <Box 
+        height='100%' 
+        width='100%'
+        onMouseOver={() => setOnHover(true)} 
+        onMouseLeave={() => setOnHover(false)}
+        sx={{
+          position: 'relative',
+          cursor: 'pointer'
+        }}
+      >
         <AnimatePresence>
-            {hover 
-                ?
-                    <motion.div 
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        exit={{opacity: 0}}
-                        transition={{duration: 0.8}}
-                        style={{
-                            position: 'absolute',
-                            height: '95%', 
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'space-around',
-                            alignItems: 'center'
-                        }}
-                    >
-                        <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' alignSelf='flex-start' fontSize='1.5rem' >
-                            <img 
-                                src={'https://www.svgrepo.com/show/434273/star.svg'}
-                                style={{
-                                    width: '60px',
-                                    height: '60px',
-                                    marginLeft: '20px',
-                                    marginRight: '20px'
-                                }}
-                            />
-                            <span style={{fontFamily: ['Orbitron', 'sans-serif'].join(","), letterSpacing: '3px', color: '#b299e6'}}>{isPublic ? clears : '--'}</span>
-                        </Box>
-                        <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' alignSelf='flex-start' fontSize='1.5rem'>
-                            <img 
-                                src={'https://www.svgrepo.com/show/362109/heart.svg'}
-                                style={{
-                                    width: '60px',
-                                    height: '60px',
-                                    marginLeft: '20px',
-                                    marginRight: '20px'
-                                }}
-                            />
-                            <span style={{fontFamily: ['Orbitron', 'sans-serif'].join(","), letterSpacing: '3px', color: '#b299e6'}}>{isPublic ? likes : '--'}</span>
-                        </Box>
-                        <Box display='flex' flexDirection='row' justifyContent='space-around' alignItems='center' width='90%'>
-                            <Button variant="contained" endIcon={<EditIcon/>} sx={styles.editButton} component={Link} to='/custom' state={{userLevelInfo}}>Edit</Button>
-                            <Button variant="contained" sx={styles.deleteButton} onClick={deleteLevel}><DeleteForeverIcon/></Button>
-                        </Box>
-                    </motion.div>
-                :
-                    <motion.img 
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        exit={{opacity: 0}}
-                        transition={{duration: 0.8}}
-                        src={'data:image/png;base64,' + thumbnail} 
-                        height='100%' 
-                        width='100%'
-                    />
-            } 
+          {hover 
+            ?
+              <motion.div 
+                  initial={{opacity: 0}}
+                  animate={{opacity: 1}}
+                  exit={{opacity: 0}}
+                  transition={{duration: 0.8}}
+                  style={{
+                      position: 'absolute',
+                      height: '95%', 
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-around',
+                      alignItems: 'center'
+                  }}
+              >
+                  <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' alignSelf='flex-start' fontSize='1.5rem' >
+                      <img 
+                          src={'https://www.svgrepo.com/show/434273/star.svg'}
+                          style={{
+                              width: '60px',
+                              height: '60px',
+                              marginLeft: '20px',
+                              marginRight: '20px'
+                          }}
+                      />
+                      <span style={{fontFamily: ['Orbitron', 'sans-serif'].join(","), letterSpacing: '3px', color: '#b299e6'}}>{isPublic ? clears : '--'}</span>
+                  </Box>
+                  <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' alignSelf='flex-start' fontSize='1.5rem'>
+                      <img 
+                          src={'https://www.svgrepo.com/show/362109/heart.svg'}
+                          style={{
+                              width: '60px',
+                              height: '60px',
+                              marginLeft: '20px',
+                              marginRight: '20px'
+                          }}
+                      />
+                      <span style={{fontFamily: ['Orbitron', 'sans-serif'].join(","), letterSpacing: '3px', color: '#b299e6'}}>{isPublic ? likes : '--'}</span>
+                  </Box>
+                  <Box display='flex' flexDirection='row' justifyContent='space-around' alignItems='center' width='90%'>
+                      <Button variant="contained" endIcon={<EditIcon/>} sx={styles.editButton} component={Link} to='/custom' state={{userLevelInfo}}>Edit</Button>
+                      <Button variant="contained" sx={styles.deleteButton} onClick={deleteLevel}><DeleteForeverIcon/></Button>
+                  </Box>
+              </motion.div>
+            :
+              <motion.img 
+                  initial={{opacity: 0}}
+                  animate={{opacity: 1}}
+                  exit={{opacity: 0}}
+                  transition={{duration: 0.8}}
+                  src={'data:image/png;base64,' + thumbnail} 
+                  height='100%' 
+                  width='100%'
+              />
+          } 
         </AnimatePresence>
-        <ReLoginModal onLogin={()=>{}} ref={reLoginModalRef}/>  
-    </Box>
-   
+        
+      </Box>
+      <ReLoginModal onLogin={()=>{}} ref={reLoginModalRef}/>  
+   </>
   );
 }
 

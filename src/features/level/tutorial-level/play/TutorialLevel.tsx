@@ -9,6 +9,7 @@ interface LocationState {levelInfo: TutorialLevelInfo};
 const TutorialLevel = () => {
   const navigate = useNavigate();
   const {state} = useLocation();
+  if(!state) return null;
   const {levelInfo} = state as LocationState;
   const level = useLevel(levelInfo);
   const [levelState] = level;

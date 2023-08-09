@@ -1,7 +1,7 @@
 import {FC, ReactNode} from 'react';
 import { motion, MotionStyle } from "framer-motion";
 interface MotionPageProps {
-    transitionType: "slide" | "fade" | "none";
+    transitionType: "slide" | "fade" | "zoom" | "none";
     style?: MotionStyle;
     children: ReactNode;
 };
@@ -14,6 +14,10 @@ const variants = {
       hidden: {opacity: 0},
       visible: {opacity: 1}
     },
+    zoom: {
+      hidden: {scale: 0},
+      visible: {scale: 1}
+    },
     none: {
       hidden:{},
       visible: {}
@@ -24,6 +28,9 @@ const transitionDurations = {
       duration: 0.8
     },
     fade: {
+      duration: 0.5
+    },
+    zoom: {
       duration: 0.5
     },
     none: {

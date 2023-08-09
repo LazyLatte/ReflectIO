@@ -9,6 +9,8 @@ import {ReLoginModal, ReLoginModalHandle} from '@features/authentication';
 import { useLike } from '../api/useLike';
 import { useClear } from '../api/useClear';
 import RestartImg from '@images/icons/restart.svg';
+import EmptyHeart from '@images/icons/emptyHeart.svg';
+import FullHeart from '@images/icons/fullHeart.svg';
 interface LocationState {userLevelInfo: UserLevelInfo};
 interface PublicLevelProps {}
 const PublicLevel: FC<PublicLevelProps> = () => {
@@ -92,8 +94,8 @@ const PublicLevel: FC<PublicLevelProps> = () => {
   
   
   const [restartImg] = useImage(RestartImg);
-  const [emptyHeartImg] = useImage('https://www.svgrepo.com/show/433523/heart-so.svg');
-  const [fullHeartImg] = useImage('https://www.svgrepo.com/show/503037/heart.svg');
+  const [emptyHeartImg] = useImage(EmptyHeart);
+  const [fullHeartImg] = useImage(FullHeart);
   return (
     <>
       <Stage mode={Mode.Public} level={level} onClear={onClear}>

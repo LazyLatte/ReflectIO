@@ -2,11 +2,11 @@ import {useState, useEffect, FC} from 'react'
 import Box from '@mui/material/Box';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { OrderOptionsBar, SearchButton, ScrollTopButton } from '@features/ui';
+import { SearchButton, ScrollTopButton } from '@features/ui/button';
 import {listGlobalLevels} from '../api/level';
 
 import { motion } from "framer-motion"
-import {LevelInfoCard, UserLevelInfo} from '@features/level';
+import {OrderOptionsBar, LevelInfoCard, UserLevelInfo} from '@features/level';
 import { useAuth } from '@features/authentication';
 const orderByOptions = ['clears', 'likes', 'timestamp'];
 interface GlobalLevelsProps {};

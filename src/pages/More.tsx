@@ -1,7 +1,7 @@
 import MotionPage from './MotionPage';
-import {MenuButton} from '@features/ui';
+import {MenuButton} from '@features/ui/button';
 
-const MoreLevels = () => {
+const More = () => {
   return (
     <MotionPage transitionType='slide'>
       <MenuButton themeColor='crimson' to='/explore'>GLOBAL</MenuButton>
@@ -10,5 +10,5 @@ const MoreLevels = () => {
   );
 }
 
-export default MoreLevels;
+export default More;
 

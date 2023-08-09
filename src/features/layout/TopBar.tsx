@@ -47,7 +47,7 @@ const path_name_pair = {
 const getDisplayText = (paths: string[], userLevelInfo: UserLevelInfo) => {
   if(paths[1]==='') return 'HOME';
   if(paths.length === 2) return path_name_pair[paths[1] as keyof typeof path_name_pair];
-  if(paths.length === 3) return '';
+  if(paths.length === 3 && paths[1] === 'tutorial') return path_name_pair[paths[1] as keyof typeof path_name_pair];
   if(paths.length === 4 && paths[1] === 'play'){
     if(paths[2] === 'easy' || paths[2] === 'normal' || paths[2] === 'hard' && Number(paths[3]) <= BuiltInLevelInfo[paths[2]].length){
       return paths[2].toUpperCase() + '-' + paths[3];

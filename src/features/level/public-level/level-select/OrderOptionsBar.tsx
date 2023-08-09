@@ -1,29 +1,36 @@
-import {useState, SyntheticEvent} from 'react';
-
+import {FC, Dispatch, SetStateAction, SyntheticEvent} from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Tabs  from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-
 import AppBar from '@mui/material/AppBar';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import useAuth from '@features/authentication/hooks/useAuth';
-import { listGlobalLevels } from 'src/api/level';
+import {useAuth} from '@features/authentication';
+import { UserLevelInfo } from '@features/level';
+import { listGlobalLevels } from '@api/level';
 
-const UpDownIcon = ({ascend}) => (
+interface UpDownIconProps {ascend: boolean}
+interface OrderOptionsBar {
+  value: number;
+  setValue: Dispatch<SetStateAction<number>>;
+  ascend: boolean;
+  setAscend: Dispatch<SetStateAction<boolean>>;
+  setHasMore: Dispatch<SetStateAction<boolean>>;
+  width: number;
+  setGlobalLevels: Dispatch<React.SetStateAction<UserLevelInfo[]>>
+}
+const UpDownIcon: FC<UpDownIconProps> = ({ascend}) => (
   <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
     <KeyboardArrowUpIcon sx={{position: 'relative', top: '10px', transform: 'scale(0.8, 0.8)', color: ascend ? 'gold' : ''}}/>
     <KeyboardArrowDownIcon sx={{position: 'relative', bottom: '10px', transform: 'scale(0.8, 0.8)', color: ascend ? '' : 'gold'}}/>
   </Box>
 )
-export const OrderOptionsBar = ({value, setValue, ascend, setAscend, setHasMore, width, setGlobalLevels}) => {
-  const {auth} = useAuth();
+export const OrderOptionsBar: FC<OrderOptionsBar> = ({value, setValue, ascend, setAscend, setHasMore, width, setGlobalLevels}) => {
+  const {auth} = useAuth()!;
   const handleChange = (e: SyntheticEvent, newValue: number) => setValue(newValue);
 
 
-  const orderByClears = async (ascend) => {
+  const orderByClears = async (ascend: boolean) => {
     setGlobalLevels([]);
     const name = auth?.accessToken ? auth?.name : '';
     const newOrderedlevels = await listGlobalLevels(name, 0, 'clears', ascend);

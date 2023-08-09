@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { TypographyVariantsOptions } from '@mui/material';
 import Modal from '@features/ui/modal';
 
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -17,6 +18,16 @@ import ThreeStarPurpleLottie from '@lotties/three-star-purple.json';
 import ThreeStarCrimsonLottie from '@lotties/three-star-crimson.json';
 
 import {useNavigate} from "react-router-dom";
+declare module '@mui/material/styles' {
+  interface CustomTypography {p: TypographyVariantsOptions}
+  interface Typography extends CustomTypography {}
+  interface TypographyOptions extends CustomTypography {}
+}
+  
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {p: true}
+}
+
 const styles = {
   btn: {
     width: '60px',

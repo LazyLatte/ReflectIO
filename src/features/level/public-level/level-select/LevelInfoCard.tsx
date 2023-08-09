@@ -1,20 +1,21 @@
 import {useState, FC, memo} from 'react';
+import moment from 'moment';
+import UuidEncoder from 'uuid-encoder';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import Avatar from '@mui/material/Avatar';
 
 import { motion } from "framer-motion"
 import {Link} from "react-router-dom";
-import {StageThumbnail} from './StageThumbnail';
 import {UserLevelInfo, MAX_MIRROR_NUM} from '@features/level';
-import moment from 'moment';
-import UuidEncoder from 'uuid-encoder';
+
+import StarImg from '@images/icons/star.svg';
+import HeartImg from '@images/icons/heart.svg';
+import ReflectorWhiteImg from '@images/mirrors/reflector-default-dark.png';
+import LensWhiteImg from '@images/mirrors/lens-default-dark.png';
 const encoder = new UuidEncoder('base64url');
-interface LevelInfoCardProps {
-  userLevelInfo: UserLevelInfo;
-}
+interface LevelInfoCardProps {userLevelInfo: UserLevelInfo}
 const styles = {
   btn: {
     height: '80px',
@@ -37,6 +38,9 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
   const level_id = encoder.encode(id);
   return (
         <motion.div 
+          initial={false}
+          animate={{height: toggle ? `${mainInfoHeight + toggledInfoHeight}px` : `${mainInfoHeight}px`}}
+          transition={{duration: 0.5}}
           style={{
             width: '800px',
             backgroundColor: '#182036',
@@ -45,11 +49,6 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
             margin: '0 auto 20px',
             overflow: 'hidden'
           }}
-
-          initial={false}
-          animate={{height: toggle ? `${mainInfoHeight + toggledInfoHeight}px` : `${mainInfoHeight}px`}}
-          transition={{duration: 0.5}}
-          
         >
           <Box 
             className='main_info'
@@ -62,7 +61,7 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
             onClick={()=>setToggle(prev => !prev)}
           >
 
-            <Box display='flex' flexDirection='column' justifyContent='flex-end' alignItems='center' height='200px' width='200px' position='relative' sx={{border: '2px solid white'}}>
+            <Box display='flex' flexDirection='column' justifyContent='flex-end' alignItems='center' height='200px' width='200px' position='relative' border='2px solid white'>
               <img src={'data:image/png;base64,' + thumbnail} height='100%' width='100%' style={{position: 'absolute'}}/>
               <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' height='27px' width='100%' sx={{backgroundColor: '#141b2d', opacity: 0.7}}>
                 <Typography sx={{fontSize: '18px', color: '#F8F8FF', letterSpacing: '2px'}}>{moment(timestamp).format('L')}</Typography>
@@ -71,7 +70,7 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
             <Box display='flex' flex={1} height='200px' margin='0 20px' flexDirection='column' justifyContent='space-between' alignItems='flex-start' paddingTop='10px' paddingBottom='20px'>
               <Box className='clears_and_likes' display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' fontSize='1.5rem'>
                 <img 
-                  src={'https://www.svgrepo.com/show/434273/star.svg'}
+                  src={StarImg}
                   style={{
                     width: '60px',
                     height: '60px',
@@ -80,7 +79,7 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
                 />
                 <span style={{fontFamily: ['Orbitron', 'sans-serif'].join(","), letterSpacing: '3px', color: '#b299e6'}}>{clears}</span>
                 <img 
-                  src={'https://www.svgrepo.com/show/362109/heart.svg'}
+                  src={HeartImg}
                   style={{
                     width: '60px',
                     height: '60px',
@@ -91,11 +90,11 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
                 <span style={{fontFamily: ['Orbitron', 'sans-serif'].join(","), letterSpacing: '3px', color: '#b299e6'}}>{likes}</span>
               </Box>
 
-              <Box className='mirror_info' display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' padding='5px 0' border='solid #647cba 3px' backgroundColor='#1d2742' borderRadius='5px'> 
+              <Box className='mirror_info' display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' padding='5px 0' border='solid #647cba 3px' borderRadius='5px' sx={{backgroundColor: '#1d2742'}}> 
                 {mirrors.map((mirrorType, i) => (
                   <Box width='50px' height='60px' key={i}>
                     {mirrorType ? 
-                      <img src={'https://stackblitz.com/files/react-ts-mirrorgame/github/LazyLatte/MirrorGame/main/src/img/' + mirrorType + '-default-dark.png'} height='100%' width='100%'/>
+                      <img src={mirrorType === 'reflector' ? ReflectorWhiteImg : LensWhiteImg} height='100%' width='100%'/>
                     :
                       <Box width='100%' height='100%'/>
                     }
@@ -106,7 +105,7 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
           </Box>
           <Box sx={{width: '90%', height: '1px', margin: '0 auto',backgroundColor: '#FAF0E6'}}/>
           <Box className='toggled' display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' width='100%'  height={`${toggledInfoHeight}px`} padding='0 40px' >
-            <Box className='toggled_info' width='65%'  height='60%' display='flex' flexDirection='column' justifyContent='space-around' alignItems='flex-start' paddingLeft='5px' backgroundColor='#1d2742' border='solid #647cba 3px'>
+            <Box className='toggled_info' width='65%'  height='60%' display='flex' flexDirection='column' justifyContent='space-around' alignItems='flex-start' paddingLeft='5px' border='solid #647cba 3px' sx={{backgroundColor: '#1d2742'}}>
               <Typography variant='h3' sx={{color: '#33ffbb'}}>Level-ID : {level_id}</Typography>
               <Typography variant='h3' sx={{color: '#33ffbb'}}>World Record : {record}</Typography>
             </Box>

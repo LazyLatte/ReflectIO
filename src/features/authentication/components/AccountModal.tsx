@@ -3,7 +3,6 @@ import UserName from './UserName';
 import Login from './Login';
 import Register from './Register';
 import Modal from '@features/ui/modal';
-
 interface AccountModalProps {};
 export interface AccountModalHandle {
   open: () => void;

@@ -1,3 +1,3 @@
 export * from './play';
-export * from './getTutorialLevelInfo';
+export * from './utils';
 export * from './interfaces';

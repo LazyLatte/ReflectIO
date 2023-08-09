@@ -1,5 +1,5 @@
 import MotionPage from './MotionPage';
-import {MenuButton} from '@features/ui';
+import {MenuButton} from '@features/ui/button';
 
 const Home = () => {
   return (
