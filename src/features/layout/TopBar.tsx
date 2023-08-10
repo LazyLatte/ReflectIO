@@ -77,12 +77,14 @@ const TopBar = () => {
   const handleSignIn = () => {
     accountModalRef.current?.open();
     handleClose();
+    location.pathname !== '/' && navigate('/');
   }
   const handleSignOut = async () => {
     const data = await userSignOut();
     console.log(data);
     setAuth({name: "", accessToken: null});
     handleClose();
+    location.pathname !== '/' && navigate('/');
   }
 
   const handleToAccount = () => {

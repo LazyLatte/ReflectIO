@@ -1,4 +1,5 @@
 import {useState, useEffect, FC} from "react";
+import { useAuth } from "@features/authentication";
 import {Difficulty, BuiltInLevelInfo} from '@features/level';
 import {Link} from "react-router-dom";
 import Box from '@mui/material/Box';
@@ -63,7 +64,6 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
     window.addEventListener('resize', handleResize);
  
   }, []);
- 
   return (
     <motion.div 
       animate={{boxShadow: `0 0 .2rem #fff, 0 0 .2rem #fff, 0 0 2rem ${frameColor}, 0 0 0.8rem ${frameColor}, 0 0 2rem ${frameColor}, inset 0 0 1.3rem ${frameColor}`}}

@@ -27,9 +27,8 @@ const UserName: FC<UserNameProps> = ({username, setUsername, setPage, closeModal
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) =>{
     e.preventDefault();
     if(username === ''){
-      const guest_name = "GUEST-" + Math.floor((Math.random()*10000)).toString();
-      setAuth({name: guest_name, accessToken: null})
-      setUsername(guest_name);
+      setAuth({name: '', accessToken: null})
+      setUsername('GUEST');
       setTimeout(closeModal, 500);
     }else{
       try{

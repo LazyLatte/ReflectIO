@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { isAxiosError, isCancel } from 'axios';
+import { isAxiosError} from 'axios';
 import useImage from 'use-image';
 import {useLocation} from "react-router-dom";
 import {Stage, StageButtonGroup, Mode} from '@features/stage';
@@ -7,7 +7,6 @@ import {Difficulty, BuiltInLevelInfo, useLevel} from '@features/level';
 import {usePatchClears} from '../api/use-patch-clears';
 import LevelClearModal, {LevelClearModalHandle} from './LevelClearModal';
 import {ReLoginModal, ReLoginModalHandle} from '@features/authentication';
-import BulbImg from '@images/icons/bulb.svg';
 import RestartImg from '@images/icons/restart.svg';
 
 
@@ -31,24 +30,21 @@ const BuiltInLevel = () => {
           setHistoryClear(true);
         },
         onError: (error) => {
-          if(isCancel(error)){
-            console.log("Guest is playing!");
-          }else if(isAxiosError(error)){
-              switch(error?.response?.status){
-                case 401:
-                    reLoginModalRef.current?.open();
-                    break;
-                default:
-                    break;
-              }
+          if(isAxiosError(error)){
+            switch(error?.response?.status){
+              case 401:
+                  reLoginModalRef.current?.open();
+                  break;
+              default:
+                  break;
             }
+          }
         }
       });
     }
   }
 
   const [restartImg] = useImage(RestartImg);
-  const [bulbImg] = useImage(BulbImg);
   return (
     <>
       <Stage mode={Mode.BuiltIn} level={level} onClear={onClear}>
@@ -59,10 +55,6 @@ const BuiltInLevel = () => {
             {
               img: restartImg,
               onClick: mirrorActions.resetMirrors
-            },
-            {
-              img: bulbImg,
-              onClick: ()=>alert('Not support yet')
             }
           ]}
         />

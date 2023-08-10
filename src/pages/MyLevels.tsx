@@ -1,5 +1,4 @@
-import {useRef, FC, ReactNode, useEffect} from 'react';
-import { isCancel, isAxiosError } from 'axios';
+import {useRef, FC, ReactNode} from 'react';
 import MotionPage from './MotionPage';
 import { ClipLoader } from 'react-spinners';
 import Box from '@mui/material/Box';
@@ -36,19 +35,12 @@ const DisplayCell: FC<DisplayCellProps> = ({idx, levelNum, isPublic, children}) 
 }
 
 const MyLevels = () => {
-  const {data: myLevels, isLoading, isError, error, remove} = useGetUserLevels();
+  const {data: myLevels, isLoading} = useGetUserLevels();
   const myLevelsArray: null[][] = Array(myLevelsShape.height).fill(Array(myLevelsShape.width).fill(null));
   const stageSizeModalRef = useRef<StageSizeModalHandle>(null);
   const handleOnClick = () => {
     stageSizeModalRef.current?.open();
   }
-  useEffect(()=>{
-    if(isError){
-      if(isCancel(error)){
-        remove();
-      }
-    }
-  }, [isError])
   return (
     <MotionPage transitionType='slide' style={{paddingTop: '150px', justifyContent: 'center',alignItems: 'center'}}>
       <Box border='2px solid white' boxShadow='0 0 .2rem #fff, 0 0 .2rem #fff, 0 0 1rem #fff' borderRadius={3}>

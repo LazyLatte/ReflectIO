@@ -8,9 +8,9 @@ export const useGetUserLevels = () => {
         queryKey: ["custom"], 
         queryFn: async () => {
             const {data} = await axiosPrivate.get<UserLevelInfo[]>('/levels/custom');
-            return data
+            return data;
         },
-        retry: false,
+        retry: false
         //cacheTime: 1000
     })
 }
