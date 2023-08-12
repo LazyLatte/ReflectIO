@@ -1,4 +1,4 @@
-import {useState, useEffect, useLayoutEffect, FC, ReactNode, forwardRef, useImperativeHandle, createRef} from 'react';
+import {useState, useEffect, useLayoutEffect, ReactNode, forwardRef, useImperativeHandle, createRef} from 'react';
 import {Stage as Wrap, Layer} from 'react-konva';
 import Konva from 'konva';
 import Grid from './Grid';
@@ -28,13 +28,14 @@ interface StageProps {
   mode: Mode;
   level: Level;
   tutorialGoal?: TutorialGoal;
+  isGettingThumbnail?: boolean;
   onClear: () => void;
   children?: ReactNode;
 }
 export interface StageHandle {
   getThumbnail: () => string | undefined;
 }
-export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorialGoal, onClear, children}, ref) => {
+export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorialGoal, isGettingThumbnail, onClear, children}, ref) => {
   const stageRef = createRef<Konva.Stage>()
   const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
   const {height: gridHeight, width: gridWidth, lasers, targets, reflectors, lens} = levelState;
@@ -88,7 +89,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
           </Layer>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
             <GridRay grid={gridRay.grid} Dgrid={gridRay.Dgrid}/>
-            <CustomGrid mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
+            <CustomGrid mode={mode} isGettingThumbnail={Boolean(isGettingThumbnail)} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
             <Lasers mode={mode} lasers={lasers} laserActions={laserActions}/>
             <Targets mode={mode} targets={targets} setMouseOnTarget={setMouseOnTarget} targetActions={targetActions}/>
             <TutorialHint mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} tutorialGoal={tutorialGoal}/>
@@ -97,8 +98,8 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
             {[...reflectors, ...lens].map((m, idx) => (
               <Mirror mode={mode} mirror={m} mirrorActions={mirrorActions} validRange={{x: gridWidth, y: gridHeight}} isValidCell = {isValidCell} key={idx} disabled={isDisabled(m.idx)}/>
             ))}
-            <ColorMixingPopover target={mouseOnTarget}/>
-            <AddObjectDropdown mode={mode}  gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  
+            <ColorMixingPopover isGettingThumbnail={Boolean(isGettingThumbnail)} target={mouseOnTarget}/>
+            <AddObjectDropdown mode={mode} isGettingThumbnail={Boolean(isGettingThumbnail)} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  
           </Layer>
         </Wrap>
       </div>

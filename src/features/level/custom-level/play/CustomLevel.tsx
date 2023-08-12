@@ -1,17 +1,19 @@
-import {FC, useRef} from 'react';
+import {FC, useRef, useState} from 'react';
 import useImage from 'use-image';
-import { isAxiosError, isCancel } from 'axios';
+import { isAxiosError } from 'axios';
 import {useLocation} from "react-router-dom";
-import {Stage, StageButtonGroup, StageHandle, Mode} from '@features/stage';
+import {Stage, AnimatedStageButtonGroup, StageHandle, Mode} from '@features/stage';
 import { UserLevelInfo, useLevel, state2info, getMirrorStates } from '@features/level';
 import { ReLoginModal, ReLoginModalHandle} from '@features/authentication';
 import UploadConfirmModal, {UploadConfirmModalHandle} from './UploadConfirmModal';
+import VerifyModal, {VerifyModalHandle} from './VerifyModal';
 import WarningModal, {WarningModalHandle} from './WarningModal';
 import { useUpdateLevel, useUploadLevel } from '../api/use-put-level';
 import { defaultEmptyLevel } from '../utils';
 import SaveImg from '@images/icons/save.svg';
 import UploadImg from '@images/icons/upload.svg';
-
+import LoadingImg from '@images/icons/loading.svg';
+import LockImg from '@images/icons/lock.svg';
 interface CustomLevelProps {}
 interface LocationState {userLevelInfo: UserLevelInfo};
 
@@ -19,7 +21,7 @@ interface LocationState {userLevelInfo: UserLevelInfo};
 const CustomLevel: FC<CustomLevelProps> = () => {
   const { state } = useLocation();
   const {userLevelInfo} = state as LocationState || {userLevelInfo: defaultEmptyLevel};
-  const {id} = userLevelInfo;
+  const {id, public: isPublic} = userLevelInfo;
  
   const level = useLevel(userLevelInfo);
   const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
@@ -29,24 +31,21 @@ const CustomLevel: FC<CustomLevelProps> = () => {
   const reLoginModalRefForUpdate = useRef<ReLoginModalHandle>(null);
   const reLoginModalRefForUpload = useRef<ReLoginModalHandle>(null);
   const uploadConfirmModalRef = useRef<UploadConfirmModalHandle>(null);
-  const warningModalRef = useRef<WarningModalHandle>(null);
-  
+  const verifyModalRef = useRef<VerifyModalHandle>(null);
+  const updateWarningModalRef = useRef<WarningModalHandle>(null);
+  const uploadWarningModalRef = useRef<WarningModalHandle>(null);
   const stageRef = useRef<StageHandle>(null);
 
   const updateMutation = useUpdateLevel();
   const uploadMutation = useUploadLevel();
 
-
+  const [isUpdating, setIsUpdating] = useState(false);
   const update = () => {
     const uri = stageRef.current?.getThumbnail() || '';
     updateMutation.mutate({id, levelInfo, thumbnail: uri.split(',')[1]}, {
-      onSuccess: (data) => {
-        
-      },
+      onSuccess: (data) => {},
       onError: (error) => {
-        if(isCancel(error)){
-          alert("Sign in to have your own level!");
-        }else if(isAxiosError(error)){
+        if(isAxiosError(error)){
           switch(error.response?.status){
             case 401:
               reLoginModalRefForUpdate.current?.open();
@@ -59,17 +58,30 @@ const CustomLevel: FC<CustomLevelProps> = () => {
       }
     })
   }
-
+  const resetAndUpdate = () => {
+    mirrorActions.resetMirrors();
+    setIsUpdating(true);
+    setTimeout(() => {
+      update();
+      setIsUpdating(false);
+    }, 800)
+  }
+  const updateChecking = () => {
+    if(isPublic){
+      updateWarningModalRef.current?.open('This level is already in the public. Updating this level will convert it to private mode and reset the number of stars and likes');
+    }else{
+      resetAndUpdate();
+    }
+  }
+  
+  const isUploadReady = id.length > 1 && levelInfo.lasers.length > 0 && levelInfo.targets.length > 0 && levelState.clear;
+  const [isUploading, setIsUploading] = useState(false);
   const upload = () => {
     const uri = stageRef.current?.getThumbnail() || '';
     uploadMutation.mutate({id, levelInfo, mirrorStates, thumbnail: uri.split(',')[1]}, {
-      onSuccess: (data) => {
-        console.log(data);
-      },
+      onSuccess: (data) => {},
       onError: (error) => {
-        if(isCancel(error)){
-          alert("Sign in to have your own level!");
-        }else if(isAxiosError(error)){
+        if(isAxiosError(error)){
           switch(error.response?.status){
             case 401:
               reLoginModalRefForUpload.current?.open();
@@ -83,54 +95,67 @@ const CustomLevel: FC<CustomLevelProps> = () => {
     })
   }
 
+  const resetAndUpload = () => {
+    mirrorActions.resetMirrors();
+    setIsUploading(true);
+    setTimeout(() => {
+      upload();
+      setIsUploading(false);
+    }, 800)
+  }
 
 
-  const uploadConfirm = () => {
-    if(levelInfo.lasers.length <= 0 || levelInfo.targets.length <= 0){
-      warningModalRef.current?.open('The level should contain at least 1 laser and 1 target');
+  const uploadChecking = () => {
+    if(id.length === 1){
+      verifyModalRef.current?.open('Guest cannot upload a level');
+    }else if(levelInfo.lasers.length <= 0 || levelInfo.targets.length <= 0){
+      verifyModalRef.current?.open('The level should contain at least 1 laser and 1 target');
     }else if(!levelState.clear){
-      warningModalRef.current?.open('Level is not clear');
+      verifyModalRef.current?.open('Level is not clear');
     }else{
-      uploadConfirmModalRef.current?.open();
+      if(isPublic){
+        uploadWarningModalRef.current?.open('This level is already in the public. Re-uploading this level will convert it to private mode and reset the number of stars and likes');
+      }else{
+        uploadConfirmModalRef.current?.open();
+      }
     }
   }
 
-  const updatePreprocess = () => {
-    mirrorActions.resetMirrors();
-    setTimeout(update, 1000);
-  }
-
-  const uploadPreprocess = () => {
-    mirrorActions.resetMirrors();
-    setTimeout(upload, 1000);
-  }
-
-
   const [saveImg] = useImage(SaveImg);
   const [uploadImg] = useImage(UploadImg);
+  const [loadingImg] = useImage(LoadingImg);
+  const [lockImg] = useImage(LockImg);
   return (
     <>
-      <Stage mode={Mode.Custom} level={level} onClear={()=>{}} ref={stageRef}>
-        <StageButtonGroup 
+      <Stage mode={Mode.Custom} level={level} isGettingThumbnail={isUpdating || isUploading} onClear={()=>{}} ref={stageRef}>
+        <AnimatedStageButtonGroup 
           gridHeight={levelState.height} 
           gridWidth={levelState.width} 
-          btn={[
+          animatedBTN={[
             {
-              img: saveImg,
-              onClick: updatePreprocess
+              originalImage: saveImg,
+              aninmatedImage: loadingImg,
+              animating: isUpdating,
+              disabled: false,
+              onClick: updateChecking
             },
             {
-              img: uploadImg,
-              onClick: uploadConfirm
+              originalImage: isUploadReady ? uploadImg : lockImg,
+              aninmatedImage: loadingImg,
+              animating: isUploading,
+              disabled: !isUploadReady,
+              onClick: uploadChecking
             }
           ]}
         />
       </Stage>
      
-      <WarningModal ref={warningModalRef}/>
-      <UploadConfirmModal uploadPreprocess={uploadPreprocess} ref={uploadConfirmModalRef}/>
-      <ReLoginModal onLogin={update} ref={reLoginModalRefForUpdate}/>
-      <ReLoginModal onLogin={upload} ref={reLoginModalRefForUpload}/>
+      <VerifyModal ref={verifyModalRef}/>
+      <WarningModal onConfirm={resetAndUpdate} ref={updateWarningModalRef}/>
+      <WarningModal onConfirm={resetAndUpload} ref={uploadWarningModalRef}/>
+      <UploadConfirmModal upload={resetAndUpload} ref={uploadConfirmModalRef}/>
+      <ReLoginModal onLogin={resetAndUpdate} ref={reLoginModalRefForUpdate}/>
+      <ReLoginModal onLogin={resetAndUpload} ref={reLoginModalRefForUpload}/>
     </>
   )
 }

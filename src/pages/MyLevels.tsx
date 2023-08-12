@@ -1,4 +1,4 @@
-import {useRef, FC, ReactNode} from 'react';
+import {useRef, FC, ReactNode, useState} from 'react';
 import MotionPage from './MotionPage';
 import { ClipLoader } from 'react-spinners';
 import Box from '@mui/material/Box';
@@ -36,6 +36,7 @@ const DisplayCell: FC<DisplayCellProps> = ({idx, levelNum, isPublic, children}) 
 
 const MyLevels = () => {
   const {data: myLevels, isLoading} = useGetUserLevels();
+  const [hoverIdx, setHoverIdx] = useState(-1);
   const myLevelsArray: null[][] = Array(myLevelsShape.height).fill(Array(myLevelsShape.width).fill(null));
   const stageSizeModalRef = useRef<StageSizeModalHandle>(null);
   const handleOnClick = () => {
@@ -54,7 +55,7 @@ const MyLevels = () => {
                 <DisplayCell idx={idx} levelNum={levelNum} isPublic={isPublic} key={idx}>
                   {(idx, levelNum) => {
                     if(isLoading) return <ClipLoader color={'green'} loading={true} size={250} aria-label="Loading Spinner" data-testid="loader"/> 
-                    if(idx < levelNum) return <CustomLevelInfoCard userLevelInfo={myLevels![idx]}/>
+                    if(idx < levelNum) return <CustomLevelInfoCard userLevelInfo={myLevels![idx]} isHovered={hoverIdx === idx} setHovered={(levelIdx: number = idx) => setHoverIdx(levelIdx)}/>
                     if(idx === levelNum) return (
                       <Button onClick={handleOnClick} sx={styles.btn}>
                         <img src={PlusImg} style={{height: '100%', width: '100%'}}/>

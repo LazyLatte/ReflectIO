@@ -7,12 +7,13 @@ interface CustomGridProps {
   mode: Mode;
   gridHeight: number;
   gridWidth: number;
+  isGettingThumbnail: boolean;
   dropdownCellPos: Vector2D | null;
   setDropdownCellPos: Dispatch<SetStateAction<Vector2D | null>>;
 }
 
-const CustomGrid: FC<CustomGridProps> = ({mode, gridHeight, gridWidth, dropdownCellPos, setDropdownCellPos}) => {
-  if(mode !== Mode.Custom) return null;
+const CustomGrid: FC<CustomGridProps> = ({mode, gridHeight, gridWidth, isGettingThumbnail, dropdownCellPos, setDropdownCellPos}) => {
+  if(mode !== Mode.Custom || isGettingThumbnail) return null;
   const gridArray: null[][] = Array(gridHeight).fill(Array(gridWidth).fill(null));
   return (
     <Group>

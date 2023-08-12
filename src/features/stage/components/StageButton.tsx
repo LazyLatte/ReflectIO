@@ -31,10 +31,6 @@ const StageButton: FC<StageButtonProps> = memo(({image, position, onClick}) => {
         height={cellWidth*btnWidthFactor} 
         fill='rgb(239,83,55)'
         stroke="rgb(255,115,87)"
-        
-
-        shadowColor="rgb(255,99,71)" 
-        shadowBlur={5}
       />
       <Image
         image={image}

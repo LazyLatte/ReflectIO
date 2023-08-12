@@ -1,16 +1,18 @@
 import { useQuery } from "react-query";
-import { useAxiosPrivate } from "@features/authentication";
+import { useAuth, useAxiosPrivate } from "@features/authentication";
 import { UserLevelInfo} from "@features/level";
 
 export const useGetUserLevels = () => {
+    const {auth} = useAuth()!;
     const axiosPrivate = useAxiosPrivate();
     return useQuery<UserLevelInfo[], Error>({
-        queryKey: ["custom"], 
+        queryKey: ["custom", auth?.name], 
         queryFn: async () => {
             const {data} = await axiosPrivate.get<UserLevelInfo[]>('/levels/custom');
             return data;
         },
-        retry: false
+        retry: false,
+        refetchOnMount: false
         //cacheTime: 1000
     })
 }

@@ -32,10 +32,12 @@ const PublicLevel: FC<PublicLevelProps> = () => {
   const likeMutation = useLike();
   const clearMutation = useClear();
 
+  const [isLike, setIsLike] = useState(Boolean(isFavorite));
+  
   const like = () => {
     likeMutation.mutate({id}, {
       onSuccess: () => {
-        navigate(pathname, { state: {userLevelInfo: {...userLevelInfo, isFavorite: !isFavorite}}, replace: true } )
+        setIsLike(prev => !prev);
       },
       onError: (error) => {
         if(isCancel(error)){
@@ -70,7 +72,8 @@ const PublicLevel: FC<PublicLevelProps> = () => {
           setClearText(beatWorldRecord ? `New World Record : ${new_personal_best}` : `New Personal Best : ${personal_best} >> ${new_personal_best}`);
           publicLevelClearModalRef.current?.open();
         }
-        navigate(pathname, { state: {userLevelInfo: {...userLevelInfo, record: Math.min(worldRecord, new_personal_best), personal_best: new_personal_best}}, replace: true });
+        publicLevelClearModalRef.current?.open();
+        //navigate(pathname, { state: {userLevelInfo: {...userLevelInfo, record: Math.min(worldRecord, new_personal_best), personal_best: new_personal_best}}, replace: true });
         
       }, 
       onError: (error) => {
@@ -108,7 +111,7 @@ const PublicLevel: FC<PublicLevelProps> = () => {
               onClick: mirrorActions.resetMirrors
             },
             {
-              img: isFavorite ? fullHeartImg : emptyHeartImg,
+              img: isLike ? fullHeartImg : emptyHeartImg,
               onClick: like
             }
           ]}

@@ -4,12 +4,12 @@ import Typography from '@mui/material/Typography';
 import Modal, {ModalBox, ModalButton, ModalSeparator} from '@features/ui/modal';
 
 interface UploadConfirmModalProps {
-  uploadPreprocess: () => void;
+  upload: () => void;
 };
 export interface UploadConfirmModalHandle {
   open: () => void;
 }
-const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, UploadConfirmModalProps> = ({uploadPreprocess}, ref) => {
+const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, UploadConfirmModalProps> = ({upload}, ref) => {
   const [open, setOpen] = useState<boolean>(false);
   useImperativeHandle(ref, ()=>({
     open: () => {
@@ -19,7 +19,7 @@ const UploadConfirmModal: ForwardRefRenderFunction<UploadConfirmModalHandle, Upl
 
   const closeModal = () => setOpen(false);
   const handleOnClick = () => {
-    uploadPreprocess();
+    upload();
     closeModal();
   }
   return (

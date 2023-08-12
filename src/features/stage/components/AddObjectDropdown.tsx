@@ -7,6 +7,7 @@ interface AddObjectDropdownProps {
   mode: Mode;
   gridHeight: number;
   gridWidth: number;
+  isGettingThumbnail: boolean;
   dropdownCellPos: Vector2D | null;
   setDropdownCellPos: Dispatch<SetStateAction<Vector2D | null>>;
   addObjects: AddObjects;
@@ -15,8 +16,8 @@ interface colorDropdownInterface {
   pos: Vector2D;
   objType: 'Laser' | 'Target' | 'Reflect' | 'Lens';
 }
-const AddObjectDropdown: FC<AddObjectDropdownProps> = ({mode, gridHeight, gridWidth, dropdownCellPos, setDropdownCellPos, addObjects}) => {
-  if(!dropdownCellPos || mode !== Mode.Custom) return null;
+const AddObjectDropdown: FC<AddObjectDropdownProps> = ({mode, gridHeight, gridWidth, isGettingThumbnail, dropdownCellPos, setDropdownCellPos, addObjects}) => {
+  if(!dropdownCellPos || mode !== Mode.Custom || isGettingThumbnail) return null;
   
   const cellPos = dropdownCellPos;
   const {cellWidth} = useStageConfig();

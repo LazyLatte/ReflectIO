@@ -1,6 +1,5 @@
 import {forwardRef, useImperativeHandle, useState, useRef} from 'react';
 import { isAxiosError, isCancel } from 'axios';
-import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Silder from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
@@ -8,7 +7,6 @@ import Typography from '@mui/material/Typography';
 
 import { EmptyStage, EmptyStageHandle } from '@features/stage';
 import { useCreateLevel } from '../api/use-post-level';
-import { defaultEmptyLevel } from '../utils';
 import { ReLoginModal, ReLoginModalHandle } from '@features/authentication';
 import Modal, {ModalBox, ModalButton, ModalSeparator} from '@features/ui/modal';
 const minSize = 8;
@@ -21,7 +19,6 @@ export interface StageSizeModalHandle {
   open: () => void;
 }
 export const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalProps>(({}, ref) => {
-  const navigate = useNavigate();
   const createLevelMutation = useCreateLevel();
   const emptyStageRef = useRef<EmptyStageHandle>(null);
   const reLoginModalRef = useRef<ReLoginModalHandle>(null);
@@ -42,12 +39,10 @@ export const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalPro
     const uri = emptyStageRef.current?.getThumbnail() || '';
     createLevelMutation.mutate({height: size, width: size, thumbnail: uri.split(',')[1]}, {
       onSuccess: (data) => {
-        navigate('/custom', {state: {userLevelInfo: data}});
         closeModal();
       },
       onError: (error) => {
         if(isCancel(error)){
-          navigate('/custom', {state: {userLevelInfo: {...defaultEmptyLevel, height: size, width: size}}});
           closeModal();
         }else if(isAxiosError(error)){
           switch(error.response?.status){

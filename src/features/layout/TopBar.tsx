@@ -80,8 +80,12 @@ const TopBar = () => {
     location.pathname !== '/' && navigate('/');
   }
   const handleSignOut = async () => {
-    const data = await userSignOut();
-    console.log(data);
+    try{
+      userSignOut();
+    }catch(err){
+      console.error(err);
+    }
+  
     setAuth({name: "", accessToken: null});
     handleClose();
     location.pathname !== '/' && navigate('/');

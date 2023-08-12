@@ -22,7 +22,7 @@ export type UserLevelInfo = LevelInfo & {
   timestamp: string;
   thumbnail: string;
   personal_best: number | null;
-  isFavorite?: number;
+  isFavorite?: boolean;
 }
 
 export type TutorialLevelInfo = LevelInfo & {

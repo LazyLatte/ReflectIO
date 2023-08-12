@@ -1,16 +1,20 @@
-import {useState, useRef, FC, memo} from 'react';
+import {useRef, FC, memo} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { isAxiosError, isCancel } from 'axios';
+import { isAxiosError } from 'axios';
 import { motion, AnimatePresence } from "framer-motion"
 import {Link} from "react-router-dom";
 import {UserLevelInfo} from '@features/level';
 import { useDeleteLevel } from '../api/use-delete-level';
 import { ReLoginModal, ReLoginModalHandle } from '@features/authentication';
+import StarImg from '@images/icons/star.svg';
+import HeartImg from '@images/icons/heart.svg';
 interface LevelInfoCardProps {
   userLevelInfo: UserLevelInfo;
+  isHovered: boolean;
+  setHovered: (levelIdx?: number) => void;
 }
 const styles = {
   editButton: {
@@ -31,20 +35,15 @@ const styles = {
     color: 'purple',
   }
 }
-export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
+export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo, isHovered, setHovered}) => {
   const {id, public: isPublic, clears, likes, record, creator, timestamp, personal_best, thumbnail} = userLevelInfo;
-  const [hover, setOnHover] = useState<boolean>(false);
   const reLoginModalRef = useRef<ReLoginModalHandle>(null);
   const deleteLevelMutation = useDeleteLevel();
   const deleteLevel = () => {
     deleteLevelMutation.mutate({id}, {
-      onSuccess: (data) => {
-        
-      },
+      onSuccess: (data) => {},
       onError: (error) => {
-        if(isCancel(error)){
-          alert("Sign in to have your own level!");
-        }else if(isAxiosError(error)){
+        if(isAxiosError(error)){
           switch(error.response?.status){
             case 401:
               reLoginModalRef.current?.open();
@@ -62,15 +61,15 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
       <Box 
         height='100%' 
         width='100%'
-        onMouseOver={() => setOnHover(true)} 
-        onMouseLeave={() => setOnHover(false)}
+        onMouseOver={() => setHovered()} 
+        onMouseLeave={() => setHovered(-1)}
         sx={{
           position: 'relative',
           cursor: 'pointer'
         }}
       >
         <AnimatePresence>
-          {hover 
+          {isHovered 
             ?
               <motion.div 
                   initial={{opacity: 0}}
@@ -89,7 +88,7 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
               >
                   <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' alignSelf='flex-start' fontSize='1.5rem' >
                       <img 
-                          src={'https://www.svgrepo.com/show/434273/star.svg'}
+                          src={StarImg}
                           style={{
                               width: '60px',
                               height: '60px',
@@ -101,7 +100,7 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
                   </Box>
                   <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center' alignSelf='flex-start' fontSize='1.5rem'>
                       <img 
-                          src={'https://www.svgrepo.com/show/362109/heart.svg'}
+                          src={HeartImg}
                           style={{
                               width: '60px',
                               height: '60px',

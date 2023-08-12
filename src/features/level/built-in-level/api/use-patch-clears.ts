@@ -1,9 +1,8 @@
-import {useAuth} from '@features/authentication';
 import { isCancel } from 'axios';
 import {useMutation, useQueryClient} from 'react-query';
 import { Difficulty} from "@features/level";
 import { ClearRecords } from './clears-type';
-import { useAxiosPrivate } from "@features/authentication";
+import { useAuth, useAxiosPrivate } from "@features/authentication";
 
 export const usePatchClears = () => {
     const {auth} = useAuth()!;

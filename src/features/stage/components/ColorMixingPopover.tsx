@@ -3,9 +3,9 @@ import { Group, Label, Tag, Text, Circle} from 'react-konva';
 import {useStageConfig} from '../hooks';
 import {Target} from '../interfaces';
 import {colorMap} from '../gameHelpers';
-interface ColorMixingPopoverProps {target: Target | null}
-const ColorMixingPopover: FC<ColorMixingPopoverProps> = ({target}) => {
-  if(!target) return null;
+interface ColorMixingPopoverProps {target: Target | null, isGettingThumbnail: boolean}
+const ColorMixingPopover: FC<ColorMixingPopoverProps> = ({target, isGettingThumbnail}) => {
+  if(!target || isGettingThumbnail) return null;
   const {cellWidth} = useStageConfig();
   const {pos: targetPos, color} = target;
   const symbolSize = 30;
