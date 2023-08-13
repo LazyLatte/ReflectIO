@@ -14,8 +14,7 @@ import StarImg from '@images/icons/star.svg';
 import HeartImg from '@images/icons/heart.svg';
 import ReflectorWhiteImg from '@images/mirrors/reflector-default-dark.png';
 import LensWhiteImg from '@images/mirrors/lens-default-dark.png';
-const encoder = new UuidEncoder('base64url');
-interface LevelInfoCardProps {userLevelInfo: UserLevelInfo}
+
 const styles = {
   btn: {
     height: '80px',
@@ -28,6 +27,9 @@ const styles = {
     }
   }
 }
+
+const encoder = new UuidEncoder('base64url');
+interface LevelInfoCardProps {userLevelInfo: UserLevelInfo}
 export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
   const {id, height, width, lasers, targets, reflectorNum, lensNum, clears, likes, record, creator, timestamp, personal_best, isFavorite, thumbnail} = userLevelInfo;
   const mirrors = Array(reflectorNum).fill('reflector').concat(Array(lensNum).fill('lens')).concat(Array(MAX_MIRROR_NUM-reflectorNum-lensNum).fill(null));

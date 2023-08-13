@@ -1,5 +1,4 @@
 import { useState} from "react";
-import { Difficulty} from "@features/level";
 import TopBar from '@features/layout';
 import Home from "./pages/Home";
 import More from './pages/More';
@@ -10,14 +9,14 @@ import Search from "./pages/Search";
 import LevelSelect from './pages/LevelSelect';
 import Tutorial from "./pages/Tutorial";
 import AboutUs from "./pages/AboutUs";
-import Account from "./pages/Account";
 import { BackButton } from "@features/ui/button";
 
 import { Route, Routes, useLocation} from "react-router-dom";
-import { AnimatePresence  } from "framer-motion"
-import {Mode} from './features/stage';
+import { AnimatePresence  } from "framer-motion";
+import { Difficulty} from "@features/level";
+import {Mode} from '@features/stage';
 
-import './style.css';
+import './App.css';
 export default function App() {
   
   const location = useLocation();
@@ -33,14 +32,18 @@ export default function App() {
           <Routes key={location.key} location={location}>
             <Route path='/' element={<Home/>} />
             <Route path='more' element={<More/>}/>
-            
             <Route path="about" element={<AboutUs/>} />
-            <Route path="account" element={<Account/>} />
+
+            <Route path="play">
+              <Route path="level/:id" element={<Play mode={Mode.Public} />}/>
+              <Route path=":difficulty/:id" element={<Play mode={Mode.BuiltIn}/>}/>
+            </Route>
 
             <Route path="tutorial">
               <Route index={true} element={<Tutorial/>} />
               <Route path=":id" element={<Play mode={Mode.Tutorial} />}/>
             </Route>
+            
             
             <Route path="explore" element={<GlobalLevels/>}/>
             <Route path="mylevels" element={<MyLevels/>}/>
@@ -49,11 +52,7 @@ export default function App() {
           </Routes>
         </AnimatePresence>
         <Routes key={location.key} location={location}>
-          <Route path="play">
-            <Route index={true} element={<LevelSelect difficulty={difficulty} setDifficulty={setDifficulty}/>} />
-            <Route path="level/:id" element={<Play mode={Mode.Public} />}/>
-            <Route path=":difficulty/:id" element={<Play mode={Mode.BuiltIn}/>}/>
-          </Route>
+            <Route path="select" element={<LevelSelect difficulty={difficulty} setDifficulty={setDifficulty}/>}/>
         </Routes>
       </div>
     </div>

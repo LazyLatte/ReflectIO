@@ -71,10 +71,11 @@ const PublicLevel: FC<PublicLevelProps> = () => {
         }else if(new_personal_best < personal_best){
           setClearText(beatWorldRecord ? `New World Record : ${new_personal_best}` : `New Personal Best : ${personal_best} >> ${new_personal_best}`);
           publicLevelClearModalRef.current?.open();
+        }else{
+          setClearText("");
+          publicLevelClearModalRef.current?.open();
         }
-        publicLevelClearModalRef.current?.open();
-        //navigate(pathname, { state: {userLevelInfo: {...userLevelInfo, record: Math.min(worldRecord, new_personal_best), personal_best: new_personal_best}}, replace: true });
-        
+        navigate(pathname, { state: {userLevelInfo: {...userLevelInfo, record: Math.min(worldRecord, new_personal_best), personal_best: new_personal_best}}, replace: true });
       }, 
       onError: (error) => {
         if(isCancel(error)){

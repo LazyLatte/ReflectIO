@@ -1,5 +1,4 @@
 import {useState, useEffect, FC} from "react";
-import { useAuth } from "@features/authentication";
 import {Difficulty, BuiltInLevelInfo} from '@features/level';
 import {Link} from "react-router-dom";
 import Box from '@mui/material/Box';
@@ -105,7 +104,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
                     <Button 
                       variant='outlined'
                       component={Link}
-                      to={`./${difficulty}/${i*shape.width+j+1}`} 
+                      to={`/play/${difficulty}/${i*shape.width+j+1}`} 
                       state={{
                         difficulty, 
                         levelIdx: i*shape.width+j, 

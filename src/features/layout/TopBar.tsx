@@ -1,14 +1,14 @@
-import {FC, useState, useEffect, useRef} from 'react';
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {useState, useEffect, useRef} from 'react';
+import {useLocation, useNavigate} from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ExtensionIcon from '@mui/icons-material/Extension';
-
+//import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -38,6 +38,7 @@ const styles = {
 const path_name_pair = {
   'more': 'MORE',
   'play': 'PLAY',
+  'select': 'SELECT',
   'explore': 'EXPLORE',
   'custom': 'CUSTOM',
   'about': 'ABOUT',
@@ -91,10 +92,10 @@ const TopBar = () => {
     location.pathname !== '/' && navigate('/');
   }
 
-  const handleToAccount = () => {
-    handleClose();
-    navigate('./account');
-  }
+  // const handleToAccount = () => {
+  //   handleClose();
+  //   navigate('./account');
+  // }
 
   const handleToMyLevels = () => {
     handleClose();
@@ -109,7 +110,7 @@ const TopBar = () => {
         accountModalRef.current?.open();
       }
     }
-    initRequest();
+    location.pathname === '/' && initRequest();
   }, [])
   return (
     <Box 
@@ -134,7 +135,7 @@ const TopBar = () => {
             {auth.accessToken ?
               <Avatar  variant="rounded" src='https://www.svgrepo.com/show/380730/avatar-winter-custome-18.svg' sx={{ width: '100%', height: '100%'}}/>
               :
-              <Avatar variant="rounded" sx={{ backgroundColor: 'transparent', fontSize: '20px', fontWeight: 'bold'}}>A</Avatar>
+              <Avatar variant="rounded" sx={{ backgroundColor: 'transparent', fontSize: '20px', fontWeight: 'bold'}}>G</Avatar>
             }
           </>
         }
@@ -153,10 +154,6 @@ const TopBar = () => {
       >
         {auth?.accessToken ?
           <MenuList>
-            <MenuItem onClick={handleToAccount} disableRipple sx={{letterSpacing: '2px'}}>
-              <ManageAccountsIcon sx={{marginRight: '7px'}}/>
-              Account
-            </MenuItem>
             <MenuItem onClick={handleToMyLevels} disableRipple sx={{letterSpacing: '2px'}}>
               <ExtensionIcon sx={{marginRight: '7px'}}/>
               My Levels
