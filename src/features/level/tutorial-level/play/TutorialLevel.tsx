@@ -18,12 +18,13 @@ const TutorialLevel = () => {
   const [step, setStep] = useState(0);
   const [open, setOpen] = useState<boolean>(true);
 
+  const mirrors = [...levelState.reflectors, ...levelState.lens];
   useEffect(()=>{
     if(step < answer.length * 2){
       let stepComplete: boolean;
       const answerIdx = Math.floor(step / 2);
       const mirrorIdx = answer[answerIdx].idx;
-      const mirrors = [...levelState.reflectors, ...levelState.lens];
+      
       if(step % 2 === 0){
         stepComplete = mirrors[mirrorIdx].pos.x === answer[answerIdx].pos.x && mirrors[mirrorIdx].pos.y === answer[answerIdx].pos.y;
       }else{
@@ -36,10 +37,11 @@ const TutorialLevel = () => {
   const tutorialGoal: TutorialGoal | undefined = (!open && step < answer.length * 2) ? {
     match: step % 2 === 0 ? "pos" : "deg",
     type: answer[Math.floor(step / 2)].idx < levelInfo.reflectorNum ? ObjectType.Reflector : ObjectType.Lens,
-    ...answer[Math.floor(step / 2)]
+    fromPos: mirrors[answer[Math.floor(step / 2)].idx].pos,
+    toPos: answer[Math.floor(step / 2)].pos,
+    toDeg: answer[Math.floor(step / 2)].deg
   } : undefined;
 
-  
   const [exclamationImg] = useImage(ExclamationImg);
   return (
     <>

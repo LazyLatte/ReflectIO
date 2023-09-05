@@ -219,6 +219,9 @@ export const useGridRay = (height: number, width: number, lasers: Laser[], refle
                             (newDgrid.grid[DgridTargetPos.y][DgridTargetPos.x].color & 7) | ((newDgrid.grid[DgridTargetPos.y][DgridTargetPos.x].color >> 3) & 7);
         const isActivated = target.color === centerColor;
         (target.clear !== isActivated) && setTargetClear(target.pos, isActivated);     
+
+        newGrid.addObject(targetPos, {type: ObjectType.Target});
+        newDgrid.addObject(targetPos, {type: ObjectType.Target});
       })
 
       return {

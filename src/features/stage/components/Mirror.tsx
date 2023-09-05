@@ -7,12 +7,13 @@ interface MirrorProps {
   mode: Mode;
   mirror: MirrorState;
   mirrorActions: MirrorActions;
-  validRange: Vector2D;
-  isValidCell: (pos: Vector2D, idx: number) => boolean;
+  draggable: boolean;
   disabled: boolean;
+  dragged: boolean;
+  isValidCell: (pos: Vector2D) => boolean;
 }
 
-const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isValidCell, disabled}) => {
+const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, draggable, disabled, dragged, isValidCell}) => {
   const { type, idx, pos, resetPos, deg } = mirror;
   const {rotateMirror, updateMirrorPos, deleteMirror} = mirrorActions;
 
@@ -20,10 +21,11 @@ const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isVal
 
   const mirrorRef = createRef<Konva.Group>();
   useLayoutEffect(() => {
-    if (pos.x >= validRange.x || pos.y >= validRange.y) {
+    if (!dragged) {
       updateMirrorPos(type, idx, resetPos);
     }
   }, [resetPos]);
+  
   useEffect(() => {
     mirrorRef.current?.position({ x: pos.x * cellWidth, y: pos.y * cellWidth });
   }, [pos, cellWidth]);
@@ -39,10 +41,10 @@ const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isVal
       y={pos.y * cellWidth}
       width={cellWidth}
       height={cellWidth}
-      draggable
+      draggable={draggable}
       onDragEnd={(e) => {
         const newPos: Vector2D = {x: Math.round(e.target.x() / cellWidth), y: Math.round(e.target.y() / cellWidth)};
-        if (newPos.x >= 0 && newPos.x < validRange.x && newPos.y >= 0 && newPos.y < validRange.y && isValidCell(newPos, idx)) {
+        if (isValidCell(newPos)) {
           updateMirrorPos(type, idx, newPos);
         } else {
           mirrorRef.current?.position({
@@ -74,7 +76,6 @@ const Mirror: FC<MirrorProps> = ({mode, mirror, mirrorActions, validRange, isVal
       }}
     >
       <Image 
-
         image={image} 
         offsetX={cellWidth * 0.8 * 0.5}
         offsetY={cellWidth * 0.8 * 0.5}

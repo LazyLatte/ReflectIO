@@ -20,6 +20,7 @@ export interface LevelState {
 
 export interface LaserActions {
   rotateLaser: (pos: Vector2D, rotateDeg: number) => void;
+  updateLaserPos: (prevPos: Vector2D, nextPos: Vector2D) => void;
   deleteLaser: (pos: Vector2D) => void;
 }
 export interface TargetActions {

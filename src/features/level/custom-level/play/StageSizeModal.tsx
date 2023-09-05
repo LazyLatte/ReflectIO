@@ -62,13 +62,13 @@ export const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalPro
         <Box display='flex' flexDirection='row' justifyContent='space-around' alignItems='center' width='100%'>
           <Box display='flex' flexDirection='column' justifyContent='space-around' alignItems='center'>
             <Typography sx={{
-                  position: 'relative',
-                  bottom: 8,
-                  fontFamily: ["Roboto","Helvetica","Arial", "sans-serif"].join(","),
-                  fontSize: 40,
-                  fontWeight: 'bold',
-                  color: '#00004d',
-                  letterSpacing: '2px',
+                position: 'relative',
+                bottom: 8,
+                fontFamily: ["Roboto","Helvetica","Arial", "sans-serif"].join(","),
+                fontSize: 40,
+                fontWeight: 'bold',
+                color: '#00004d',
+                letterSpacing: '2px',
               }}
             >
               {`${size} x ${size}`}

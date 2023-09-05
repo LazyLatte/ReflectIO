@@ -45,6 +45,7 @@ const styles = {
 const lottieData = [null, OneStarLottie, TwoStarLottie, ThreeStarLottie, ThreeStarPurpleLottie, ThreeStarCrimsonLottie];
 interface PublicLevelClearModalProps {
   reset: () => void;
+  updateBarDisplay: () => void;
   clearText: string;
   star: number;
   warning: boolean;
@@ -52,7 +53,7 @@ interface PublicLevelClearModalProps {
 export interface PublicLevelClearModalHandle {
   open: () => void;
 }
-const PublicLevelClearModal: ForwardRefRenderFunction<PublicLevelClearModalHandle, PublicLevelClearModalProps> = ({reset, clearText, star, warning}, ref) => {
+const PublicLevelClearModal: ForwardRefRenderFunction<PublicLevelClearModalHandle, PublicLevelClearModalProps> = ({reset, updateBarDisplay, clearText, star, warning}, ref) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
   useImperativeHandle(ref, ()=>({
@@ -70,9 +71,13 @@ const PublicLevelClearModal: ForwardRefRenderFunction<PublicLevelClearModalHandl
   const restart = () => {
     reset();
     closeModal();
+    updateBarDisplay();
   }
   return (
-    <Modal open={open} onBackDropClick={closeModal}>
+    <Modal open={open} onBackDropClick={() => {
+      closeModal();
+      updateBarDisplay();
+    }}>
       <Box 
         position='relative' 
         height='230px' 

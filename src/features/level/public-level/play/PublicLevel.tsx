@@ -18,7 +18,7 @@ const PublicLevel: FC<PublicLevelProps> = () => {
   const navigate = useNavigate();
   const { state, pathname } = useLocation();
   const {userLevelInfo} = state as LocationState /*|| {} redirect ...*/;
-  const {id, record: worldRecord, personal_best, isFavorite} = userLevelInfo;
+  const {id, record, personal_best, isFavorite} = userLevelInfo;
 
 
   const level = useLevel(userLevelInfo);
@@ -55,27 +55,30 @@ const PublicLevel: FC<PublicLevelProps> = () => {
     })
   }
 
+  const [worldRecord, setWorldRecord] = useState(record);
+  const [personalBest, setPersonalBest] = useState(personal_best);
   const [clearText, setClearText] = useState<string>('');
   const [star, setStar] = useState<number>(3);
   const [warning, setWarning] = useState<boolean>(false);
   const onClear = () => {
     clearMutation.mutate({id, mirrorStates}, {
       onSuccess: (data) => {
-        const new_personal_best = data.personal_best;
-        const beatWorldRecord = new_personal_best < worldRecord;
+        const newPersonalBest = data.personal_best;
+        const beatWorldRecord = newPersonalBest < worldRecord;
+        setPersonalBest(newPersonalBest);
+        setWorldRecord(Math.min(worldRecord, newPersonalBest));
         setStar(beatWorldRecord ? 4 : 3);
         setWarning(false);
-        if(personal_best === null ){
-          setClearText(beatWorldRecord ? `New World Record : ${new_personal_best}` : 'First Clear');
+        if(personalBest === null ){
+          setClearText(beatWorldRecord ? `New World Record : ${newPersonalBest}` : 'First Clear');
           publicLevelClearModalRef.current?.open();
-        }else if(new_personal_best < personal_best){
-          setClearText(beatWorldRecord ? `New World Record : ${new_personal_best}` : `New Personal Best : ${personal_best} >> ${new_personal_best}`);
+        }else if(newPersonalBest < personalBest){
+          setClearText(beatWorldRecord ? `New World Record : ${newPersonalBest}` : `New Personal Best : ${personalBest} >> ${newPersonalBest}`);
           publicLevelClearModalRef.current?.open();
         }else{
           setClearText("");
           publicLevelClearModalRef.current?.open();
         }
-        navigate(pathname, { state: {userLevelInfo: {...userLevelInfo, record: Math.min(worldRecord, new_personal_best), personal_best: new_personal_best}}, replace: true });
       }, 
       onError: (error) => {
         if(isCancel(error)){
@@ -96,7 +99,7 @@ const PublicLevel: FC<PublicLevelProps> = () => {
     })
   }
   
-  
+  const updateBarDisplay = () => navigate(pathname, { state: {userLevelInfo: {...userLevelInfo, record: worldRecord, personal_best: personalBest}}, replace: true });
   const [restartImg] = useImage(RestartImg);
   const [emptyHeartImg] = useImage(EmptyHeart);
   const [fullHeartImg] = useImage(FullHeart);
@@ -118,7 +121,7 @@ const PublicLevel: FC<PublicLevelProps> = () => {
           ]}
         />
       </Stage>
-      <PublicLevelClearModal reset={mirrorActions.resetMirrors} clearText={clearText} star={star} warning={warning} ref={publicLevelClearModalRef}/>
+      <PublicLevelClearModal reset={mirrorActions.resetMirrors} updateBarDisplay={updateBarDisplay} clearText={clearText} star={star} warning={warning} ref={publicLevelClearModalRef}/>
       <ReLoginModal onLogin={like} ref={reLoginModalRefForLike}/>
       <ReLoginModal onLogin={onClear} ref={reLoginModalRefForClear}/>
     </>

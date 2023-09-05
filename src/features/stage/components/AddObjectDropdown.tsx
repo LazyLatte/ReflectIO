@@ -61,7 +61,7 @@ const AddObjectDropdown: FC<AddObjectDropdownProps> = ({mode, gridHeight, gridWi
             onmouseover={() => setColorDropdown({
                 pos: {
                   x: objectOptionSize.width + 2,
-                  y: -10 + i * objectOptionSize.height
+                  y: (-34 * cellPos.y - 10) + i * objectOptionSize.height
                 },
                 objType
             })}

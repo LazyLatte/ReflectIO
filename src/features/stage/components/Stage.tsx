@@ -15,14 +15,6 @@ import TutorialHint from './TutorialHint';
 import {useGridRay, useStageConfig} from '../hooks';
 import {ObjectType, Level, Vector2D, Target, Mode} from '../interfaces';
 import { TutorialGoal } from '@features/level';
-// function downloadURI(uri: string, name: string) {
-//   var link = document.createElement('a');
-//   link.download = name;
-//   link.href = uri;
-//   document.body.appendChild(link);
-//   link.click();
-//   document.body.removeChild(link);
-// }
 
 interface StageProps {
   mode: Mode;
@@ -45,10 +37,12 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
   
   const boardOrigin: Vector2D = {x: (window.innerWidth-gridWidth*cellWidth) >> 1, y: 56};
 
+  const isOnBoard = (pos: Vector2D) => (pos.x >= 0 && pos.x < gridWidth && pos.y >= 0 && pos.y < gridHeight);
   const isEmptyCell = (pos: Vector2D): boolean => (gridRay.grid[pos.y][pos.x].object.type === ObjectType.None);
-  const isAnswerCell = (pos: Vector2D, idx: number): boolean => (tutorialGoal?.idx === idx && pos.x === tutorialGoal?.pos.x && pos.y === tutorialGoal?.pos.y);
-  const isValidCell = (pos: Vector2D, idx: number): boolean => (mode!==Mode.Tutorial && isEmptyCell(pos)) || (mode===Mode.Tutorial && isAnswerCell(pos, idx));
-  const isDisabled = (idx: number): boolean => (mode===Mode.Tutorial && (tutorialGoal?.idx !== idx || tutorialGoal.match !== "deg"));
+  const isValidCell = (pos: Vector2D): boolean => isOnBoard(pos) && isEmptyCell(pos);
+  const isDraggable = (pos: Vector2D): boolean => (mode !== Mode.Tutorial || (mode===Mode.Tutorial && pos.x === tutorialGoal?.fromPos.x && pos.y === tutorialGoal?.fromPos.y && tutorialGoal?.match === "pos"))
+  const isDisabled = (pos: Vector2D): boolean => (mode===Mode.Tutorial && (pos.x !== tutorialGoal?.fromPos.x || pos.y !== tutorialGoal?.fromPos.y || tutorialGoal?.match !== "deg"));
+
   useLayoutEffect(()=>{
     mirrorActions.updateMirrorsResetPos(shouldRearrange);
   }, [shouldRearrange]);
@@ -90,13 +84,13 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
             <GridRay grid={gridRay.grid} Dgrid={gridRay.Dgrid}/>
             <CustomGrid mode={mode} isGettingThumbnail={Boolean(isGettingThumbnail)} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
-            <Lasers mode={mode} lasers={lasers} laserActions={laserActions}/>
+            <Lasers mode={mode} lasers={lasers} laserActions={laserActions} isValidCell={isValidCell}/>
             <Targets mode={mode} targets={targets} setMouseOnTarget={setMouseOnTarget} targetActions={targetActions}/>
-            <TutorialHint mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} tutorialGoal={tutorialGoal}/>
+            <TutorialHint mode={mode} tutorialGoal={tutorialGoal}/>
           </Layer>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
             {[...reflectors, ...lens].map((m, idx) => (
-              <Mirror mode={mode} mirror={m} mirrorActions={mirrorActions} validRange={{x: gridWidth, y: gridHeight}} isValidCell = {isValidCell} key={idx} disabled={isDisabled(m.idx)}/>
+              <Mirror mode={mode} mirror={m} mirrorActions={mirrorActions} isValidCell={isValidCell} draggable={isDraggable(m.pos)} disabled={isDisabled(m.pos)} dragged={isOnBoard(m.pos)} key={idx} />
             ))}
             <ColorMixingPopover isGettingThumbnail={Boolean(isGettingThumbnail)} target={mouseOnTarget}/>
             <AddObjectDropdown mode={mode} isGettingThumbnail={Boolean(isGettingThumbnail)} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  

@@ -4,7 +4,6 @@ import { Image} from 'react-konva';
 import { Spring, animated, easings } from '@react-spring/konva';
 import { Vector2D, Mode, ObjectType } from '../interfaces';
 import {useStageConfig, useImages} from '../hooks';
-import { ITEMS_BAR_HEIGHT } from '@features/stage';
 import { TutorialGoal } from '@features/level';
 import TapImg from '@images/icons/tap.svg';
 import MouseImg from '@images/icons/mouse.svg';
@@ -12,8 +11,6 @@ import LeftClickImg from '@images/icons/left-click.svg';
 import RightClickImg from '@images/icons/right-click.svg';
 interface TutorialHintProps {
   mode: Mode;
-  gridHeight: number;
-  gridWidth: number;
   tutorialGoal: TutorialGoal | undefined;
 }
 interface DegHintProps {type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, deg: number};
@@ -24,7 +21,10 @@ const PosHint: FC<PosHintProps> = ({type, fromPos, toPos}) => {
   const {cellWidth} = useStageConfig();
   return (
     <Spring
-      from={{ x: fromPos.x * cellWidth, y: fromPos.y * cellWidth}}
+      from={{ 
+        x: fromPos.x * cellWidth, 
+        y: fromPos.y * cellWidth
+      }}
       to={{
         x: toPos.x * cellWidth,
         y: toPos.y * cellWidth,
@@ -91,17 +91,12 @@ const DegHint: FC<DegHintProps> = ({type, pos, deg}) => {
   )
 }
 
-const TutorialHint: FC<TutorialHintProps> = ({mode, gridHeight, gridWidth, tutorialGoal}) => {
+const TutorialHint: FC<TutorialHintProps> = ({mode, tutorialGoal}) => {
   if(mode !== Mode.Tutorial || tutorialGoal === undefined) return null;
-  const {match, type, idx, pos, deg} = tutorialGoal;
-  const {shouldRearrange} = useStageConfig();
-
-  const itemBarPos: Vector2D = shouldRearrange ? {x: 0, y: gridHeight+1} : {x: gridWidth+1, y: 0};
-  const mirrorItemBarPos: Vector2D = shouldRearrange ? {x: idx % ITEMS_BAR_HEIGHT, y: Math.floor(idx / ITEMS_BAR_HEIGHT)} : {x: Math.floor(idx / ITEMS_BAR_HEIGHT), y: idx % ITEMS_BAR_HEIGHT} 
-
+  const {match, type, fromPos, toPos, toDeg} = tutorialGoal;
   switch(match){
-    case "pos": return <PosHint type={type} fromPos={{x: itemBarPos.x + mirrorItemBarPos.x, y: itemBarPos.y + mirrorItemBarPos.y}} toPos={pos} />;
-    case "deg": return <DegHint type={type} pos={pos} deg={deg}/>;
+    case "pos": return <PosHint type={type} fromPos={fromPos} toPos={toPos} />;
+    case "deg": return <DegHint type={type} pos={toPos} deg={toDeg}/>;
     default: return null;
   }
 }

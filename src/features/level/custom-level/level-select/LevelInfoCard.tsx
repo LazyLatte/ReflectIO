@@ -39,6 +39,7 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo, isHovered,
   const {id, public: isPublic, clears, likes, record, creator, timestamp, personal_best, thumbnail} = userLevelInfo;
   const reLoginModalRef = useRef<ReLoginModalHandle>(null);
   const deleteLevelMutation = useDeleteLevel();
+  //should have confirm modal
   const deleteLevel = () => {
     deleteLevelMutation.mutate({id}, {
       onSuccess: (data) => {},
