@@ -32,7 +32,9 @@ const WarningModal: ForwardRefRenderFunction<WarningModalHandle, WarningModalPro
           <ModalButton width='45%' disabled={false} onClick={()=>{
             onConfirm();
             closeModal();
-          }}>Confirm</ModalButton>
+          }}>
+            Confirm
+          </ModalButton>
         </Box>
         
       </ModalBox>

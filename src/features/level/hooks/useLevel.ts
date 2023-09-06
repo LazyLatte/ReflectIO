@@ -28,7 +28,7 @@ export const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): 
         deg: 0
       }
     }),
-    lens:  Array.from(Array(lensNum)).map((_, i) => {
+    lens: Array.from(Array(lensNum)).map((_, i) => {
       const resetPos = getMirrorResetPos(reflectorNum + i, false);
       return {
         type: ObjectType.Lens,
@@ -125,6 +125,14 @@ export const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): 
       }]
     }));
   };
+
+  const updateTargetPos = (prevPos: Vector2D, nextPos: Vector2D) => {
+    setLevelState((prev) => ({
+      ...prev, 
+      targets: prev.targets.map(e => e.pos.x === prevPos.x && e.pos.y === prevPos.y ? {...e, pos: nextPos} : e)
+    }));
+  };
+
   const deleteTarget = (pos: Vector2D) => {
     setLevelState((prev) => ({
       ...prev,
@@ -158,7 +166,6 @@ export const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): 
           ] : prev.lens.map((e, i) => ({...e, idx: e.idx + 1, resetPos: getMirrorResetPos(prev.reflectors.length + 1 + i, shouldRearrange)}))
         }
       }else{
-
         return prev;
       }
     });
@@ -175,7 +182,7 @@ export const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): 
     }));
   };
   const laserActions: LaserActions = {rotateLaser, updateLaserPos, deleteLaser};
-  const targetActions: TargetActions = {setTargetClear, deleteTarget};
+  const targetActions: TargetActions = {setTargetClear, updateTargetPos, deleteTarget};
   const mirrorActions: MirrorActions = {rotateMirror, updateMirrorPos, updateMirrorsResetPos, resetMirrors, deleteMirror};
   const addObjects: AddObjects = {addLaser, addTarget, addMirror};
   return [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] as const;

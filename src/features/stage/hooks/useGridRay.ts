@@ -202,6 +202,10 @@ export const useGridRay = (height: number, width: number, lasers: Laser[], refle
         newGrid.addObject(laser.pos, {type: ObjectType.Laser});
         newDgrid.addObject(laser.pos, {type: ObjectType.Laser});
       });
+      targets.forEach(target => {
+        newGrid.addObject(target.pos, {type: ObjectType.Target});
+        newDgrid.addObject(target.pos, {type: ObjectType.Target});
+      });
       reflectors.concat(lens).filter(mirror => mirror.pos.x >= 0 && mirror.pos.x < width && mirror.pos.y >= 0 && mirror.pos.y < height).forEach(mirror => {
         const {type, pos, deg} = mirror;
         newGrid.addObject(pos, {type, nv: mirrorDegreeToNormalVector(deg)});
@@ -219,9 +223,6 @@ export const useGridRay = (height: number, width: number, lasers: Laser[], refle
                             (newDgrid.grid[DgridTargetPos.y][DgridTargetPos.x].color & 7) | ((newDgrid.grid[DgridTargetPos.y][DgridTargetPos.x].color >> 3) & 7);
         const isActivated = target.color === centerColor;
         (target.clear !== isActivated) && setTargetClear(target.pos, isActivated);     
-
-        newGrid.addObject(targetPos, {type: ObjectType.Target});
-        newDgrid.addObject(targetPos, {type: ObjectType.Target});
       })
 
       return {
@@ -232,44 +233,7 @@ export const useGridRay = (height: number, width: number, lasers: Laser[], refle
 
     setGridRay(calculateGridRay());
 
-  }, [lasers, reflectors, lens, targets.length]);
+  }, [lasers, reflectors, lens, targets]);
 
   return gridRay;
 };
-
-export const calculateGridRay = (height: number, width: number, lasers: Laser[], targetHooks: any[]) => {
-
-    const newGrid = new Grid(height, width);
-    const newDgrid = new Dgrid(height, width);
-
-    lasers.forEach(laser => {
-      newGrid.addObject(laser.pos, {type: ObjectType.Laser});
-      newDgrid.addObject(laser.pos, {type: ObjectType.Laser});
-    });
-
-
-    lasers.forEach(laser => {
-      if(laser.dir.x === 0 || laser.dir.y === 0)
-        newGrid.trace(laser);
-      else
-        newDgrid.trace(laser);
-    });
-
-    targetHooks.forEach(targetHook => {
-      const target = targetHook[0];
-      const setTargetClear = targetHook[1];
-      const targetPos: Vector2D = target.pos;
-      const DgridTargetPos: Vector2D = newDgrid.positionTransform(target.pos);
-      const centerColor: number = (newGrid.grid[targetPos.y][targetPos.x].color & 7) |
-                                  ((newGrid.grid[targetPos.y][targetPos.x].color >> 3) & 7) | 
-                                  (newDgrid.grid[DgridTargetPos.y][DgridTargetPos.x].color & 7) | 
-                                ((newDgrid.grid[DgridTargetPos.y][DgridTargetPos.x].color >> 3) & 7);
-      setTargetClear(target.color === centerColor);
-    })
-
-    return {
-      grid: newGrid.grid,
-      Dgrid: newDgrid.grid
-    };
-
-}

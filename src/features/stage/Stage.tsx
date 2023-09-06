@@ -1,19 +1,12 @@
-import {useState, useEffect, useLayoutEffect, ReactNode, forwardRef, useImperativeHandle, createRef} from 'react';
+import {useState, useEffect, useLayoutEffect, ReactNode, forwardRef, useImperativeHandle, createRef, useCallback} from 'react';
 import {Stage as Wrap, Layer} from 'react-konva';
 import Konva from 'konva';
-import Grid from './Grid';
-import CustomGrid from './CustomGrid';
-import ItemBar from './ItemBar';
-import CustomItemBar from './CustomItemBar';
-import Mirror from './Mirror';
-import Lasers from './Lasers';
-import Targets from './Targets';
-import GridRay from './GridRay';
-import ColorMixingPopover from './ColorMixingPopover';
-import AddObjectDropdown from './AddObjectDropdown';
-import TutorialHint from './TutorialHint';
-import {useGridRay, useStageConfig} from '../hooks';
-import {ObjectType, Level, Vector2D, Target, Mode} from '../interfaces';
+import {Lasers, Targets, Mirrors} from './objects';
+import {Grid, CustomGrid, GridRay, ItemBar, CustomItemBar} from './grids';
+import {ColorMixingPopover, TutorialHint} from './hints';
+import {AddObjectDropdown} from './dropdown';
+import {useGridRay, useStageConfig} from './hooks';
+import {ObjectType, Level, Vector2D, Target, Mode} from './interfaces';
 import { TutorialGoal } from '@features/level';
 
 interface StageProps {
@@ -85,13 +78,11 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
             <GridRay grid={gridRay.grid} Dgrid={gridRay.Dgrid}/>
             <CustomGrid mode={mode} isGettingThumbnail={Boolean(isGettingThumbnail)} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
             <Lasers mode={mode} lasers={lasers} laserActions={laserActions} isValidCell={isValidCell}/>
-            <Targets mode={mode} targets={targets} setMouseOnTarget={setMouseOnTarget} targetActions={targetActions}/>
+            <Targets mode={mode} targets={targets} targetActions={targetActions} isValidCell={isValidCell} setMouseOnTarget={setMouseOnTarget} />
             <TutorialHint mode={mode} tutorialGoal={tutorialGoal}/>
           </Layer>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
-            {[...reflectors, ...lens].map((m, idx) => (
-              <Mirror mode={mode} mirror={m} mirrorActions={mirrorActions} isValidCell={isValidCell} draggable={isDraggable(m.pos)} disabled={isDisabled(m.pos)} dragged={isOnBoard(m.pos)} key={idx} />
-            ))}
+            <Mirrors mode={mode} mirrors={[...reflectors, ...lens]} mirrorActions={mirrorActions} isDraggable={isDraggable} isDisabled={isDisabled} isOnBoard={isOnBoard} isValidCell={isValidCell}/>
             <ColorMixingPopover isGettingThumbnail={Boolean(isGettingThumbnail)} target={mouseOnTarget}/>
             <AddObjectDropdown mode={mode} isGettingThumbnail={Boolean(isGettingThumbnail)} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  
           </Layer>

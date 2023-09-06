@@ -25,6 +25,7 @@ export interface LaserActions {
 }
 export interface TargetActions {
   setTargetClear: (pos: Vector2D, clear: boolean) => void;
+  updateTargetPos: (prevPos: Vector2D, nextPos: Vector2D) => void;
   deleteTarget: (pos: Vector2D) => void;
 }
 
