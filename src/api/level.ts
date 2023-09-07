@@ -1,7 +1,5 @@
 import axios from './axios';
 
-
-
 export const listGlobalLevels = async (name: string, start: number, orderBy: string = 'clears', ascend: boolean = false) => {
     const response = await axios.get(`/levels?name=${name}&start=${start}&orderBy=${orderBy}&ascend=${ascend}`);
     return response.data;

@@ -1,4 +1,4 @@
-import {forwardRef, useImperativeHandle, useState, ForwardRefRenderFunction} from 'react';
+import {forwardRef, useImperativeHandle, useState} from 'react';
 import Modal, {ModalBox, ModalButton, ModalSeparator} from '@features/ui/modal';
 import Typography from '@mui/material/Typography';
 
@@ -6,7 +6,7 @@ interface verifyModalProps {};
 export interface VerifyModalHandle {
   open: (msg: string) => void;
 }
-const verifyModal: ForwardRefRenderFunction<VerifyModalHandle, verifyModalProps> = ({}, ref) => {
+const VerifyModal = forwardRef<VerifyModalHandle, verifyModalProps>(({}, ref) => {
   const [errMsg, setErrMsg] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
   
@@ -28,6 +28,6 @@ const verifyModal: ForwardRefRenderFunction<VerifyModalHandle, verifyModalProps>
       </ModalBox>
     </Modal>
   );
-}
+})
 
-export default forwardRef(verifyModal);
+export default VerifyModal;

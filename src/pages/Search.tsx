@@ -6,7 +6,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { TypographyVariantsOptions } from '@mui/material';
-import {LevelInfoCard, UserLevelInfo} from '@features/level';
+import { UserLevelInfo } from '@features/level';
+import {PublicLevelInfoCard} from '@features/level/public-level';
 import { motion, AnimatePresence  } from "framer-motion";
 import UuidEncoder from 'uuid-encoder';
 
@@ -71,15 +72,15 @@ const Search = () => {
       </Box>
       <AnimatePresence mode='wait'>
         {level &&
-            <motion.div
-              key={`${level.id}`}
-              initial={{x: '50vw', opacity: 0}}
-              animate={{ x: 0, opacity: 1}}
-              exit={{x: '-50vw', opacity: 0}}
-              transition= { {duration: 0.6}}
-            >
-              <LevelInfoCard userLevelInfo={level}/>
-            </motion.div>
+          <motion.div
+            key={`${level.id}`}
+            initial={{x: '50vw', opacity: 0}}
+            animate={{ x: 0, opacity: 1}}
+            exit={{x: '-50vw', opacity: 0}}
+            transition= { {duration: 0.6}}
+          >
+            <PublicLevelInfoCard userLevelInfo={level}/>
+          </motion.div>
         }
       </AnimatePresence>
     </MotionPage>

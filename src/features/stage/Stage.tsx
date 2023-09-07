@@ -6,8 +6,7 @@ import {Grid, CustomGrid, GridRay, ItemBar, CustomItemBar} from './grids';
 import {ColorMixingPopover, TutorialHint} from './hints';
 import {AddObjectDropdown} from './dropdown';
 import {useGridRay, useStageConfig} from './hooks';
-import {ObjectType, Level, Vector2D, Target, Mode} from './interfaces';
-import { TutorialGoal } from '@features/level';
+import {ObjectType, Level, Vector2D, Target, Mode, TutorialGoal} from './interfaces';
 
 interface StageProps {
   mode: Mode;
@@ -40,7 +39,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
     mirrorActions.updateMirrorsResetPos(shouldRearrange);
   }, [shouldRearrange]);
   useEffect(()=>{
-    let isClear = true;
+    let isClear = targets.length > 0;
     targets.forEach(target => {
       isClear &&= Boolean(target.clear);
     });

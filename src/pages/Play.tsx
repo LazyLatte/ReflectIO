@@ -1,5 +1,8 @@
 import {FC} from 'react';
-import {BuiltInLevel, CustomLevel, PublicLevel, TutorialLevel } from '@features/level';
+import BuiltInLevel from '@features/level/built-in-level/BuiltInLevel';
+import CustomLevel from '@features/level/custom-level';
+import PublicLevel from '@features/level/public-level';
+import TutorialLevel from '@features/level/tutorial-level';
 import { Mode } from '@features/stage';
 interface PlayProps {mode: Mode};
 

@@ -9,11 +9,12 @@ import Search from "./pages/Search";
 import LevelSelect from './pages/LevelSelect';
 import Tutorial from "./pages/Tutorial";
 import AboutUs from "./pages/AboutUs";
+import NoMatch from "./pages/NoMatch";
 import { BackButton } from "@features/ui/button";
 
-import { Route, Routes, useLocation} from "react-router-dom";
+import { Route, Routes, useLocation, Navigate} from "react-router-dom";
 import { AnimatePresence  } from "framer-motion";
-import { Difficulty} from "@features/level";
+import { Difficulty} from "@features/level/built-in-level";
 import {Mode} from '@features/stage';
 
 import './App.css';
@@ -36,7 +37,7 @@ export default function App() {
 
             <Route path="play">
               <Route path="level/:id" element={<Play mode={Mode.Public} />}/>
-              <Route path=":difficulty/:id" element={<Play mode={Mode.BuiltIn}/>}/>
+              <Route path=":difficulty/:id" element={<Play mode={Mode.BuiltIn}/>} errorElement={<Navigate to='/' replace/>}/>
             </Route>
 
             <Route path="tutorial">
@@ -49,6 +50,7 @@ export default function App() {
             <Route path="mylevels" element={<MyLevels/>}/>
             <Route path="custom" element={<Play mode={Mode.Custom} />} />
             <Route path="search" element={<Search/>}/>
+            <Route path="*" element={<NoMatch />} />
           </Routes>
         </AnimatePresence>
         <Routes key={location.key} location={location}>

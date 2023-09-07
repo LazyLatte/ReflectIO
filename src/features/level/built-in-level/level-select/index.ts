@@ -1,2 +1,2 @@
-export {DifficultyDisplay} from './DifficultyDisplay';
-export {LevelDisplay} from './LevelDisplay';
+export * from './DifficultyDisplay';
+export * from './LevelDisplay';

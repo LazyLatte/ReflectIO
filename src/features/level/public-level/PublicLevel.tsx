@@ -3,11 +3,12 @@ import useImage from 'use-image';
 import { isAxiosError, isCancel } from 'axios';
 import {useLocation, useNavigate} from "react-router-dom";
 import {Stage, StageButtonGroup, Mode} from '@features/stage';
-import { UserLevelInfo, useLevel, getMirrorStates } from '@features/level';
-import PublicLevelClearModal, {PublicLevelClearModalHandle} from './PublicLevelClearModal';
+import { UserLevelInfo, getMirrorStates } from '@features/level';
+import PublicLevelClearModal, {PublicLevelClearModalHandle} from './modals/PublicLevelClearModal';
 import {ReLoginModal, ReLoginModalHandle} from '@features/authentication';
-import { useLike } from '../api/useLike';
-import { useClear } from '../api/useClear';
+import useLevel from '../hooks/useLevel';
+import useLikeLevel from './api/use-like-level';
+import useClearLevel from './api/use-clear-level';
 import RestartImg from '@images/icons/restart.svg';
 import EmptyHeart from '@images/icons/emptyHeart.svg';
 import FullHeart from '@images/icons/fullHeart.svg';
@@ -29,8 +30,8 @@ const PublicLevel: FC<PublicLevelProps> = () => {
   const reLoginModalRefForLike = useRef<ReLoginModalHandle>(null);
   const reLoginModalRefForClear = useRef<ReLoginModalHandle>(null);
 
-  const likeMutation = useLike();
-  const clearMutation = useClear();
+  const likeMutation = useLikeLevel();
+  const clearMutation = useClearLevel();
 
   const [isLike, setIsLike] = useState(Boolean(isFavorite));
   

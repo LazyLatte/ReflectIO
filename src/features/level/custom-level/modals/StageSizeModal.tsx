@@ -3,12 +3,11 @@ import { isAxiosError, isCancel } from 'axios';
 import Box from '@mui/material/Box';
 import Silder from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
-
-
-import { EmptyStage, EmptyStageHandle } from '@features/stage';
-import { useCreateLevel } from '../api/use-post-level';
-import { ReLoginModal, ReLoginModalHandle } from '@features/authentication';
 import Modal, {ModalBox, ModalButton, ModalSeparator} from '@features/ui/modal';
+import { ReLoginModal, ReLoginModalHandle } from '@features/authentication';
+import { EmptyStage, EmptyStageHandle } from '@features/stage';
+import useCreateLevel from '../api/use-create-level';
+
 const minSize = 8;
 const maxSize = 12;
 const defaultSize = 10;
@@ -18,7 +17,7 @@ interface StageSizeModalProps {};
 export interface StageSizeModalHandle {
   open: () => void;
 }
-export const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalProps>(({}, ref) => {
+const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalProps>(({}, ref) => {
   const createLevelMutation = useCreateLevel();
   const emptyStageRef = useRef<EmptyStageHandle>(null);
   const reLoginModalRef = useRef<ReLoginModalHandle>(null);
@@ -38,7 +37,7 @@ export const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalPro
   const createLevel = () => {
     const uri = emptyStageRef.current?.getThumbnail() || '';
     createLevelMutation.mutate({height: size, width: size, thumbnail: uri.split(',')[1]}, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         closeModal();
       },
       onError: (error) => {
@@ -101,3 +100,5 @@ export const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalPro
     </Modal>
   );
 })
+
+export default StageSizeModal;

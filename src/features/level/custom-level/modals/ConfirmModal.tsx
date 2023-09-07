@@ -1,21 +1,23 @@
-import {forwardRef, useImperativeHandle, useState, ForwardRefRenderFunction} from 'react';
+import {forwardRef, useImperativeHandle, useState} from 'react';
 import Modal, {ModalBox, ModalButton, ModalSeparator} from '@features/ui/modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-interface WarningModalProps {
+interface ConfirmModalProps {
   onConfirm: () => void;
 };
-export interface WarningModalHandle {
-  open: (msg: string) => void;
+export interface ConfirmModalHandle {
+  open: (msg: string, height: number) => void;
 }
-const WarningModal: ForwardRefRenderFunction<WarningModalHandle, WarningModalProps> = ({onConfirm}, ref) => {
-  const [warningMsg, setWarningMsg] = useState<string>('');
+const ConfirmModal = forwardRef<ConfirmModalHandle, ConfirmModalProps>(({onConfirm}, ref) => {
+  const [msg, setMsg] = useState<string>('');
+  const [height, setHeight] = useState<number>(400);
   const [open, setOpen] = useState<boolean>(false);
   
   useImperativeHandle(ref, ()=>({
-    open: (msg) => {
-      setWarningMsg(msg);
+    open: (msg, height) => {
+      setMsg(msg);
+      setHeight(height);
       setOpen(true);
     }
   }))
@@ -24,8 +26,8 @@ const WarningModal: ForwardRefRenderFunction<WarningModalHandle, WarningModalPro
 
   return (
     <Modal open={open} onBackDropClick={closeModal}>
-      <ModalBox height={400} width={650}>
-        <Typography variant='caption' sx={{textAlign: 'center'}}>{warningMsg}</Typography>
+      <ModalBox height={height} width={650}>
+        <Typography variant='caption' sx={{textAlign: 'center'}}>{msg}</Typography>
         <ModalSeparator/>
         <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' width='100%' >
           <ModalButton width='45%' disabled={false} onClick={closeModal}>Cancel</ModalButton>
@@ -40,6 +42,6 @@ const WarningModal: ForwardRefRenderFunction<WarningModalHandle, WarningModalPro
       </ModalBox>
     </Modal>
   );
-}
+})
 
-export default forwardRef(WarningModal);
+export default ConfirmModal;

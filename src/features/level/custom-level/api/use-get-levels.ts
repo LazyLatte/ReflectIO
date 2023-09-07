@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { useAuth, useAxiosPrivate } from "@features/authentication";
 import { UserLevelInfo} from "@features/level";
 
-export const useGetUserLevels = () => {
+const useGetUserLevels = () => {
     const {auth} = useAuth()!;
     const axiosPrivate = useAxiosPrivate();
     return useQuery<UserLevelInfo[], Error>({
@@ -17,3 +17,4 @@ export const useGetUserLevels = () => {
     })
 }
 
+export default useGetUserLevels;

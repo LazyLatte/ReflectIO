@@ -1,10 +1,9 @@
 import {useRef, FC, ReactNode, useState} from 'react';
-import MotionPage from './MotionPage';
-import { ClipLoader } from 'react-spinners';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { CustomLevelInfoCard, StageSizeModal, StageSizeModalHandle } from '@features/level';
-import { useGetUserLevels } from '@features/level/custom-level/api/use-get-levels';
+import MotionPage from './MotionPage';
+import { ClipLoader } from 'react-spinners';
+import { CustomLevelInfoCard, StageSizeModal, StageSizeModalHandle, useGetUserLevels } from '@features/level/custom-level';
 import PlusImg from '@images/icons/plus.svg';
 
 const styles = {
@@ -39,9 +38,8 @@ const MyLevels = () => {
   const [hoverIdx, setHoverIdx] = useState(-1);
   const myLevelsArray: null[][] = Array(myLevelsShape.height).fill(Array(myLevelsShape.width).fill(null));
   const stageSizeModalRef = useRef<StageSizeModalHandle>(null);
-  const handleOnClick = () => {
-    stageSizeModalRef.current?.open();
-  }
+  const handleOnClick = () => stageSizeModalRef.current?.open();
+  
   return (
     <MotionPage transitionType='slide' style={{paddingTop: '150px', justifyContent: 'center',alignItems: 'center'}}>
       <Box border='2px solid white' boxShadow='0 0 .2rem #fff, 0 0 .2rem #fff, 0 0 1rem #fff' borderRadius={3}>

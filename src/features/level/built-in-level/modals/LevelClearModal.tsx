@@ -12,7 +12,8 @@ import OneStarLottie from '@lotties/one-star.json';
 import TwoStarLottie from '@lotties/two-star.json';
 import ThreeStarLottie from '@lotties/three-star.json';
 
-import { Difficulty, BuiltInLevelInfo } from '..';
+import {Difficulty} from '..';
+import builtInLevelInfo from "../builtInLevelInfo";
 const styles = {
   btn: {
     width: '60px',
@@ -59,7 +60,7 @@ const LevelClearModal = forwardRef<LevelClearModalHandle, LevelClearModalProps>(
   }
 
   const toNextLevel = () => {
-    (levelIdx+1 < BuiltInLevelInfo[difficulty].length) && navigate(`/play/${difficulty}/${levelIdx+2}`, {state: {difficulty, levelIdx: levelIdx+1}, replace: true});
+    (levelIdx+1 < builtInLevelInfo[difficulty].length) && navigate(`/play/${difficulty}/${levelIdx+2}`, {state: {difficulty, levelIdx: levelIdx+1}, replace: true});
     closeModal();
   }
 
@@ -89,7 +90,7 @@ const LevelClearModal = forwardRef<LevelClearModalHandle, LevelClearModalProps>(
         <Box position='absolute' left={0} right={0} top='125px' display='flex' flexDirection='row' justifyContent='space-around' alignItems='center'>
           <Button sx={styles.btn} onClick={toLevelSelect}><MenuIcon sx={{ fontSize: 40 }} /></Button>
           <Button sx={styles.btn} onClick={restart}><RefreshIcon sx={{ fontSize: 40 }} /></Button>
-          <Button sx={styles.btn} disabled={levelIdx+1 >= BuiltInLevelInfo[difficulty].length} onClick={toNextLevel}>
+          <Button sx={styles.btn} disabled={levelIdx+1 >= builtInLevelInfo[difficulty].length} onClick={toNextLevel}>
             <ForwardIcon sx={{ fontSize: 40 }} />
           </Button>
         </Box>

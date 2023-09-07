@@ -3,6 +3,12 @@ export interface MirrorState {
   pos: Vector2D;
   deg: number;
 }
+
+export interface MirrorStates {
+  reflectors: MirrorState[];
+  lenses: MirrorState[];
+}
+
 export interface LevelInfo {
   height: number;
   width: number;

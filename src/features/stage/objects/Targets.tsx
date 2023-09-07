@@ -17,7 +17,7 @@ const Target: FC<TargetProps & {target: Target}> = memo(({mode, target, targetAc
   const {updateTargetPos, deleteTarget} = targetActions;
   const targetImages = useImages()?.targetImages || [];
   const {cellWidth} = useStageConfig();
- //console.log('Target')
+
   return (
     <Object
       pos={pos}

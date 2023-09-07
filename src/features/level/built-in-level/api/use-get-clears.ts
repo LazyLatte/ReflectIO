@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query';
-import { ClearRecords } from './clears-type';
+import { ClearRecords } from '..';
 import { useAuth, useAxiosPrivate } from "@features/authentication";
 
-export const useGetClears = () => {
+const useGetClears = () => {
     const {auth} = useAuth()!;
     const axiosPrivate = useAxiosPrivate();
     return useQuery<ClearRecords, Error>({
@@ -17,3 +17,4 @@ export const useGetClears = () => {
     })
 }
 
+export default useGetClears;

@@ -1,15 +1,16 @@
 import {FC, useRef, useState} from 'react';
 import useImage from 'use-image';
 import { isAxiosError } from 'axios';
-import {useLocation} from "react-router-dom";
+import {useLocation, Navigate} from "react-router-dom";
 import {Stage, AnimatedStageButtonGroup, StageHandle, Mode} from '@features/stage';
-import { UserLevelInfo, useLevel, state2info, getMirrorStates } from '@features/level';
 import { ReLoginModal, ReLoginModalHandle} from '@features/authentication';
-import UploadConfirmModal, {UploadConfirmModalHandle} from './UploadConfirmModal';
-import VerifyModal, {VerifyModalHandle} from './VerifyModal';
-import WarningModal, {WarningModalHandle} from './WarningModal';
-import { useUpdateLevel, useUploadLevel } from '../api/use-put-level';
-import { defaultEmptyLevel } from '../utils';
+import { UserLevelInfo, getMirrorStates, MirrorStates } from '..';
+import useLevel from '../hooks/useLevel';
+import { defaultEmptyLevel, state2info } from './utils';
+import ConfirmModal, {ConfirmModalHandle} from './modals/ConfirmModal';
+import VerifyModal, { VerifyModalHandle} from './modals/VerifyModal';
+import useUpdateLevel from './api/use-update-level';
+import useUploadLevel from './api/use-upload-level';
 import SaveImg from '@images/icons/save.svg';
 import UploadImg from '@images/icons/upload.svg';
 import LoadingImg from '@images/icons/loading.svg';
@@ -20,21 +21,21 @@ interface LocationState {userLevelInfo: UserLevelInfo};
 
 const CustomLevel: FC<CustomLevelProps> = () => {
   const { state } = useLocation();
-  const {userLevelInfo} = state as LocationState || {userLevelInfo: defaultEmptyLevel};
-  const {id, public: isPublic} = userLevelInfo;
+  if(!state) return <Navigate to='/' replace/>
+  const {userLevelInfo} = state as LocationState;
+  const {id} = userLevelInfo;
  
   const level = useLevel(userLevelInfo);
   const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
   const levelInfo = state2info(levelState);
-  const mirrorStates = getMirrorStates(levelState);
+  const [isPublic, setIsPublic] = useState<boolean>(userLevelInfo.public);
 
+  const stageRef = useRef<StageHandle>(null);
+  const verifyModalRef = useRef<VerifyModalHandle>(null);
+  const updateConfirmModalRef = useRef<ConfirmModalHandle>(null);
+  const uploadConfirmModalRef = useRef<ConfirmModalHandle>(null);
   const reLoginModalRefForUpdate = useRef<ReLoginModalHandle>(null);
   const reLoginModalRefForUpload = useRef<ReLoginModalHandle>(null);
-  const uploadConfirmModalRef = useRef<UploadConfirmModalHandle>(null);
-  const verifyModalRef = useRef<VerifyModalHandle>(null);
-  const updateWarningModalRef = useRef<WarningModalHandle>(null);
-  const uploadWarningModalRef = useRef<WarningModalHandle>(null);
-  const stageRef = useRef<StageHandle>(null);
 
   const updateMutation = useUpdateLevel();
   const uploadMutation = useUploadLevel();
@@ -43,7 +44,9 @@ const CustomLevel: FC<CustomLevelProps> = () => {
   const update = () => {
     const uri = stageRef.current?.getThumbnail() || '';
     updateMutation.mutate({id, levelInfo, thumbnail: uri.split(',')[1]}, {
-      onSuccess: (data) => {},
+      onSuccess: (data) => {
+        setIsPublic(false);
+      },
       onError: (error) => {
         if(isAxiosError(error)){
           switch(error.response?.status){
@@ -68,7 +71,7 @@ const CustomLevel: FC<CustomLevelProps> = () => {
   }
   const updateChecking = () => {
     if(isPublic){
-      updateWarningModalRef.current?.open('This level is already in the public. Updating this level will convert it to private mode and reset the number of stars and likes');
+      updateConfirmModalRef.current?.open('This level is already in the public. Updating this level will convert it to private mode and reset the number of stars and likes', 400);
     }else{
       resetAndUpdate();
     }
@@ -76,15 +79,23 @@ const CustomLevel: FC<CustomLevelProps> = () => {
   
   const isUploadReady = id.length > 1 && levelInfo.lasers.length > 0 && levelInfo.targets.length > 0 && levelState.clear;
   const [isUploading, setIsUploading] = useState(false);
+  const [mirrorsStateBuffer, setMirrorsStateBuffer] = useState<MirrorStates | null>(null);
   const upload = () => {
     const uri = stageRef.current?.getThumbnail() || '';
+    const mirrorStates = mirrorsStateBuffer || getMirrorStates(levelState);
     uploadMutation.mutate({id, levelInfo, mirrorStates, thumbnail: uri.split(',')[1]}, {
-      onSuccess: (data) => {},
+      onSuccess: (data) => {
+        setMirrorsStateBuffer(null);
+        setIsPublic(true);
+      },
       onError: (error) => {
         if(isAxiosError(error)){
           switch(error.response?.status){
             case 401:
               reLoginModalRefForUpload.current?.open();
+              break;
+            case 400:
+              alert("PLEASE CLEAR THE LEVEL AGAIN!");
               break;
             default:
               console.error(error);
@@ -96,6 +107,7 @@ const CustomLevel: FC<CustomLevelProps> = () => {
   }
 
   const resetAndUpload = () => {
+    mirrorsStateBuffer === null && setMirrorsStateBuffer(getMirrorStates(levelState));
     mirrorActions.resetMirrors();
     setIsUploading(true);
     setTimeout(() => {
@@ -113,11 +125,9 @@ const CustomLevel: FC<CustomLevelProps> = () => {
     }else if(!levelState.clear){
       verifyModalRef.current?.open('Level is not clear');
     }else{
-      if(isPublic){
-        uploadWarningModalRef.current?.open('This level is already in the public. Re-uploading this level will convert it to private mode and reset the number of stars and likes');
-      }else{
-        uploadConfirmModalRef.current?.open();
-      }
+      const text = isPublic ? 'This level is already in the public. Re-uploading this level will reset the number of stars and likes' : 'UPLOAD THE LEVEL TO THE PUBLIC?';
+      const height = isPublic ? 300 : 200;
+      uploadConfirmModalRef.current?.open(text, height);
     }
   }
 
@@ -151,9 +161,8 @@ const CustomLevel: FC<CustomLevelProps> = () => {
       </Stage>
      
       <VerifyModal ref={verifyModalRef}/>
-      <WarningModal onConfirm={resetAndUpdate} ref={updateWarningModalRef}/>
-      <WarningModal onConfirm={resetAndUpload} ref={uploadWarningModalRef}/>
-      <UploadConfirmModal upload={resetAndUpload} ref={uploadConfirmModalRef}/>
+      <ConfirmModal onConfirm={resetAndUpdate} ref={updateConfirmModalRef}/>
+      <ConfirmModal onConfirm={resetAndUpload} ref={uploadConfirmModalRef}/>
       <ReLoginModal onLogin={resetAndUpdate} ref={reLoginModalRefForUpdate}/>
       <ReLoginModal onLogin={resetAndUpload} ref={reLoginModalRefForUpload}/>
     </>

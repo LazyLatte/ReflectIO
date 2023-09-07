@@ -5,8 +5,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { SearchButton, ScrollTopButton } from '@features/ui/button';
 import {listGlobalLevels} from '../api/level';
 
-import { motion } from "framer-motion"
-import {OrderOptionsBar, LevelInfoCard, UserLevelInfo} from '@features/level';
+import { motion } from "framer-motion";
+import { UserLevelInfo } from '@features/level';
+import {OrderOptionsBar, PublicLevelInfoCard} from '@features/level/public-level';
 import { useAuth } from '@features/authentication';
 const orderByOptions = ['clears', 'likes', 'timestamp'];
 interface GlobalLevelsProps {};
@@ -65,7 +66,7 @@ const GlobalLevels: FC<GlobalLevelsProps> = ({}) => {
               transition= { {duration: 0.8, delay: 0.25 * (idx%5) }}
               key={idx}
             >
-              <LevelInfoCard userLevelInfo={level}/>
+              <PublicLevelInfoCard userLevelInfo={level}/>
             </motion.div>
           ))}
         </InfiniteScroll>

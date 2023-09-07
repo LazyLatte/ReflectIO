@@ -1,15 +1,16 @@
 import { useState, useEffect} from 'react';
 import useImage from 'use-image';
-import {useLocation, useNavigate} from "react-router-dom";
-import {Stage, StageButtonGroup, Mode, ObjectType} from '@features/stage';
-import { TutorialLevelInfo, TutorialGoal, useLevel } from '@features/level';
-import InstructionModal from './InstructionModal';
+import {useLocation, useNavigate, Navigate} from "react-router-dom";
+import {Stage, StageButtonGroup, Mode, ObjectType, TutorialGoal} from '@features/stage';
+import { TutorialLevelInfo } from '..';
+import useLevel from '../hooks/useLevel';
+import InstructionModal from './modals/InstructionModal';
 import ExclamationImg from '@images/icons/exclamation.svg';
 interface LocationState {levelInfo: TutorialLevelInfo};
 const TutorialLevel = () => {
   const navigate = useNavigate();
   const {state} = useLocation();
-  if(!state) return null;
+  if(!state) return <Navigate to="*" replace />;
   const {levelInfo} = state as LocationState;
   const level = useLevel(levelInfo);
   const [levelState] = level;

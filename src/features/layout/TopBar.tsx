@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useAuth, useRefreshToken, AccountModal, AccountModalHandle, userSignOut} from '@features/authentication';
-import { BuiltInLevelInfo, UserLevelInfo } from '@features/level';
+import { UserLevelInfo} from '@features/level';
 
 const styles = {
   pfpBtn: {
@@ -50,7 +50,7 @@ const getDisplayText = (paths: string[], userLevelInfo: UserLevelInfo) => {
   if(paths.length === 2) return path_name_pair[paths[1] as keyof typeof path_name_pair];
   if(paths.length === 3 && paths[1] === 'tutorial') return path_name_pair[paths[1] as keyof typeof path_name_pair];
   if(paths.length === 4 && paths[1] === 'play'){
-    if(paths[2] === 'easy' || paths[2] === 'normal' || paths[2] === 'hard' && Number(paths[3]) <= BuiltInLevelInfo[paths[2]].length){
+    if(paths[2] === 'easy' || paths[2] === 'normal' || paths[2] === 'hard'){
       return paths[2].toUpperCase() + '-' + paths[3];
     }
     if(paths[2] === 'level'){

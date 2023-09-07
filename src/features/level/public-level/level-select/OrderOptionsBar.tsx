@@ -25,7 +25,7 @@ const UpDownIcon: FC<UpDownIconProps> = ({ascend}) => (
     <KeyboardArrowDownIcon sx={{position: 'relative', bottom: '10px', transform: 'scale(0.8, 0.8)', color: ascend ? '' : 'gold'}}/>
   </Box>
 )
-export const OrderOptionsBar: FC<OrderOptionsBar> = ({value, setValue, ascend, setAscend, setHasMore, width, setGlobalLevels}) => {
+const OrderOptionsBar: FC<OrderOptionsBar> = ({value, setValue, ascend, setAscend, setHasMore, width, setGlobalLevels}) => {
   const {auth} = useAuth()!;
   const handleChange = (e: SyntheticEvent, newValue: number) => setValue(newValue);
 
@@ -82,5 +82,5 @@ export const OrderOptionsBar: FC<OrderOptionsBar> = ({value, setValue, ascend, s
   );
 }
 
-
+export default OrderOptionsBar;
 

@@ -1,12 +1,13 @@
 import {useState, useEffect, FC} from "react";
-import {Difficulty, BuiltInLevelInfo} from '@features/level';
+import { motion, AnimatePresence } from "framer-motion";
 import {Link} from "react-router-dom";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import useGetClears from "../api/use-get-clears";
+import {Difficulty} from '..';
+import builtInLevelInfo from "../builtInLevelInfo";
 import StarWhite from '@images/icons/star-white.svg';
 import StarYellow from '@images/icons/star-yellow.svg';
-import { motion, AnimatePresence } from "framer-motion"
-import { useGetClears } from "../api/use-get-clears";
 
 const theme = {
   "frame": {
@@ -100,7 +101,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
             {row.map((_, j)=>(
 
               <Box height={80} width={80} margin={5} key={j}>
-                {i*shape.width+j < BuiltInLevelInfo[difficulty].length ?
+                {i*shape.width+j < builtInLevelInfo[difficulty].length ?
                     <Button 
                       variant='outlined'
                       component={Link}

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { isCancel } from "axios";
 import { useAuth, useAxiosPrivate } from "@features/authentication";
 import { UserLevelInfo} from "@features/level";
-export const useDeleteLevel = () => {
+const useDeleteLevel = () => {
     const {auth} = useAuth()!;
     const axiosPrivate = useAxiosPrivate();
     const queryClient = useQueryClient();
@@ -26,3 +26,4 @@ export const useDeleteLevel = () => {
     })
 }
 
+export default useDeleteLevel;

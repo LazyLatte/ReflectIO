@@ -1,6 +1,6 @@
 import {FC, Dispatch, SetStateAction} from "react";
 import MotionPage from "./MotionPage";
-import { Difficulty, DifficultyDisplay, LevelDisplay } from '@features/level';
+import { Difficulty, DifficultyDisplay, LevelDisplay } from '@features/level/built-in-level';
 interface LevelSelectProps {
   difficulty: Difficulty;
   setDifficulty: Dispatch<SetStateAction<Difficulty>>;

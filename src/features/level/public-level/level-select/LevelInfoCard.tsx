@@ -30,7 +30,7 @@ const styles = {
 
 const encoder = new UuidEncoder('base64url');
 interface LevelInfoCardProps {userLevelInfo: UserLevelInfo}
-export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
+const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
   const {id, height, width, lasers, targets, reflectorNum, lensNum, clears, likes, record, creator, timestamp, personal_best, isFavorite, thumbnail} = userLevelInfo;
   const mirrors = Array(reflectorNum).fill('reflector').concat(Array(lensNum).fill('lens')).concat(Array(MAX_MIRROR_NUM-reflectorNum-lensNum).fill(null));
   const [toggle, setToggle] = useState(false);
@@ -117,4 +117,6 @@ export const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
 
   );
 }
+
+export default LevelInfoCard;
 

@@ -4,7 +4,7 @@ import { isCancel } from "axios";
 import { useAuth, useAxiosPrivate } from "@features/authentication";
 import { UserLevelInfo} from "@features/level";
 import { defaultEmptyLevel } from "../utils";
-export const useCreateLevel = () => {
+const useCreateLevel = () => {
     const {auth} = useAuth()!;
     const axiosPrivate = useAxiosPrivate();
     const queryClient = useQueryClient();
@@ -29,3 +29,4 @@ export const useCreateLevel = () => {
     })
 }
 
+export default useCreateLevel;

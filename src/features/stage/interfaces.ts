@@ -43,3 +43,11 @@ export interface AddObjects {
 }
 export type SetLevelClear = (clear: boolean) => void;
 export type Level = readonly [LevelState, LaserActions, TargetActions, MirrorActions, AddObjects, SetLevelClear];
+
+export interface TutorialGoal {
+  match: "pos" | "deg";
+  type: ObjectType.Reflector | ObjectType.Lens;
+  fromPos: Vector2D;
+  toPos: Vector2D;
+  toDeg: number;
+}

@@ -1,5 +1,5 @@
 import { LevelState } from "@features/stage";
-import { LevelInfo } from "..";
+import { LevelInfo } from "@features/level";
 export const state2info = (levelState: LevelState): LevelInfo => {
     return {
         height: levelState.height,
