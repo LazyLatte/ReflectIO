@@ -23,7 +23,7 @@ export const tokens = (mode: 'light' | 'dark') => ({
                 800: "#080b12",
                 900: "#040509"
             },
-            green: {
+            secondary: {
                 100: "#dbf5ee",
                 200: "#b7ebde",
                 300: "#94e2cd",
@@ -34,88 +34,177 @@ export const tokens = (mode: 'light' | 'dark') => ({
                 800: "#1e5245",
                 900: "#0f2922"
             },
+            green: {
+                100: "#ccf0cc",
+                200: "#99e199",
+                300: "#66d166",
+                400: "#33c233",
+                500: "#00b300",
+                600: "#008f00",
+                700: "#006b00",
+                800: "#004800",
+                900: "#002400"
+            },
+            magenta: {
+                100: "#f8d6f8",
+                200: "#f1adf1",
+                300: "#eb85eb",
+                400: "#e45ce4",
+                500: "#dd33dd",
+                600: "#b129b1",
+                700: "#851f85",
+                800: "#581458",
+                900: "#2c0a2c"
+            },
             red: {
-                100: "#f8dcdb",
-                200: "#f1b9b7",
-                300: "#e99592",
-                400: "#e2726e",
-                500: "#db4f4a",
-                600: "#af3f3b",
-                700: "#832f2c",
-                800: "#58201e",
-                900: "#2c100f"
+                100: "#fbd5dd",
+                200: "#f7abba",
+                300: "#f38198",
+                400: "#ef5775",
+                500: "#eb2d53",
+                600: "#bc2442",
+                700: "#8d1b32",
+                800: "#5e1221",
+                900: "#2f0911"
+            },
+            orange: {
+                100: "#fae5cc",
+                200: "#f5cb99",
+                300: "#f0b266",
+                400: "#eb9833",
+                500: "#e67e00",
+                600: "#b86500",
+                700: "#8a4c00",
+                800: "#5c3200",
+                900: "#2e1900"
             },
             blue: {
-                100: "#e1e2fe",
-                200: "#c3c6fd",
-                300: "#a4a9fc",
-                400: "#868dfb",
-                500: "#6870fa",
-                600: "#535ac8",
-                700: "#3e4396",
-                800: "#2a2d64",
-                900: "#151632"
+                100: "#d9e1f9",
+                200: "#b3c3f3",
+                300: "#8da5ed",
+                400: "#6787e7",
+                500: "#4169e1",
+                600: "#3454b4",
+                700: "#273f87",
+                800: "#1a2a5a",
+                900: "#0d152d"
             },
+            cyan: {
+                100: "#ccf2f2",
+                200: "#99e6e6",
+                300: "#66d9d9",
+                400: "#33cdcd",
+                500: "#00c0c0",
+                600: "#009a9a",
+                700: "#007373",
+                800: "#004d4d",
+                900: "#002626"
+            }
         } : {
             grey: {
-                100: "#141414",
-                200: "#292929",
-                300: "#3d3d3d",
-                400: "#525252",
+                100: "#e0e0e0",
+                200: "#c2c2c2",
+                300: "#a3a3a3",
+                400: "#858585",
                 500: "#666666",
-                600: "#858585",
-                700: "#a3a3a3",
-                800: "#c2c2c2",
-                900: "#e0e0e0"
+                600: "#525252",
+                700: "#3d3d3d",
+                800: "#292929",
+                900: "#141414"
             },
             primary: {
-                100: "#040509",
-                200: "#080b12",
-                300: "#0c101b",
-                400: "#f2f0f0",
-                500: "#141b2d",
-                600: "#434957",
-                700: "#727681",
-                800: "#a1a4ab",
-                900: "#d0d1d5"
+                100: "#fffaf9",
+                200: "#fff4f3",
+                300: "#ffefed",
+                400: "#ffe9e7",
+                500: "#ffe4e1",
+                600: "#ccb6b4",
+                700: "#998987",
+                800: "#665b5a",
+                900: "#332e2d"
+            },
+            secondary: {
+                100: "#dbf5ee",
+                200: "#b7ebde",
+                300: "#94e2cd",
+                400: "#70d8bd",
+                500: "#4cceac",
+                600: "#3da58a",
+                700: "#2e7c67",
+                800: "#1e5245",
+                900: "#0f2922"
             },
             green: {
-                100: "#0f2922",
-                200: "#1e5245",
-                300: "#2e7c67",
-                400: "#3da58a",
-                500: "#4cceac",
-                600: "#70d8bd",
-                700: "#94e2cd",
-                800: "#b7ebde",
-                900: "#dbf5ee"
+                100: "#ccf0cc",
+                200: "#99e199",
+                300: "#66d166",
+                400: "#33c233",
+                500: "#00b300",
+                600: "#008f00",
+                700: "#006b00",
+                800: "#004800",
+                900: "#002400"
+            },
+            magenta: {
+                100: "#f8d6f8",
+                200: "#f1adf1",
+                300: "#eb85eb",
+                400: "#e45ce4",
+                500: "#dd33dd",
+                600: "#b129b1",
+                700: "#851f85",
+                800: "#581458",
+                900: "#2c0a2c"
             },
             red: {
-                100: "#2c100f",
-                200: "#58201e",
-                300: "#832f2c",
-                400: "#af3f3b",
-                500: "#db4f4a",
-                600: "#e2726e",
-                700: "#e99592",
-                800: "#f1b9b7",
-                900: "#f8dcdb"
+                100: "#fbd5dd",
+                200: "#f7abba",
+                300: "#f38198",
+                400: "#ef5775",
+                500: "#eb2d53",
+                600: "#bc2442",
+                700: "#8d1b32",
+                800: "#5e1221",
+                900: "#2f0911"
+            },
+            orange: {
+                100: "#fae5cc",
+                200: "#f5cb99",
+                300: "#f0b266",
+                400: "#eb9833",
+                500: "#e67e00",
+                600: "#b86500",
+                700: "#8a4c00",
+                800: "#5c3200",
+                900: "#2e1900"
             },
             blue: {
-                100: "#151632",
-                200: "#2a2d64",
-                300: "#3e4396",
-                400: "#535ac8",
-                500: "#6870fa",
-                600: "#868dfb",
-                700: "#a4a9fc",
-                800: "#c3c6fd",
-                900: "#e1e2fe"
+                100: "#d9e1f9",
+                200: "#b3c3f3",
+                300: "#8da5ed",
+                400: "#6787e7",
+                500: "#4169e1",
+                600: "#3454b4",
+                700: "#273f87",
+                800: "#1a2a5a",
+                900: "#0d152d"
+            },
+            cyan: {
+                100: "#ccf2f2",
+                200: "#99e6e6",
+                300: "#66d9d9",
+                400: "#33cdcd",
+                500: "#00c0c0",
+                600: "#009a9a",
+                700: "#007373",
+                800: "#004d4d",
+                900: "#002626"
             }
         }
     )
   })
-  export const themeSettings = (mode: 'light' | 'dark') => {
+
+export const themeSettings = (mode: 'light' | 'dark') => {
     const colors = tokens(mode);
     return {
         palette: {
@@ -123,10 +212,13 @@ export const tokens = (mode: 'light' | 'dark') => ({
             ...(mode === 'dark' ?
                 {
                     primary: {
-                        main: colors.primary[500]
+                        dark: colors.primary[700],
+                        main: colors.primary[600],
+                        light: colors.primary[500],
+                        contrastText: '#fff',
                     },
                     secondary: {
-                        main: colors.green[500]
+                        main: colors.secondary[500]
                     },
                     neutral: {
                         dark: colors.grey[700],
@@ -134,48 +226,102 @@ export const tokens = (mode: 'light' | 'dark') => ({
                         light: colors.grey[100]
                     },
                     crimson: {
-                        main: '#bb1133',
-                        light: '#eb2d53'
+                        dark: colors.red[700],
+                        main: colors.red[600],
+                        light: colors.red[500]
                     },
                     magenta: {
-                        main: '#990099',
-                        light: '#dd33dd'
+                        dark: colors.magenta[700],
+                        main: colors.magenta[600],
+                        light: colors.magenta[500]
                     },
                     orange: {
-                        main: '#cc7000',
-                        light: '#e67e00'
+                        dark: colors.orange[700],
+                        main: colors.orange[600],
+                        light: colors.orange[500]
                     },
                     royalBlue: {
-                        main: '#4169E1',
-                        light: '#91a8ee'
+                        dark: colors.blue[700],
+                        main: colors.blue[600],
+                        light: colors.blue[300]
                     },
                     green: {
-                        main: '#008000',
-                        light: '#00b300'
+                        dark: colors.green[700],
+                        main: colors.green[600],
+                        light: colors.green[500]
                     },
                     cyan: {
-                        main: '#00cccc',
-                        light: '#00c0c0'
+                        dark: colors.cyan[700],
+                        main: colors.cyan[600],
+                        light: colors.cyan[500]
+                    },
+                    contrast: {
+                        main: '#fff'
+                    },
+                    display: {
+                        main: '#93aed2'
                     },
                     background: {
                         default: colors.primary[600]
+                    },
+                    action: {
+                        hover: colors.primary[500],
+                        active: colors.primary[400],
+                        selected: '#181f31',
                     }
                 } 
                 :
                 {
                     primary: {
-                        main: colors.primary[100]
+                        dark: colors.primary[600],
+                        main: colors.primary[500],
+                        light: colors.primary[400],
                     },
                     secondary: {
-                        main: colors.green[500]
+                        main: colors.secondary[500]
                     },
                     neutral: {
                         dark: colors.grey[700],
                         main: colors.grey[500],
                         light: colors.grey[100]
                     },
+                    crimson: {
+                        main: colors.red[500],
+                        light: colors.red[100]
+                    },
+                    magenta: {
+                        main: colors.magenta[500],
+                        light: colors.magenta[100]
+                    },
+                    orange: {
+                        main: colors.orange[500],
+                        light: colors.orange[100]
+                    },
+                    royalBlue: {
+                        main: colors.blue[500],
+                        light: colors.blue[100]
+                    },
+                    green: {
+                        main: colors.green[400],
+                        light: colors.green[100]
+                    },
+                    cyan: {
+                        main: colors.cyan[500],
+                        light: colors.cyan[100]
+                    },
+                    contrast: {
+                        main: colors.grey[300]
+                    },
+                    display: {
+                        main: "#718cb0",
+                    },
                     background: {
-                        default: "#fcfcfc"
+                        default: colors.primary[500]
+                    },
+                    action: {
+                        hover: undefined,
+                        active: colors.primary[400],
+                        selected: '#181f31',
                     }
                 }
             )
@@ -185,11 +331,11 @@ export const tokens = (mode: 'light' | 'dark') => ({
             fontSize: 24,
             
             caption: {
-              fontFamily: ['Trebuchet MS', 'sans-serif'].join(","),
-              fontSize: 32,
-              fontWeight: 'bold',
-              color: '#222222',
-              letterSpacing: '2px'
+                fontFamily: ['Trebuchet MS', 'sans-serif'].join(","),
+                fontSize: 32,
+                fontWeight: 'bold',
+                color: '#222222',
+                letterSpacing: '2px'
             },
             h1: {
                 fontFamily: ['Orbitron', 'sans-serif'].join(","),
@@ -221,9 +367,9 @@ export const tokens = (mode: 'light' | 'dark') => ({
                 letterSpacing: '2px'
             },
             p: {
-              fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-              fontWeight: 'bold',
-              fontSize: 14
+                fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+                fontWeight: 'bold',
+                fontSize: 14
             },
             menu: {
                 fontFamily: ['Orbitron', 'sans-serif'].join(","),
@@ -240,7 +386,5 @@ export const tokens = (mode: 'light' | 'dark') => ({
             }
         }
     }
-  }
-  
-  
+}
   

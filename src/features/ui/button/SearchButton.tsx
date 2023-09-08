@@ -13,18 +13,17 @@ const styles = {
     border: '2px solid white',
     borderLeft: 0,
     borderRadius: '0 3px 3px 0',
-    color: 'white',
-    '&:hover': {
+    ':hover': {
       border: '2px solid',
       borderLeft: 0,
-      backgroundColor: '#181f31'
+      bgcolor: 'action.active'
     }
   }
 }
 
 const SearchButton = ({}) => {
   return (
-    <Button variant="outlined" color='primary' sx={{...styles.btn}} component={Link} to='/search'>
+    <Button variant="outlined" color='contrast' sx={{...styles.btn}} component={Link} to='/search'>
       <SearchIcon sx={{fontSize: 100}}/>
       <Typography variant="h4" >
         Search

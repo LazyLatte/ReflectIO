@@ -22,8 +22,8 @@ const BackButton = ({}) => {
         >
           <Button
             variant='contained'
-            disableRipple={true}
-            disableFocusRipple={true}
+            disableRipple
+            disableFocusRipple
             sx={{
               height: '60px',
               width: '140px',

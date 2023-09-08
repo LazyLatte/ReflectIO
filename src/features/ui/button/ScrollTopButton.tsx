@@ -11,11 +11,10 @@ const styles = {
     border: '2px solid white',
     borderBottom: 0,
     borderRadius: '3px 3px 0 0',
-    color: 'white',
-    '&:hover': {
+    ':hover': {
       border: '2px solid',
       borderBottom: 0,
-      backgroundColor: '#181f31'
+      bgcolor: 'action.active'
     }
   }
 }
@@ -28,7 +27,7 @@ const ScrollTopButton = ({}) => {
     });
   }
   return (
-    <Button variant="outlined" color='primary' sx={{...styles.btn}} onClick={handleOnClick}>
+    <Button variant="outlined" color='contrast' sx={{...styles.btn}} onClick={handleOnClick}>
       <ForwardIcon sx={{fontSize: 80, transform: 'rotate(270deg)'}}/>
     </Button>
   );

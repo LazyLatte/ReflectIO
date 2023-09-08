@@ -5,21 +5,12 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import { TypographyVariantsOptions } from '@mui/material';
 import { UserLevelInfo } from '@features/level';
 import {PublicLevelInfoCard} from '@features/level/public-level';
 import { motion, AnimatePresence  } from "framer-motion";
 import UuidEncoder from 'uuid-encoder';
 
-declare module '@mui/material/styles' {
-  interface CustomTypography {search: TypographyVariantsOptions}
-  interface Typography extends CustomTypography {}
-  interface TypographyOptions extends CustomTypography {}
-}
-  
-declare module '@mui/material/Typography' {
-  interface TypographyPropsVariantOverrides {search: true}
-}
+
 
 
 const encoder = new UuidEncoder('base64url');

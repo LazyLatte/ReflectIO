@@ -6,7 +6,7 @@ import {Stage, AnimatedStageButtonGroup, StageHandle, Mode} from '@features/stag
 import { ReLoginModal, ReLoginModalHandle} from '@features/authentication';
 import { UserLevelInfo, getMirrorStates, MirrorStates } from '..';
 import useLevel from '../hooks/useLevel';
-import { defaultEmptyLevel, state2info } from './utils';
+import {state2info } from './utils';
 import ConfirmModal, {ConfirmModalHandle} from './modals/ConfirmModal';
 import VerifyModal, { VerifyModalHandle} from './modals/VerifyModal';
 import useUpdateLevel from './api/use-update-level';

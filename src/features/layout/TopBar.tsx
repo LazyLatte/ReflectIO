@@ -8,13 +8,16 @@ import MenuItem from '@mui/material/MenuItem';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ExtensionIcon from '@mui/icons-material/Extension';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
+
 //import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 import { useAuth, useRefreshToken, AccountModal, AccountModalHandle, userSignOut} from '@features/authentication';
-import { UserLevelInfo} from '@features/level';
-
+import useColorMode from 'src/hooks/useColorMode';
 const styles = {
   pfpBtn: {
     height: '50px',
@@ -30,7 +33,6 @@ const styles = {
     }
   },
   locationTxt: {
-    color: '#93aed2', 
     font: '40px Comic Sans MS',
     whiteSpace: 'pre-wrap'
   }
@@ -45,28 +47,28 @@ const path_name_pair = {
   'tutorial': 'TUTORIAL',
   'mylevels': 'MY LEVELS'
 }
-const getDisplayText = (paths: string[], userLevelInfo: UserLevelInfo) => {
+const getDisplayText = (paths: string[], {record, personal_best}: {record: number, personal_best: number | null}) => {
   if(paths[1]==='') return 'HOME';
   if(paths.length === 2) return path_name_pair[paths[1] as keyof typeof path_name_pair];
-  if(paths.length === 3 && paths[1] === 'tutorial') return path_name_pair[paths[1] as keyof typeof path_name_pair];
+  if(paths.length === 3 && paths[1] === 'tutorial') return 'TUTORIAL';
   if(paths.length === 4 && paths[1] === 'play'){
     if(paths[2] === 'easy' || paths[2] === 'normal' || paths[2] === 'hard'){
       return paths[2].toUpperCase() + '-' + paths[3];
     }
     if(paths[2] === 'level'){
-      const worldRecord = userLevelInfo?.record;
-      const personal_best = userLevelInfo?.personal_best;
-      return [`World Record : ${worldRecord >= 0 ? worldRecord : '--'}`,  `Personal Best : ${Number.isInteger(personal_best) && personal_best! >= 0 ? personal_best : '--'}`].join('   ');
+      return [`World Record : ${record >= 0 ? record : '--'}`,  `Personal Best : ${Number.isInteger(personal_best) && personal_best! >= 0 ? personal_best : '--'}`].join('   ');
     }
   }
   return '';
 }
 const TopBar = () => {
+  const {colorMode, toggleColorMode} = useColorMode()!;
   const {auth, setAuth} = useAuth()!;
   const navigate = useNavigate();
-  const location = useLocation();
-  const paths = location.pathname.split('/');
-  const displayText = getDisplayText(paths, location?.state?.userLevelInfo);
+  const {state, pathname} = useLocation();
+  const {record, personal_best} = state?.userLevelInfo || {record: -1, personal_best: null};
+  const paths = pathname.split('/');
+  const displayText = getDisplayText(paths, {record, personal_best});
 
   const accountModalRef = useRef<AccountModalHandle>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -105,7 +107,7 @@ const TopBar = () => {
   useEffect(()=>{
     const initRequest = async () => {
       try{
-        const accessToken = await refresh();
+        //const accessToken = await refresh();
       }catch(err){
         accountModalRef.current?.open();
       }
@@ -122,25 +124,31 @@ const TopBar = () => {
       alignItems='center' 
       borderBottom='solid #696969 2px'
       padding='0 40px'
+      
       sx={{
-        background: 'linear-gradient(to bottom,#272931 0,#17191d 100%)'
+        background: colorMode === 'dark' ? 'linear-gradient(to bottom,#272931 0,#17191d 100%)' : 'linear-gradient(to bottom,#ffa399 0,#ff8c80 100%)'
       }}
     >
-      <Typography sx={styles.locationTxt}>
+      <Typography color="display.main" sx={styles.locationTxt}>
         {displayText}
       </Typography>
-      <Button id="pfp-btn" sx={styles.pfpBtn} onClick={handleClick}>
-        {auth && 
-          <>
-            {auth.accessToken ?
-              <Avatar  variant="rounded" src='https://www.svgrepo.com/show/380730/avatar-winter-custome-18.svg' sx={{ width: '100%', height: '100%'}}/>
-              :
-              <Avatar variant="rounded" sx={{ backgroundColor: 'transparent', fontSize: '20px', fontWeight: 'bold'}}>G</Avatar>
-            }
-          </>
-        }
-        
-      </Button>
+      <Box>
+        <IconButton sx={{marginRight: 3}} onClick={toggleColorMode} color="inherit">
+          {colorMode === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
+        </IconButton>
+        <Button id="pfp-btn" sx={styles.pfpBtn} onClick={handleClick}>
+          {auth && 
+            <>
+              {auth.accessToken ?
+                <Avatar  variant="rounded" src='https://www.svgrepo.com/show/380730/avatar-winter-custome-18.svg' sx={{ width: '100%', height: '100%'}}/>
+                :
+                <Avatar variant="rounded" sx={{ backgroundColor: 'transparent', fontSize: '20px', fontWeight: 'bold'}}>G</Avatar>
+              }
+            </>
+          }
+          
+        </Button>
+      </Box>
       <Menu
         id="pfp-menu"
         anchorEl={anchorEl}

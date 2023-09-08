@@ -8,8 +8,8 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 import { motion } from "framer-motion"
 import {Link} from "react-router-dom";
-import {UserLevelInfo, MAX_MIRROR_NUM} from '@features/level';
-
+import {UserLevelInfo} from '@features/level';
+import { MAX_MIRROR_NUM } from '@features/stage';
 import StarImg from '@images/icons/star.svg';
 import HeartImg from '@images/icons/heart.svg';
 import ReflectorWhiteImg from '@images/mirrors/reflector-default-dark.png';
