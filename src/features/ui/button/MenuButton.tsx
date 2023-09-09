@@ -1,5 +1,4 @@
 import {FC, ReactNode} from 'react';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ToggledButton from './ToggledButton';
 import { Link } from "react-router-dom";

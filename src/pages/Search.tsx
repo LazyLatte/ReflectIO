@@ -1,40 +1,42 @@
-import {useState, ChangeEvent} from 'react';
+import {useState, useEffect, ChangeEvent} from 'react';
 import MotionPage from './MotionPage';
-import axios from '@api/axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import { UserLevelInfo } from '@features/level';
-import {PublicLevelInfoCard} from '@features/level/public-level';
+import {PublicLevelInfoCard, useGetLevelByID} from '@features/level/public-level';
 import { motion, AnimatePresence  } from "framer-motion";
 import UuidEncoder from 'uuid-encoder';
 
-
-
-
 const encoder = new UuidEncoder('base64url');
-//2ECbKQ9Ff4Fuer5n7KvhJo
-//1z1bpxAKT5Nefv1T_RAYRB
+//1rqCMGwzD3PR5943F96BOz
+//1cyrx-qIP7EAEYQTPwohJP
 const ID_REGEX = /[a-zA-Z0-9_-]{22}/;
 const Search = () => {
   const [levelID, setLevelID] = useState<string>('');
-  const [level, setLevel] = useState<UserLevelInfo | null>(null);
   const [errMsg, setErrMsg] = useState<string>('');
-  const search = async () => {
+
+  const {data: level, refetch, remove} = useGetLevelByID(encoder.decode(levelID));
+  const onSearch = async () => {
     const isValid = ID_REGEX.test(levelID);
     if(isValid){
-      const {data} = await axios.get<UserLevelInfo | null>(`/levels/${encoder.decode(levelID)}`);
-      if(data){
-        setErrMsg('');
-        setLevel(data);
-      }else{
-        setErrMsg('Level not found');
+      try{
+        const {data} = await refetch();
+        data ? setErrMsg('') : setErrMsg('Level not found');
+      }catch(err){
+        console.error(err);
       }
+
     }else{
       setErrMsg('Invalid ID');
     }
   }
+
+  useEffect(()=>{
+    return () => {
+      remove();
+    }
+  }, [])
 
   return (
     <MotionPage transitionType='slide' style={{alignItems: 'center'}}>
@@ -55,7 +57,7 @@ const Search = () => {
           size='medium'
           sx={{width: 600}}
         />
-        <Button variant="contained" color='secondary' sx={{height: 72, marginLeft: '10px'}} onClick={search}>
+        <Button variant="contained" color='secondary' sx={{height: 72, marginLeft: '10px'}} onClick={onSearch}>
           <Typography variant="search">
             Search
           </Typography>

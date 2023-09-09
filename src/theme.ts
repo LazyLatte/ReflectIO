@@ -258,8 +258,11 @@ export const themeSettings = (mode: 'light' | 'dark') => {
                     contrast: {
                         main: '#fff'
                     },
-                    display: {
-                        main: '#93aed2'
+                    enter: {
+                        main: '#FFD700'
+                    },
+                    tutorial: {
+                        main: '#fff'
                     },
                     background: {
                         default: colors.primary[600]
@@ -282,7 +285,7 @@ export const themeSettings = (mode: 'light' | 'dark') => {
                     },
                     neutral: {
                         dark: colors.grey[700],
-                        main: colors.grey[500],
+                        main: "#ccf0cc",
                         light: colors.grey[100]
                     },
                     crimson: {
@@ -310,17 +313,20 @@ export const themeSettings = (mode: 'light' | 'dark') => {
                         light: colors.cyan[100]
                     },
                     contrast: {
-                        main: colors.grey[300]
+                        main: "#33ccc7"
                     },
-                    display: {
-                        main: "#718cb0",
+                    enter: {
+                        main: '#00cc7e',
+                    },
+                    tutorial: {
+                        main: "#ccf0cc"
                     },
                     background: {
                         default: colors.primary[500]
                     },
                     action: {
                         hover: undefined,
-                        active: colors.primary[400],
+                        active: '#efd4d1',
                         selected: '#181f31',
                     }
                 }

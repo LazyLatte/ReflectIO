@@ -52,7 +52,7 @@ const InstructionModal: FC<InstructionModalProps> = ({instructions, open, setOpe
       }}
     >
       <DialogContent>
-        <Typography sx={{fontFamily: "Edu SA Beginner, cursive", fontSize: 32}}>
+        <Typography sx={{fontFamily: "Edu SA Beginner, cursive", fontSize: 32, color: 'white'}}>
           {idx < instructions.length && (instructions[idx] === "#RULE#" ? colorMixingRule : instructions[idx])}
         </Typography>
       </DialogContent>

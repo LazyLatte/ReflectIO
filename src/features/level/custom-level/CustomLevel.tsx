@@ -43,6 +43,7 @@ const CustomLevel: FC<CustomLevelProps> = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const update = () => {
     const uri = stageRef.current?.getThumbnail() || '';
+    //console.log(uri);
     updateMutation.mutate({id, levelInfo, thumbnail: uri.split(',')[1]}, {
       onSuccess: (data) => {
         setIsPublic(false);
@@ -119,7 +120,7 @@ const CustomLevel: FC<CustomLevelProps> = () => {
 
   const uploadChecking = () => {
     if(id.length === 1){
-      verifyModalRef.current?.open('Guest cannot upload a level');
+      verifyModalRef.current?.open('Guest cannot upload levels');
     }else if(levelInfo.lasers.length <= 0 || levelInfo.targets.length <= 0){
       verifyModalRef.current?.open('The level should contain at least 1 laser and 1 target');
     }else if(!levelState.clear){

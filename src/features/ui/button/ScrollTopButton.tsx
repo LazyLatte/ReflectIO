@@ -8,7 +8,7 @@ const styles = {
     justifyContent:'center',
     height: 100,
     width: 90,
-    border: '2px solid white',
+    border: '2px solid',
     borderBottom: 0,
     borderRadius: '3px 3px 0 0',
     ':hover': {

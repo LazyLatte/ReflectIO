@@ -48,7 +48,7 @@ const MotionPage: FC<MotionPageProps> = ({transitionType, style, children}) => {
       style={{
         position: 'absolute',
         width: '100%',
-        flex: 1,
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',

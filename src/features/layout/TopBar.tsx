@@ -129,7 +129,7 @@ const TopBar = () => {
         background: colorMode === 'dark' ? 'linear-gradient(to bottom,#272931 0,#17191d 100%)' : 'linear-gradient(to bottom,#ffa399 0,#ff8c80 100%)'
       }}
     >
-      <Typography color="display.main" sx={styles.locationTxt}>
+      <Typography sx={{...styles.locationTxt, color: colorMode === 'dark' ? '#93aed2' : "#718cb0"}}>
         {displayText}
       </Typography>
       <Box>

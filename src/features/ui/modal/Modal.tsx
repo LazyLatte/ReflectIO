@@ -1,5 +1,5 @@
 import {FC, ReactNode} from 'react';
-import { motion, AnimatePresence  } from "framer-motion"
+import { motion, AnimatePresence, MotionStyle } from "framer-motion"
 import BackDrop from './BackDrop';
 
 
@@ -14,9 +14,10 @@ const variant = {
 interface AccountModalProps {
     open: boolean;
     onBackDropClick?: () => void;
+    style?: MotionStyle;
     children: ReactNode;
 };
-const Modal: FC<AccountModalProps> = ({open, onBackDropClick, children}) => {
+const Modal: FC<AccountModalProps> = ({open, onBackDropClick, style, children}) => {
 
   return (
     <AnimatePresence>
@@ -28,6 +29,7 @@ const Modal: FC<AccountModalProps> = ({open, onBackDropClick, children}) => {
             animate='visible'
             exit='hidden'
             onClick={(e)=>e.stopPropagation()}
+            style={{...style, position: 'relative'}}
           >
             {children}
           </motion.div>

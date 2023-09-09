@@ -5,19 +5,14 @@ import Tab from '@mui/material/Tab';
 import AppBar from '@mui/material/AppBar';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import {useAuth} from '@features/authentication';
-import { UserLevelInfo } from '@features/level';
-import { listGlobalLevels } from '@api/level';
 
 interface UpDownIconProps {ascend: boolean}
 interface OrderOptionsBar {
-  value: number;
-  setValue: Dispatch<SetStateAction<number>>;
-  ascend: boolean;
-  setAscend: Dispatch<SetStateAction<boolean>>;
-  setHasMore: Dispatch<SetStateAction<boolean>>;
   width: number;
-  setGlobalLevels: Dispatch<React.SetStateAction<UserLevelInfo[]>>
+  value: number;
+  ascend: boolean;
+  setValue: Dispatch<SetStateAction<number>>;
+  setAscend: Dispatch<SetStateAction<boolean>>;
 }
 const UpDownIcon: FC<UpDownIconProps> = ({ascend}) => (
   <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
@@ -25,35 +20,10 @@ const UpDownIcon: FC<UpDownIconProps> = ({ascend}) => (
     <KeyboardArrowDownIcon sx={{position: 'relative', bottom: '10px', transform: 'scale(0.8, 0.8)', color: ascend ? '' : 'gold'}}/>
   </Box>
 )
-const OrderOptionsBar: FC<OrderOptionsBar> = ({value, setValue, ascend, setAscend, setHasMore, width, setGlobalLevels}) => {
-  const {auth} = useAuth()!;
+const OrderOptionsBar: FC<OrderOptionsBar> = ({width, value, ascend, setValue, setAscend}) => {
+
   const handleChange = (e: SyntheticEvent, newValue: number) => setValue(newValue);
-
-
-  const orderByClears = async (ascend: boolean) => {
-    setGlobalLevels([]);
-    const name = auth?.accessToken ? auth?.name : '';
-    const newOrderedlevels = await listGlobalLevels(name, 0, 'clears', ascend);
-    setGlobalLevels(newOrderedlevels);
-    setHasMore(true);
-    setAscend(ascend);
-  }
-
-  const orderByLikes = async () => {
-    setGlobalLevels([]);
-    const name = auth?.accessToken ? auth?.name : '';
-    const newOrderedlevels = await listGlobalLevels(name, 0, 'likes');
-    setGlobalLevels(newOrderedlevels);
-    setHasMore(true);
-  }
-
-  const orderByTime = async () => {
-    setGlobalLevels([]);
-    const name = auth?.accessToken ? auth?.name : '';
-    const newOrderedlevels = await listGlobalLevels(name, 0, 'timestamp');
-    setGlobalLevels(newOrderedlevels);
-    setHasMore(true);
-  }
+  const orderByClears = async (ascend: boolean) => setAscend(ascend);
   return (
     <Box 
       display='flex' 
@@ -74,8 +44,8 @@ const OrderOptionsBar: FC<OrderOptionsBar> = ({value, setValue, ascend, setAscen
           variant="fullWidth"
         >
           <Tab icon={<UpDownIcon ascend={ascend}/>} iconPosition="end"  label="Clears" onClick={()=>orderByClears(value === 0 ? !ascend : ascend)}/>
-          <Tab label="Likes" onClick={orderByLikes}/>
-          <Tab label="Newest" onClick={orderByTime}/>
+          <Tab label="Likes" />
+          <Tab label="Newest" />
         </Tabs>
       </AppBar>
     </Box>

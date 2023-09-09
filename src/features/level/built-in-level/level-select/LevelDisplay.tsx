@@ -6,11 +6,13 @@ import Button from '@mui/material/Button';
 import useGetClears from "../api/use-get-clears";
 import {Difficulty} from '..';
 import builtInLevelInfo from "../builtInLevelInfo";
+import useColorMode from "src/hooks/useColorMode";
 import StarWhite from '@images/icons/star-white.svg';
 import StarYellow from '@images/icons/star-yellow.svg';
 
 const theme = {
   "frame": {
+
     "easy": '#00FF7F',
     "normal": '#bc13fe',
     "hard": '#DC143C'
@@ -34,12 +36,14 @@ const styles = {
     height: '100%',
     width: '100%',
     borderRadius: 3,
+    border: '1px solid white',
     padding: '1rem',
     font: '1rem Comic Sans MS',
     fontSize: '3rem',
-
-    position: 'relative'
-    
+    position: 'relative',
+    ':hover': {
+      borderColor: 'white'
+    }
   }
 }
 interface LevelDisplayProps {
@@ -47,6 +51,7 @@ interface LevelDisplayProps {
 }
 export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => { 
   const {data: clears} = useGetClears();
+  const {colorMode} = useColorMode()!;
   const [shape, setShape] = useState<Size2D>(window.innerWidth >= 1430 ? {height: 3, width: 5} : {height: 5, width: 3});
   const reshapeLevelArray: null[][] = Array.from(Array(shape.height).fill(
     Array(shape.width).fill(null)
@@ -66,7 +71,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
   }, []);
   return (
     <motion.div 
-      animate={{boxShadow: `0 0 .2rem #fff, 0 0 .2rem #fff, 0 0 2rem ${frameColor}, 0 0 0.8rem ${frameColor}, 0 0 2rem ${frameColor}, inset 0 0 1.3rem ${frameColor}`}}
+      animate={{boxShadow: `0 0 0.8rem ${frameColor}, 0 0 0.8rem ${frameColor}, inset 0 0 1rem ${frameColor}`}}
       transition= { {duration: 0.7 }}
       style={{
         display:'flex',
@@ -74,7 +79,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
         justifyContent:'center',
         alignItems: 'center',
         borderRadius: 5,
-        border: '2px solid',
+        border: '3px solid white',
         position: 'relative',
         width: `${160*shape.width}px`, 
         height: `${160*shape.height}px`
@@ -115,7 +120,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
                       sx={{
                         ...styles.levelBtn, 
                         textShadow: `-2px 0 ${textColor}, 0 2px ${textColor}, 2px 0 ${textColor}, 0 -2px ${textColor}`,
-                        boxShadow: `0 0 1px #fff, 0 0 1px #fff, 0 0 10px ${btnFrameColor}, 0 0 4px ${btnFrameColor}, 0 0 14px ${btnFrameColor}, inset 0 0 6px ${btnFrameColor}`
+                        boxShadow: `0 0 4px ${btnFrameColor}, 0 0 10px ${btnFrameColor}, inset 0 0 6px ${btnFrameColor}`
                       }}
                     >
                       <img 

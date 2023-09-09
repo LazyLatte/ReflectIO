@@ -10,7 +10,7 @@ const styles = {
     justifyContent:'flex-start',
     height: 150,
     width: 150,
-    border: '2px solid white',
+    border: '2px solid',
     borderLeft: 0,
     borderRadius: '0 3px 3px 0',
     ':hover': {

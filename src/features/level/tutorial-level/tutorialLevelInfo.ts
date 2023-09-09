@@ -1,4 +1,4 @@
-import { TutorialLevelInfo } from "./interfaces";
+import { TutorialLevelInfo } from "..";
 //------------------------
 
 import t1 from 'src/data/levels/tutorial/1.json';

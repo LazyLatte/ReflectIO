@@ -5,7 +5,7 @@ import Silder from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import Modal, {ModalBox, ModalButton, ModalSeparator} from '@features/ui/modal';
 import { ReLoginModal, ReLoginModalHandle } from '@features/authentication';
-import { EmptyStage, EmptyStageHandle } from '@features/stage';
+import { EmptyStage, emptyLayerUri } from '@features/stage';
 import useCreateLevel from '../api/use-create-level';
 
 const minSize = 8;
@@ -19,7 +19,6 @@ export interface StageSizeModalHandle {
 }
 const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalProps>(({}, ref) => {
   const createLevelMutation = useCreateLevel();
-  const emptyStageRef = useRef<EmptyStageHandle>(null);
   const reLoginModalRef = useRef<ReLoginModalHandle>(null);
   const [size, setSize] = useState<number>(defaultSize);
   const [open, setOpen] = useState<boolean>(false);
@@ -35,8 +34,7 @@ const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalProps>(({}
     }
   };
   const createLevel = () => {
-    const uri = emptyStageRef.current?.getThumbnail() || '';
-    createLevelMutation.mutate({height: size, width: size, thumbnail: uri.split(',')[1]}, {
+    createLevelMutation.mutate({height: size, width: size, thumbnail: emptyLayerUri}, {
       onSuccess: () => {
         closeModal();
       },
@@ -56,7 +54,7 @@ const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalProps>(({}
     })
   };
   return (
-    <Modal open={open} onBackDropClick={closeModal}>
+    <Modal open={open} onBackDropClick={closeModal} style={{bottom: 120}}>
       <ModalBox height={600} width={550}>
         <Box display='flex' flexDirection='row' justifyContent='space-around' alignItems='center' width='100%'>
           <Box display='flex' flexDirection='column' justifyContent='space-around' alignItems='center'>
@@ -72,7 +70,7 @@ const StageSizeModal = forwardRef<StageSizeModalHandle, StageSizeModalProps>(({}
             >
               {`${size} x ${size}`}
             </Typography>
-            <EmptyStage size={size} cellWidth={gridSize / size} ref={emptyStageRef}/>
+            <EmptyStage size={size} cellWidth={gridSize / size}/>
           </Box>
           <Silder 
               color="secondary" 

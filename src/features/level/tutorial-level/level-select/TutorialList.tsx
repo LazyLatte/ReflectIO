@@ -1,4 +1,3 @@
-import Button from '@mui/material/Button';
 import ToggledButton from '@features/ui/button/ToggledButton';
 import { Link } from "react-router-dom";
 import tutorialLevelInfo from '../tutorialLevelInfo';
@@ -28,7 +27,7 @@ const TutorialList = () => {
   return (
     <>
       {tutorialLevelInfo.map((levelInfo, idx) => (
-        <ToggledButton color="contrast" sx={btnStyles} component={Link} to={`./${idx+1}`} state={{levelInfo}} key={idx}>
+        <ToggledButton color="tutorial" sx={btnStyles} component={Link} to={`./${idx+1}`} state={{levelInfo}} key={idx}>
             {`${idx+1}. ${levelInfo.title}`}
         </ToggledButton>
       ))}

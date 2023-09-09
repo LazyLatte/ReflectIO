@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { Palette, PaletteOptions} from "@mui/material";
+import { Palette, PaletteOptions, TypographyProps} from "@mui/material";
 declare module '@mui/material/styles' {
   /* Palette */
   interface Palette {
@@ -9,8 +9,10 @@ declare module '@mui/material/styles' {
     royalBlue: Palette['primary'];
     green: Palette['primary'];
     cyan: Palette['primary'];
+    neutral: Palette['primary'];
+    tutorial: Palette['primary'];
     contrast: Palette['primary'];
-    display: Palette['primary'];
+    enter: Palette['primary'];
   }
 
   interface PaletteOptions {
@@ -20,8 +22,10 @@ declare module '@mui/material/styles' {
     royalBlue?: PaletteOptions['primary'];
     green?: PaletteOptions['primary'];
     cyan?: PaletteOptions['primary'];
+    neutral?: PaletteOptions['primary'];
+    tutorial?: PaletteOptions['primary'];
     contrast?: PaletteOptions['primary'];
-    display?: PaletteOptions['primary'];
+    enter?: PaletteOptions['primary'];
   }
 
   /* Typography */
@@ -45,8 +49,10 @@ declare module '@mui/material/Button' {
     royalBlue: true;
     green: true;
     cyan: true;
+    neutral: true;
+    tutorial: true;
     contrast: true;
-    display: true;
+    enter: true;
   }
 }
 

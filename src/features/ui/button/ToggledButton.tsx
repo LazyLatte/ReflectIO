@@ -10,7 +10,7 @@ const ToggledButton: FC<IProps> = (props) => {
     const {colorMode} = useColorMode()!;
     const variant = colorMode === 'dark' ? 'outlined' : 'contained';
     return (
-        <Button variant={variant} {...props}>
+        <Button variant={variant} disableRipple {...props}>
             {props.children}
         </Button>
     );

@@ -2,16 +2,21 @@ import {FC, Dispatch, SetStateAction} from "react";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
-import { motion } from "framer-motion"
+import useColorMode from "src/hooks/useColorMode";
+import { motion } from "framer-motion";
 import { Difficulty } from "..";
 
 
-const theme = {
+const darkTheme = {
   "easy": '#00FF7F',
   "normal": '#bc13fe',
   "hard": '#DC143C'
 }
-
+const lightTheme = {
+  "easy": '#3CB371',
+  "normal": '#bc13fe',
+  "hard": '#DC143C'
+}
 
 const styles = {
   frame: {
@@ -21,7 +26,7 @@ const styles = {
     height: 120,
     width: 360,
     animation: 'pulsate 1.5s infinite alternate',
-    border: '0.2rem solid #fff',
+    borderStyle: 'solid',
     borderRadius: '2rem',
     padding: '0.4em',
 
@@ -29,17 +34,12 @@ const styles = {
     fontSize: 45,
     fontWeight: 900,
     letterSpacing: 8,
-    color: '#fff'
   },
   arrowBtn:{
     margin: '0 40px'
-  },
-  arrowIcon: {
-    fontSize: '4rem',
-    color: '#E0FFFF',
-    filter: 'drop-shadow(0 0 0.5rem #E0FFFF)'
   }
 }
+//filter: 'drop-shadow(0 0 0.5rem #E0FFFF)'
 interface DifficultyDisplayProps {
   difficulty: Difficulty;
   setDifficulty: Dispatch<SetStateAction<Difficulty>>;
@@ -53,8 +53,18 @@ const getNextDifficuly = (difficulty: Difficulty): Difficulty => {
   }
 }
 export const DifficultyDisplay: FC<DifficultyDisplayProps> = ({difficulty, setDifficulty}) => {
+  const {colorMode} = useColorMode()!;
   const nextDifficulty: Difficulty = getNextDifficuly(difficulty);
   const prevDiff: Difficulty = getNextDifficuly(getNextDifficuly(difficulty));
+  const arrowIconStyle = {fontSize: '4rem', color: colorMode === 'dark' ? '#E0FFFF' : '#404040'}
+  const frameColor = colorMode === 'dark' ? {color: '#fff', borderColor: '#fff', borderWidth: '0.2rem'} : {borderColor: '#fff', borderWidth: '0.4rem'};
+  const animate = colorMode === 'dark' ? {
+    boxShadow: `0 0 0.8rem ${darkTheme[difficulty]}, inset 0 0 0.8rem ${darkTheme[difficulty]}`,
+    textShadow: `0 0 36px ${darkTheme[difficulty]}`
+  } : {
+    color: lightTheme[difficulty], 
+    borderColor: lightTheme[difficulty]
+  }
   return (
 
     <Box
@@ -64,29 +74,18 @@ export const DifficultyDisplay: FC<DifficultyDisplayProps> = ({difficulty, setDi
       alignItems='center'
       marginBottom={15}
     >
-      <Button 
-        disableRipple
-        sx={styles.arrowBtn} 
-        onClick={()=>{setDifficulty(prevDiff)}}
-      >
-        <DoubleArrowIcon sx={{...styles.arrowIcon, transform: 'rotate(180deg)'}}/>
+      <Button disableRipple sx={styles.arrowBtn} onClick={()=>{setDifficulty(prevDiff)}}>
+        <DoubleArrowIcon sx={{...arrowIconStyle, transform: 'rotate(180deg)'}}/>
       </Button>
       <motion.div
-        style={styles.frame}
-        animate={{
-          boxShadow: `0 0 .2rem #fff, 0 0 .2rem #fff, 0 0 2rem ${theme[difficulty]}, 0 0 0.8rem ${theme[difficulty]}, inset 0 0 1.3rem ${theme[difficulty]}`,
-          textShadow: `0 0 7px #fff, 0 0 10px #fff, 0 0 42px ${theme[difficulty]}, 0 0 82px ${theme[difficulty]}`
-        }}
-        transition= { {duration: 0.7 }}
+        animate={animate}
+        style={{...styles.frame, ...frameColor}}
+        transition= {{duration: 0.1 }}
       >
           {difficulty.toUpperCase()}
       </motion.div>
-      <Button 
-        disableRipple
-        sx={styles.arrowBtn}  
-        onClick={()=>{setDifficulty(nextDifficulty)}}
-      >
-        <DoubleArrowIcon sx={{...styles.arrowIcon}} />
+      <Button disableRipple sx={styles.arrowBtn} onClick={()=>{setDifficulty(nextDifficulty)}}>
+        <DoubleArrowIcon sx={{...arrowIconStyle}} />
       </Button>
     </Box>
     

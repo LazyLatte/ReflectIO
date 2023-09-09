@@ -13,6 +13,7 @@ const AboutUs = () => {
           backgroundColor: '#17123b',
           border: 'solid #7B68EE',
           fontSize: '24px',
+          color: 'white',
           overflow: 'scroll'
         }}
       >

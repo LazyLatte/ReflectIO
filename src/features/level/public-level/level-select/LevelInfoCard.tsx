@@ -9,7 +9,8 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { motion } from "framer-motion"
 import {Link} from "react-router-dom";
 import {UserLevelInfo} from '@features/level';
-import { MAX_MIRROR_NUM } from '@features/stage';
+import { MAX_MIRROR_NUM, emptyStageUri } from '@features/stage';
+import useColorMode from 'src/hooks/useColorMode';
 import StarImg from '@images/icons/star.svg';
 import HeartImg from '@images/icons/heart.svg';
 import ReflectorWhiteImg from '@images/mirrors/reflector-default-dark.png';
@@ -31,6 +32,7 @@ const styles = {
 const encoder = new UuidEncoder('base64url');
 interface LevelInfoCardProps {userLevelInfo: UserLevelInfo}
 const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
+  const {colorMode} = useColorMode()!;
   const {id, height, width, lasers, targets, reflectorNum, lensNum, clears, likes, record, creator, timestamp, personal_best, isFavorite, thumbnail} = userLevelInfo;
   const mirrors = Array(reflectorNum).fill('reflector').concat(Array(lensNum).fill('lens')).concat(Array(MAX_MIRROR_NUM-reflectorNum-lensNum).fill(null));
   const [toggle, setToggle] = useState(false);
@@ -64,6 +66,7 @@ const LevelInfoCard: FC<LevelInfoCardProps> = ({userLevelInfo}) => {
           >
 
             <Box display='flex' flexDirection='column' justifyContent='flex-end' alignItems='center' height='200px' width='200px' position='relative' border='2px solid white'>
+              <img src={'data:image/png;base64,' + emptyStageUri[colorMode][width as keyof typeof emptyStageUri['dark']]} height='100%' width='100%' style={{position: 'absolute'}}/>
               <img src={'data:image/png;base64,' + thumbnail} height='100%' width='100%' style={{position: 'absolute'}}/>
               <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' height='27px' width='100%' sx={{backgroundColor: '#141b2d', opacity: 0.7}}>
                 <Typography sx={{fontSize: '18px', color: '#F8F8FF', letterSpacing: '2px'}}>{moment(timestamp).format('L')}</Typography>

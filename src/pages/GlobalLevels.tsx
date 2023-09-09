@@ -1,35 +1,21 @@
-import {useState, useEffect, FC} from 'react'
+import {useState, useEffect} from 'react'
 import Box from '@mui/material/Box';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 import { SearchButton, ScrollTopButton } from '@features/ui/button';
-import {listGlobalLevels} from '../api/level';
-
 import { motion } from "framer-motion";
-import { UserLevelInfo } from '@features/level';
-import {OrderOptionsBar, PublicLevelInfoCard} from '@features/level/public-level';
-import { useAuth } from '@features/authentication';
-const orderByOptions = ['clears', 'likes', 'timestamp'];
-interface GlobalLevelsProps {};
-const GlobalLevels: FC<GlobalLevelsProps> = ({}) => {
-  const {auth} = useAuth()!;
+import {OrderOptionsBar, PublicLevelInfoCard, useGetGlobalLevels} from '@features/level/public-level';
+const orderOptions = ['clears', 'likes', 'timestamp'];
+const GlobalLevels = () => {
   const [value, setValue] = useState<number>(0);
   const [ascend, setAscend] = useState<boolean>(false);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [globalLevels, setGlobalLevels] = useState<UserLevelInfo[]>([]); 
-  const fetchGlobalLevels = async () => {
-    try{
-      const name = auth?.accessToken ? auth?.name : '';
-      const newGlobalLevels = await listGlobalLevels(name, globalLevels.length, orderByOptions[value], value === 0 ? ascend : false);
-      console.log(newGlobalLevels);
-      newGlobalLevels.length > 0 ? setGlobalLevels(prev => [...prev, ...newGlobalLevels]) : setHasMore(false);
-    }catch(err){
-      console.error(err);
-    }
-  };
+
+  const {data, fetchNextPage, hasNextPage, refetch, remove} = useGetGlobalLevels(orderOptions[value], value === 0 ? ascend : false);
+  const globalLevels = data?.pages.flat() || [];
+
   useEffect(() => {
-    fetchGlobalLevels();
-  }, [])
+    remove();
+    refetch();
+  }, [value, ascend])
   return (
     <div
       style={{
@@ -46,18 +32,13 @@ const GlobalLevels: FC<GlobalLevelsProps> = ({}) => {
         <SearchButton/>
       </Box>
       <Box display='flex' flexDirection='column' justifyContent='flex-start' alignItems='center' height='100%'>
-        <OrderOptionsBar value={value} setValue={setValue} ascend={ascend} setAscend={setAscend} setHasMore={setHasMore} width={800} setGlobalLevels={setGlobalLevels}/>
+        <OrderOptionsBar value={value} setValue={setValue} ascend={ascend} setAscend={setAscend} width={800} />
         <InfiniteScroll
           dataLength={globalLevels.length} 
-          next={fetchGlobalLevels}
-          hasMore={hasMore}
+          next={fetchNextPage}
+          hasMore={Boolean(hasNextPage)}
           loader={<h4>Loading...</h4>}
           height={window.innerHeight-240}
-          endMessage={
-            <p style={{ textAlign: 'center' }}>
-              <b>Yay! That's all</b>
-            </p>
-          }
         >
           {globalLevels.map((level, idx) => (
             <motion.div

@@ -20,7 +20,7 @@ export interface StageHandle {
   getThumbnail: () => string | undefined;
 }
 export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorialGoal, isGettingThumbnail, onClear, children}, ref) => {
-  const stageRef = createRef<Konva.Stage>()
+  const layerRef = createRef<Konva.Layer>()
   const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
   const {height: gridHeight, width: gridWidth, lasers, targets, reflectors, lens} = levelState;
   
@@ -49,7 +49,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
 
   useImperativeHandle(ref, ()=>({
     getThumbnail: () => {
-      return stageRef.current?.toDataURL({
+      return layerRef.current?.toDataURL({
         x: boardOrigin.x-2,
         y: boardOrigin.y-2,
         width: gridWidth * cellWidth + 4,
@@ -66,14 +66,14 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
         style={{position: 'absolute'}}
         onContextMenu={e => e.preventDefault()}
       >
-        <Wrap width={window.innerWidth} height={window.innerHeight - 100} ref={stageRef}>
+        <Wrap width={window.innerWidth} height={window.innerHeight - 100} >
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
             <ItemBar gridHeight={gridHeight} gridWidth={gridWidth}/>
             <CustomItemBar mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} mirrorNum={reflectors.length + lens.length} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
             <Grid gridHeight={gridHeight} gridWidth={gridWidth}/>
             {children}
           </Layer>
-          <Layer x={boardOrigin.x} y={boardOrigin.y}>
+          <Layer x={boardOrigin.x} y={boardOrigin.y} ref={layerRef}>
             <GridRay grid={gridRay.grid} Dgrid={gridRay.Dgrid}/>
             <CustomGrid mode={mode} isGettingThumbnail={Boolean(isGettingThumbnail)} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
             <Lasers mode={mode} lasers={lasers} laserActions={laserActions} isValidCell={isValidCell}/>
