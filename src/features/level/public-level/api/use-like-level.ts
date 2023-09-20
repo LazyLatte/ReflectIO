@@ -3,7 +3,7 @@ import { useAxiosPrivate } from "@features/authentication";
 const useLikeLevel = () => {
     const axiosPrivate = useAxiosPrivate();
     return useMutation(async ({id}: {id: string}) => {
-        const {data} = await axiosPrivate.put(`/levels/like/${id}`);
+        const {data} = await axiosPrivate.put(`/play/like/${id}`);
         return data;
     })
 }

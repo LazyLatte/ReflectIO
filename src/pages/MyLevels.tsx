@@ -26,6 +26,7 @@ const MyLevels = () => {
   const [hoverIdx, setHoverIdx] = useState(-1);
   const myLevelsArray: null[][] = Array(myLevelsShape.height).fill(Array(myLevelsShape.width).fill(null));
 
+  
   return (
     <MotionPage transitionType='slide' style={{paddingTop: '150px', alignItems: 'center'}}>
       <Box border='2px solid' borderRadius={3} boxShadow='0 0 0.4rem' sx={{color: colorMode === 'dark' ? '#fff' : "#191970"}}>

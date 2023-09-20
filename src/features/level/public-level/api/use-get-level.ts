@@ -9,7 +9,7 @@ const useGetLevelByID = (id: string) => {
         queryKey: ["search"], 
         queryFn: async () => {
             const decodeID = encoder.decode(id);
-            const {data} = await axios.get<UserLevelInfo | null>(`/levels/${decodeID}`);
+            const {data} = await axios.get<UserLevelInfo | null>(`/play/${decodeID}`);
             return data;
         },
         retry: false,

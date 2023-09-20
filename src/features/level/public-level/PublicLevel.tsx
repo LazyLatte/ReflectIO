@@ -12,15 +12,14 @@ import useClearLevel from './api/use-clear-level';
 import RestartImg from '@images/icons/restart.svg';
 import EmptyHeart from '@images/icons/emptyHeart.svg';
 import FullHeart from '@images/icons/fullHeart.svg';
-interface LocationState {userLevelInfo: UserLevelInfo};
+interface LocationState {userLevelInfo: UserLevelInfo, mirrorless?: boolean};
 interface PublicLevelProps {}
 const PublicLevel: FC<PublicLevelProps> = () => {
 
   const navigate = useNavigate();
   const { state, pathname } = useLocation();
-  const {userLevelInfo} = state as LocationState /*|| {} redirect ...*/;
+  const {userLevelInfo, mirrorless} = state as LocationState /*|| {} redirect ...*/;
   const {id, record, personal_best, isFavorite} = userLevelInfo;
-
 
   const level = useLevel(userLevelInfo);
   const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
@@ -62,6 +61,7 @@ const PublicLevel: FC<PublicLevelProps> = () => {
   const [star, setStar] = useState<number>(3);
   const [warning, setWarning] = useState<boolean>(false);
   const onClear = () => {
+    if(mirrorless) return;
     clearMutation.mutate({id, mirrorStates}, {
       onSuccess: (data) => {
         const newPersonalBest = data.personal_best;
@@ -100,7 +100,7 @@ const PublicLevel: FC<PublicLevelProps> = () => {
     })
   }
   
-  const updateBarDisplay = () => navigate(pathname, { state: {userLevelInfo: {...userLevelInfo, record: worldRecord, personal_best: personalBest}}, replace: true });
+  const updateBarDisplay = () => navigate(pathname, { state: {userLevelInfo: {...userLevelInfo, record: worldRecord, personal_best: personal_best}, mirrorless: record === 0}, replace: true });
   const [restartImg] = useImage(RestartImg);
   const [emptyHeartImg] = useImage(EmptyHeart);
   const [fullHeartImg] = useImage(FullHeart);

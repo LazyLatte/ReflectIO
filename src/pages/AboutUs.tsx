@@ -20,7 +20,7 @@ const AboutUs = () => {
         Reflect.io is an online puzzle game. You can challenge a variety of levels, or create one by yourself. 
       </Paper>
       <Box position="absolute" bottom="50px" display="flex" flexDirection="row" justifyContent="center" alignItems="center" fontSize='20px' color="#7f7fe6">
-        Contributor :&nbsp;<a href='https://github.com/LazyLatte' target="_blank" style={{color: '#aaaaee'}}>LazyLatte</a>
+        Contributor :&nbsp;<a href='https://github.com/LazyLatte' target="_blank" style={{color: '#aaaaee'}}>LazyLatte {'(Kuan-Fu Chen)'}</a>
       </Box>
     </MotionPage>
   );

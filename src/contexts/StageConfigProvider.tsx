@@ -16,7 +16,7 @@ export const StageConfigProvider: FC<Provider> = ({children}) => {
       const stageHeight = window.innerHeight - 100;
       const stageWidth = window.innerWidth;
       const shouldShrinkBasedOnWidth = (stageWidth <= shrinkThreshold);
-      const cellWidthBasedOnHeight =  Math.max(Math.min((stageHeight + 100) * 0.8 * 4  / 45, 80), 60);
+      const cellWidthBasedOnHeight =  Math.max(Math.min((stageHeight + 100) * 0.064, 80), 60);
       const newCellWidth = shouldShrinkBasedOnWidth ?  Math.max(0.05*(stageWidth - shrinkThreshold) + cellWidthBasedOnHeight, 45) : cellWidthBasedOnHeight;
 
       setCellWidth(newCellWidth);

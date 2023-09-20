@@ -8,7 +8,7 @@ const useGetUserLevels = () => {
     return useQuery<UserLevelInfo[], Error>({
         queryKey: ["custom", auth?.name], 
         queryFn: async () => {
-            const {data} = await axiosPrivate.get<UserLevelInfo[]>('/levels/custom');
+            const {data} = await axiosPrivate.get<UserLevelInfo[]>(`/levels/${auth?.name}`);
             return data;
         },
         retry: false,

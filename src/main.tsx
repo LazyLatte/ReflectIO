@@ -21,17 +21,18 @@ const queryClient = new QueryClient({
 const rootElement = document.getElementById('root') as HTMLElement;
 const root = createRoot(rootElement);
 root.render(
-  <>
-    <BrowserRouter>
+  <StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <AxiosPrivateProvider>
             <ColorModeProvider>
               <ImagesProvider>
                 <StageConfigProvider>
-                  <Routes>
-                    <Route path='/*' element={<App />} />
-                  </Routes>
+                  <BrowserRouter>
+                    <Routes>
+                      <Route path='/*' element={<App />} />
+                    </Routes>
+                  </BrowserRouter>
                 </StageConfigProvider>
               </ImagesProvider>
             </ColorModeProvider>
@@ -39,6 +40,5 @@ root.render(
         </AuthProvider>
       <ReactQueryDevtools/>
       </QueryClientProvider> 
-    </BrowserRouter>
-  </>
+  </StrictMode>
 );

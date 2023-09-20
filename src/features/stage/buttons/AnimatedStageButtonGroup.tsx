@@ -35,7 +35,7 @@ const AnimatedStageButtonGroup: FC<AnimatedStageButtonGroupProps> = ({gridHeight
         </Group>
       );
     case 2 : 
-      let btnGroupPos: Vector2D = shouldRearrange ? {x: ITEMS_BAR_HEIGHT+1.5, y: gridHeight+1.4} : {x: gridWidth+1.4, y: ITEMS_BAR_HEIGHT+1.5};
+      let btnGroupPos: Vector2D = shouldRearrange ? {x: ITEMS_BAR_HEIGHT + (0.5 * gridWidth - 3.5), y: gridHeight+1.4} : {x: gridWidth+1.4, y: ITEMS_BAR_HEIGHT + (0.5 * gridHeight - 3.5)};
       return (
         <Group x={btnGroupPos.x*cellWidth} y={btnGroupPos.y*cellWidth}>
           <AnimatedStageButton 
@@ -51,7 +51,7 @@ const AnimatedStageButtonGroup: FC<AnimatedStageButtonGroupProps> = ({gridHeight
             aninmatedImage={animatedBTN[1].aninmatedImage}
             animating={animatedBTN[1].animating}
             disabled={animatedBTN[1].disabled}
-            position={shouldRearrange ? {x: cellWidth*2.2, y: 0} : {x: 0, y:cellWidth*2.2}}
+            position={shouldRearrange ? {x: cellWidth* (0.1 * gridWidth + 1.2), y: 0} : {x: 0, y:cellWidth * (0.1 * gridHeight + 1.2)}}
             onClick={animatedBTN[1].onClick}
           />
         </Group>

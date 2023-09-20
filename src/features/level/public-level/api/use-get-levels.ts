@@ -9,7 +9,7 @@ const useGetGlobalLevels = (orderBy: string = 'clears', ascend: boolean = false)
     return useInfiniteQuery<UserLevelInfo[], Error>({
         queryKey: ["global"], 
         queryFn: async ({ pageParam = 0 }) => {
-            const {data} = await axios.get<UserLevelInfo[]>(`/levels?name=${name}&start=${pageParam}&orderBy=${orderBy}&ascend=${ascend}`);
+            const {data} = await axios.get<UserLevelInfo[]>(`/play?name=${name}&start=${pageParam}&orderBy=${orderBy}&ascend=${ascend}`);
             return data;
         },
         getNextPageParam: (lastPage, allPages) => {

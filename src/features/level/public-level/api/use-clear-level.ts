@@ -7,7 +7,7 @@ interface PersonalBest {
 const useClearLevel = () => {
     const axiosPrivate = useAxiosPrivate();
     return useMutation(async ({id, mirrorStates}: {id: string, mirrorStates: {reflectors: MirrorState[], lenses: MirrorState[]}}) => {
-        const {data} = await axiosPrivate.put<PersonalBest>(`/levels/clear/${id}`, {mirrorStates});
+        const {data} = await axiosPrivate.put<PersonalBest>(`/play/clear/${id}`, {mirrorStates});
         return data;
     })
 }
