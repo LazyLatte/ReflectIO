@@ -3,7 +3,6 @@ import { motion } from "framer-motion"
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { TypographyVariantsOptions } from '@mui/material';
 import Modal from '@features/ui/modal';
 
 import RefreshIcon from '@mui/icons-material/Refresh';

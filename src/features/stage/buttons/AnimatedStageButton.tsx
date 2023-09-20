@@ -3,7 +3,7 @@ import { Group, Image, Rect } from 'react-konva';
 import Konva from "konva";
 import {useStageConfig} from '../hooks';
 import {Vector2D} from '../interfaces';
-
+import useColorMode from 'src/hooks/useColorMode';
 interface AnimatedStageButtonProps{
   originalImage: HTMLImageElement | undefined;
   aninmatedImage: HTMLImageElement | undefined;
@@ -14,6 +14,7 @@ interface AnimatedStageButtonProps{
 }
 const btnWidthFactor = 1.2;
 const AnimatedStageButton: FC<AnimatedStageButtonProps> = ({originalImage, aninmatedImage, animating, disabled, position, onClick}) => {
+  const {colorMode} = useColorMode()!;
   const {cellWidth} = useStageConfig();
   const imgRef = createRef<Konva.Image>()
 
@@ -55,8 +56,8 @@ const AnimatedStageButton: FC<AnimatedStageButtonProps> = ({originalImage, aninm
         cornerRadius = {20}
         width={cellWidth*btnWidthFactor} 
         height={cellWidth*btnWidthFactor} 
-        fill={disabled ? '#A9A9A9' : 'rgb(239,83,55)'}
-        stroke="rgb(255,115,87)"
+        fill={disabled ? '#A9A9A9' : (colorMode === 'dark' ? 'rgb(239,83,55)' : "rgb(255,115,87)")}
+        stroke={colorMode === 'dark' ? "rgb(255,115,87)" : 'rgb(239,83,55)'}
       />
       <Image
         ref={imgRef}

@@ -5,7 +5,7 @@ interface ColorModeContextInterface {colorMode: 'light' | 'dark', toggleColorMod
 const ColorModeContext = createContext<ColorModeContextInterface | null>(null);
 
 export const ColorModeProvider: FC<Provider> = ({children}) => {
-  const [colorMode, setColorMode] = useState<'light' | 'dark'>('light');
+  const [colorMode, setColorMode] = useState<'light' | 'dark'>('dark');
   const toggleColorMode = useCallback(()=>{
     setColorMode((prev) => (prev === 'dark' ? 'light' : 'dark'))
   }, []);

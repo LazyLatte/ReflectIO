@@ -6,17 +6,13 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import {PublicLevelInfoCard, useGetLevelByID} from '@features/level/public-level';
 import { motion, AnimatePresence  } from "framer-motion";
-import UuidEncoder from 'uuid-encoder';
 
-const encoder = new UuidEncoder('base64url');
-//1rqCMGwzD3PR5943F96BOz
-//1cyrx-qIP7EAEYQTPwohJP
 const ID_REGEX = /[a-zA-Z0-9_-]{22}/;
 const Search = () => {
   const [levelID, setLevelID] = useState<string>('');
   const [errMsg, setErrMsg] = useState<string>('');
 
-  const {data: level, refetch, remove} = useGetLevelByID(encoder.decode(levelID));
+  const {data: level, refetch, remove} = useGetLevelByID(levelID);
   const onSearch = async () => {
     const isValid = ID_REGEX.test(levelID);
     if(isValid){
@@ -51,7 +47,7 @@ const Search = () => {
           error={Boolean(errMsg)}
           label={errMsg}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setLevelID(e.target.value);
+            setLevelID(e.target.value.trim());
           }}
           focused 
           size='medium'

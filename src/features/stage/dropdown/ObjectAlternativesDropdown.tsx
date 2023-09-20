@@ -13,7 +13,7 @@ interface ObjectAlternativesDropdownProps {
 
 const ObjectAlternativesDropdown: FC<ObjectAlternativesDropdownProps> = ({ origin, cellPos, objType, addObjects, closeDropdown}) => {
   const {addLaser, addTarget, addMirror} = addObjects;
-  const colorOptions = (objType === 'Reflect' || objType === 'Lens') ? [7, 4, 2, 1, 6, 3, 5] : [4, 2, 1, 6, 3, 5, 7];
+  const colorOptions = (objType === 'Reflect' || objType === 'Lens') ? [7/*, 4, 2, 1, 6, 3, 5*/] : [4, 2, 1, 6, 3, 5, 7];
   
   const laserImages = useImages()?.laserImages || [];
   const targetImages = useImages()?.targetImages || [];

@@ -28,7 +28,7 @@ const BackButton = ({}) => {
               height: '60px',
               width: '140px',
               backgroundColor: 'grey',
-              backgroundImage: 'url(https://www.svgrepo.com/show/263908/back.svg)',
+              backgroundImage: 'url(src/assets/images/icons/back.svg)',
               backgroundSize: '100% 100%',
               border: 'solid black',
               

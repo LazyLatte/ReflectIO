@@ -264,6 +264,9 @@ export const themeSettings = (mode: 'light' | 'dark') => {
                     tutorial: {
                         main: '#fff'
                     },
+                    orderBar: {
+                        main: colors.primary[600]
+                    },
                     background: {
                         default: colors.primary[600]
                     },
@@ -317,9 +320,13 @@ export const themeSettings = (mode: 'light' | 'dark') => {
                     },
                     enter: {
                         main: '#00cc7e',
+                        light: '#00e699'
                     },
                     tutorial: {
                         main: "#ccf0cc"
+                    },
+                    orderBar: {
+                        main: colors.primary[400],
                     },
                     background: {
                         default: colors.primary[500]

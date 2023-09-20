@@ -13,6 +13,7 @@ declare module '@mui/material/styles' {
     tutorial: Palette['primary'];
     contrast: Palette['primary'];
     enter: Palette['primary'];
+    orderBar: Palette['primary'];
   }
 
   interface PaletteOptions {
@@ -26,6 +27,7 @@ declare module '@mui/material/styles' {
     tutorial?: PaletteOptions['primary'];
     contrast?: PaletteOptions['primary'];
     enter?: PaletteOptions['primary'];
+    orderBar?: PaletteOptions['primary'];
   }
 
   /* Typography */
@@ -53,8 +55,10 @@ declare module '@mui/material/Button' {
     tutorial: true;
     contrast: true;
     enter: true;
+    orderBar: true;
   }
 }
+
 
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
@@ -63,4 +67,9 @@ declare module '@mui/material/Typography' {
   }
 }
 
+declare module '@mui/material/AppBar' {
+  interface AppBarPropsColorOverrides {
+    orderBar: true;
+  }
+}
 

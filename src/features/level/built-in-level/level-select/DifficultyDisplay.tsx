@@ -14,8 +14,8 @@ const darkTheme = {
 }
 const lightTheme = {
   "easy": '#3CB371',
-  "normal": '#bc13fe',
-  "hard": '#DC143C'
+  "normal": '#9932CC',
+  "hard": '#c12525'
 }
 
 const styles = {
@@ -57,13 +57,17 @@ export const DifficultyDisplay: FC<DifficultyDisplayProps> = ({difficulty, setDi
   const nextDifficulty: Difficulty = getNextDifficuly(difficulty);
   const prevDiff: Difficulty = getNextDifficuly(getNextDifficuly(difficulty));
   const arrowIconStyle = {fontSize: '4rem', color: colorMode === 'dark' ? '#E0FFFF' : '#404040'}
-  const frameColor = colorMode === 'dark' ? {color: '#fff', borderColor: '#fff', borderWidth: '0.2rem'} : {borderColor: '#fff', borderWidth: '0.4rem'};
   const animate = colorMode === 'dark' ? {
+    color: '#fff', 
+    borderColor: '#fff', 
+    borderWidth: '0.2rem',
     boxShadow: `0 0 0.8rem ${darkTheme[difficulty]}, inset 0 0 0.8rem ${darkTheme[difficulty]}`,
     textShadow: `0 0 36px ${darkTheme[difficulty]}`
   } : {
     color: lightTheme[difficulty], 
-    borderColor: lightTheme[difficulty]
+    borderColor: lightTheme[difficulty],
+    borderWidth: '0.4rem',
+    textShadow: `0 0 0 white`
   }
   return (
 
@@ -79,7 +83,7 @@ export const DifficultyDisplay: FC<DifficultyDisplayProps> = ({difficulty, setDi
       </Button>
       <motion.div
         animate={animate}
-        style={{...styles.frame, ...frameColor}}
+        style={{...styles.frame}}
         transition= {{duration: 0.1 }}
       >
           {difficulty.toUpperCase()}

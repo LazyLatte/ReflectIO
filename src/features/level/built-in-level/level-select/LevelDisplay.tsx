@@ -3,29 +3,70 @@ import { motion, AnimatePresence } from "framer-motion";
 import {Link} from "react-router-dom";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import useGetClears from "../api/use-get-clears";
 import {Difficulty} from '..';
-import builtInLevelInfo from "../builtInLevelInfo";
+import builtInLevelInfo, {getClears} from "../builtInLevelInfo";
 import useColorMode from "src/hooks/useColorMode";
 import StarWhite from '@images/icons/star-white.svg';
 import StarYellow from '@images/icons/star-yellow.svg';
-
-const theme = {
-  "frame": {
-
-    "easy": '#00FF7F',
-    "normal": '#bc13fe',
-    "hard": '#DC143C'
+interface DifficultyColor {
+  easy: string,
+  normal: string,
+  hard: string
+}
+interface DisplayStyle {
+  frame: DifficultyColor,
+  btnFrame:DifficultyColor,
+  btnText: DifficultyColor,
+  btnHover: DifficultyColor
+}
+const theme: {
+  dark: DisplayStyle,
+  light: DisplayStyle
+} = {
+  dark: {
+    frame: {
+      "easy": '#00FF7F',
+      "normal": '#bc13fe',
+      "hard": '#DC143C'
+    },
+    btnFrame:{
+      "easy": '#00FA9A',
+      "normal": '#8A2BE2',
+      "hard": '#B22222'
+    },
+    btnHover:{
+      "easy": '',
+      "normal": '',
+      "hard": ''
+    },
+    btnText: {
+      "easy": '#AFEEEE',
+      "normal": '#87CEEB',
+      "hard": '#80bfff'
+    }
   },
-  "btnFrame":{
-    "easy": '#00FA9A',
-    "normal": '#8A2BE2',
-    "hard": '#B22222'
-  },
-  "btnText": {
-    "easy": '#AFEEEE',
-    "normal": '#4dd2ff',
-    "hard": '#80bfff'
+
+  light: {
+    frame: {
+      "easy": '#3CB371',
+      "normal": '#9932CC',
+      "hard": '#c12525'
+    },
+    btnFrame:{
+      "easy": '#00cc7e',
+      "normal": '#9370DB',
+      "hard": '#d2143a'
+    },
+    btnHover:{
+      "easy": '#00fa9a',
+      "normal": '#b299e6',
+      "hard": '#ee4466'
+    },
+    btnText: {
+      "easy": '#AFEEEE',
+      "normal": '#87CEEB',
+      "hard": '#80bfff'
+    }
   }
 }
 
@@ -36,53 +77,72 @@ const styles = {
     height: '100%',
     width: '100%',
     borderRadius: 3,
-    border: '1px solid white',
     padding: '1rem',
     font: '1rem Comic Sans MS',
     fontSize: '3rem',
     position: 'relative',
-    ':hover': {
-      borderColor: 'white'
-    }
+    transition: "background 0.5s",
   }
 }
 interface LevelDisplayProps {
   difficulty: Difficulty;
 }
 export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => { 
-  const {data: clears} = useGetClears();
+  const clears = getClears(difficulty);
   const {colorMode} = useColorMode()!;
   const [shape, setShape] = useState<Size2D>(window.innerWidth >= 1430 ? {height: 3, width: 5} : {height: 5, width: 3});
   const reshapeLevelArray: null[][] = Array.from(Array(shape.height).fill(
     Array(shape.width).fill(null)
   ));
 
-  const frameColor: string = theme["frame"][difficulty];
-  const btnFrameColor: string = theme["btnFrame"][difficulty];
-  const textColor: string = theme["btnText"][difficulty];
+  const frameColor: string = theme[colorMode]["frame"][difficulty];
+  const btnFrameColor: string = theme[colorMode]["btnFrame"][difficulty];
+  const btnHoverColor: string = theme[colorMode]["btnHover"][difficulty];
+  const textColor: string = theme[colorMode]["btnText"][difficulty];
 
+  const frameStyle = colorMode === 'dark' ? {borderColor: 'white'} : {};
+  const btnStyle = colorMode === 'dark' ? {
+    border: '1px solid white',
+    boxShadow: `0 0 4px ${btnFrameColor}, 0 0 10px ${btnFrameColor}, inset 0 0 6px ${btnFrameColor}`,
+    ':hover': {
+      borderColor: 'white',
+      bgcolor: '#1e2943'
+    }
+  } : {
+    backgroundColor: btnFrameColor,
+    ':hover': {
+      bgcolor: btnHoverColor
+    }
+  }
+  
+  const animate = colorMode === 'dark' ? {
+    borderWidth: '3px', 
+    boxShadow: `0 0 0.8rem ${frameColor}, 0 0 0.8rem ${frameColor}, inset 0 0 1rem ${frameColor}`,
+  } : {
+    borderColor: frameColor,
+    borderWidth: '7px', 
+  }
 
   useEffect(()=>{
-    function handleResize() {
+    window.addEventListener('resize', () => {
       setShape(window.innerWidth >= 1430 ? {height: 3, width: 5} : {height: 5, width: 3});
-    };
-    window.addEventListener('resize', handleResize);
- 
+    });
   }, []);
   return (
     <motion.div 
-      animate={{boxShadow: `0 0 0.8rem ${frameColor}, 0 0 0.8rem ${frameColor}, inset 0 0 1rem ${frameColor}`}}
-      transition= { {duration: 0.7 }}
+      animate={animate}
+      transition= {{duration: 0.5 }}
       style={{
+        ...frameStyle,
+        position: 'relative',
         display:'flex',
         flexDirection: 'column',
         justifyContent:'center',
         alignItems: 'center',
         borderRadius: 5,
-        border: '3px solid white',
-        position: 'relative',
+        borderStyle: 'solid', 
         width: `${160*shape.width}px`, 
-        height: `${160*shape.height}px`
+        height: `${160*shape.height}px`,
       }}
     >
       <AnimatePresence>
@@ -91,7 +151,7 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
           initial={{opacity: 0}}
           animate={{opacity: 1}}
           exit={{opacity: 0}}
-          transition= { {duration: 0.5 }}
+          transition= {{duration: 0.5 }}
           style={{
             position: 'absolute',
             display: 'flex',
@@ -104,27 +164,22 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
         {reshapeLevelArray.map((row, i)=>(
           <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center' key={i}>
             {row.map((_, j)=>(
-
               <Box height={80} width={80} margin={5} key={j}>
                 {i*shape.width+j < builtInLevelInfo[difficulty].length ?
                     <Button 
-                      variant='outlined'
+                      variant={colorMode === 'dark' ? 'outlined' : 'contained'}
                       component={Link}
                       to={`/play/${difficulty}/${i*shape.width+j+1}`} 
-                      state={{
-                        difficulty, 
-                        levelIdx: i*shape.width+j, 
-                        clear: clears!==undefined && Boolean((clears[difficulty] & (1 << (i*shape.width+j))))
-                      }}
+                      state={{difficulty, levelIdx: i*shape.width+j}}
                       
                       sx={{
+                        ...btnStyle, 
                         ...styles.levelBtn, 
                         textShadow: `-2px 0 ${textColor}, 0 2px ${textColor}, 2px 0 ${textColor}, 0 -2px ${textColor}`,
-                        boxShadow: `0 0 4px ${btnFrameColor}, 0 0 10px ${btnFrameColor}, inset 0 0 6px ${btnFrameColor}`
                       }}
                     >
                       <img 
-                        src={clears!==undefined && Boolean((clears[difficulty] & (1 << (i*shape.width+j)))) ? StarYellow : StarWhite}
+                        src={Boolean(clears & (1 << (i*shape.width+j))) ? StarYellow : StarWhite}
                         style={{
                           position: 'absolute',
                           bottom: '4rem',

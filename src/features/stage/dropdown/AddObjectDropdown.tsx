@@ -29,7 +29,7 @@ const AddObjectDropdown: FC<AddObjectDropdownProps> = ({mode, gridHeight, gridWi
     setColorDropdown(null);
   }
   return (
-    <Group x={(cellPos.x + 1.2) * cellWidth} y={cellPos.y * cellWidth}>
+    <Group x={(cellPos.x + 1) * cellWidth} y={(cellPos.y + 0.2) * cellWidth}>
       {objectOptions.map((objType, i) => (
         <Group 
           x={0} 
@@ -61,7 +61,7 @@ const AddObjectDropdown: FC<AddObjectDropdownProps> = ({mode, gridHeight, gridWi
             onmouseover={() => setColorDropdown({
                 pos: {
                   x: objectOptionSize.width + 2,
-                  y: (-34 * cellPos.y - 10) + i * objectOptionSize.height
+                  y: (objType === 'Reflect' || objType === 'Lens') ?  (cellPos.y + 5) + i * objectOptionSize.height : (-34 * cellPos.y - 10) + i * objectOptionSize.height
                 },
                 objType
             })}

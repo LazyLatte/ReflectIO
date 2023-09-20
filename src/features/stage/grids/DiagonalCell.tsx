@@ -3,6 +3,7 @@ import { Group, Rect } from 'react-konva';
 import {colorMap, mirrorNormalVectorToDegree} from '../gameHelpers';
 import {useStageConfig} from '../hooks';
 import {ObjectType, CellRay} from '../interfaces';
+import useColorMode from 'src/hooks/useColorMode';
 interface DiagonalCellProps {
   cell: CellRay;
   i: number;
@@ -11,7 +12,9 @@ interface DiagonalCellProps {
 const inv_sqrt2 = 0.70710678118;
 const DiagonalCell: FC<DiagonalCellProps> = ({cell, i, j}) => {
   const {color} = cell;
+  const {colorMode} = useColorMode()!;
   const {cellWidth} = useStageConfig();
+  const shadowBlur = colorMode === 'dark' ? 5 : 0;
   const rayLengthFactor = 0.5;
   const rayWidthFactor = 0.1;
   
@@ -45,7 +48,7 @@ const DiagonalCell: FC<DiagonalCellProps> = ({cell, i, j}) => {
           height={diagonalCellWidth * rayLengthFactor * verticalRayLengthFactor} 
           fill= {colorMap[(color >> 9) & 7]}
           shadowColor={colorMap[(color >> 9) & 7]}
-          shadowBlur={5}
+          shadowBlur={shadowBlur}
           globalCompositeOperation='lighter'
         />
 
@@ -57,7 +60,7 @@ const DiagonalCell: FC<DiagonalCellProps> = ({cell, i, j}) => {
           height={diagonalCellWidth * rayWidthFactor} 
           fill= {colorMap[(color >> 6) & 7]}
           shadowColor={colorMap[(color >> 6) & 7]}
-          shadowBlur={5}
+          shadowBlur={shadowBlur}
           globalCompositeOperation='lighter'
 
         />
@@ -69,7 +72,7 @@ const DiagonalCell: FC<DiagonalCellProps> = ({cell, i, j}) => {
           height={diagonalCellWidth * rayLengthFactor * verticalRayLengthFactor} 
           fill= {colorMap[(color >> 3) & 7]}
           shadowColor={colorMap[(color >> 3) & 7]}
-          shadowBlur={5}
+          shadowBlur={shadowBlur}
           globalCompositeOperation='lighter'
         />
         <Rect 
@@ -80,7 +83,7 @@ const DiagonalCell: FC<DiagonalCellProps> = ({cell, i, j}) => {
           height={diagonalCellWidth * rayWidthFactor} 
           fill= {colorMap[(color) & 7]}
           shadowColor={colorMap[(color) & 7]}
-          shadowBlur={5}
+          shadowBlur={shadowBlur}
           globalCompositeOperation='lighter'
         />
       

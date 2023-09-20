@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { useAuth, useRefreshToken, AccountModal, AccountModalHandle, userSignOut} from '@features/authentication';
 import useColorMode from 'src/hooks/useColorMode';
+//import GingerbreadMan from '@images/avatar/gingerbread-man.svg';
 const styles = {
   pfpBtn: {
     height: '50px',
@@ -27,7 +28,7 @@ const styles = {
     borderRadius: 2,
     padding: 0,
     backgroundColor: '#bfbff2',
-    boxShadow: '0 0 0.2rem #bfbff2',
+    border: '2px solid',
     '&:hover': {
       backgroundColor: '#d4d4f7'
     }
@@ -129,18 +130,18 @@ const TopBar = () => {
         background: colorMode === 'dark' ? 'linear-gradient(to bottom,#272931 0,#17191d 100%)' : 'linear-gradient(to bottom,#ffa399 0,#ff8c80 100%)'
       }}
     >
-      <Typography sx={{...styles.locationTxt, color: colorMode === 'dark' ? '#93aed2' : "#718cb0"}}>
+      <Typography sx={{...styles.locationTxt, color: colorMode === 'dark' ? '#93aed2' : "#4785b8"}}>
         {displayText}
       </Typography>
       <Box>
         <IconButton sx={{marginRight: 3}} onClick={toggleColorMode} color="inherit">
           {colorMode === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
         </IconButton>
-        <Button id="pfp-btn" sx={styles.pfpBtn} onClick={handleClick}>
+        <Button id="pfp-btn" sx={{...styles.pfpBtn, borderColor: colorMode === 'dark' ? '#fff' : '#b478ed'}} onClick={handleClick}>
           {auth && 
             <>
               {auth.accessToken ?
-                <Avatar  variant="rounded" src='https://www.svgrepo.com/show/380730/avatar-winter-custome-18.svg' sx={{ width: '100%', height: '100%'}}/>
+                <Avatar  variant="rounded" src='src/assets/images/avatar/gingerbread-man.svg' sx={{ width: '100%', height: '100%'}}/>
                 :
                 <Avatar variant="rounded" sx={{ backgroundColor: 'transparent', fontSize: '20px', fontWeight: 'bold'}}>G</Avatar>
               }

@@ -1,4 +1,5 @@
 import { LevelInfo } from "..";
+import { Difficulty } from ".";
 //------------------------
 
 // easy levels
@@ -31,8 +32,9 @@ import h3 from 'src/data/levels/hard/3.json';
 import h4 from 'src/data/levels/hard/4.json';
 import h5 from 'src/data/levels/hard/5.json';
 
-
 //------------------------
+
+const levelNum = 15;
 const easyLevels: LevelInfo[] = [e1, e2, e3, e4, e5, e6, e7, e8, e9, e10];
 const normalLevels: LevelInfo[] = [n1, n2, n3, n4, n5, n6, n7, n8, n9, n10];
 const hardLevels: LevelInfo[] = [h1, h2, h3, h4, h5];
@@ -42,5 +44,17 @@ const builtInLevelInfo = {
   normal: normalLevels,
   hard: hardLevels
 }
+const shifts = {
+  easy: 0,
+  normal: easyLevels.length,
+  hard: easyLevels.length + normalLevels.length
+}
+const masks = (1 << levelNum) - 1;
 
+export const getClears = (difficulty: Difficulty) => ((Number(localStorage.getItem('reflectio')) || 0) >> shifts[difficulty]) & masks;
+export const updateClears = (difficulty: Difficulty, idx: number) => {
+  const prevClears: number = Number(localStorage.getItem('reflectio')) || 0;
+  const updatedClears: number = prevClears | (1 << (shifts[difficulty] + idx));
+  localStorage.setItem('reflectio', updatedClears.toString());
+}
 export default builtInLevelInfo;

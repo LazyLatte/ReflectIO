@@ -1,4 +1,5 @@
 import {FC, Dispatch, SetStateAction, SyntheticEvent} from 'react';
+import useColorMode from 'src/hooks/useColorMode';
 import Box from '@mui/material/Box';
 import Tabs  from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -14,12 +15,16 @@ interface OrderOptionsBar {
   setValue: Dispatch<SetStateAction<number>>;
   setAscend: Dispatch<SetStateAction<boolean>>;
 }
-const UpDownIcon: FC<UpDownIconProps> = ({ascend}) => (
-  <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
-    <KeyboardArrowUpIcon sx={{position: 'relative', top: '10px', transform: 'scale(0.8, 0.8)', color: ascend ? 'gold' : ''}}/>
-    <KeyboardArrowDownIcon sx={{position: 'relative', bottom: '10px', transform: 'scale(0.8, 0.8)', color: ascend ? '' : 'gold'}}/>
-  </Box>
-)
+const UpDownIcon: FC<UpDownIconProps> = ({ascend}) => {
+  const {colorMode} = useColorMode()!;
+  const activeColor = colorMode === 'dark' ? 'gold' : '#00FA9A';
+  return (
+    <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
+      <KeyboardArrowUpIcon sx={{position: 'relative', top: '10px', transform: 'scale(0.8, 0.8)', color: ascend ? activeColor : ''}}/>
+      <KeyboardArrowDownIcon sx={{position: 'relative', bottom: '10px', transform: 'scale(0.8, 0.8)', color: ascend ? '' : activeColor}}/>
+    </Box>
+  )
+}
 const OrderOptionsBar: FC<OrderOptionsBar> = ({width, value, ascend, setValue, setAscend}) => {
 
   const handleChange = (e: SyntheticEvent, newValue: number) => setValue(newValue);
@@ -32,10 +37,9 @@ const OrderOptionsBar: FC<OrderOptionsBar> = ({width, value, ascend, setValue, s
       justifyContent='space-around' 
       alignItems='center' 
       border='solid white 1px'
-      borderRadius='1px'
       margin='20px 0'
     >
-      <AppBar position='static' color='primary' enableColorOnDark> 
+      <AppBar position='static' color='orderBar' enableColorOnDark> 
         <Tabs 
           value={value} 
           onChange={handleChange}

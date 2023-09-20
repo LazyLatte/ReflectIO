@@ -17,6 +17,7 @@ export const ModalButton: FC<ModalButtonProps> = ({width, disabled, onClick, chi
         height: '45px',
         fontSize: '2rem',
         backgroundColor: '#aaaaaa',
+        color: '#000',
         border: '1px solid',
         padding: 0,
       }}
