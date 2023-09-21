@@ -1,4 +1,4 @@
-import {useState, useEffect, useLayoutEffect, ReactNode, forwardRef, useImperativeHandle, createRef, useCallback} from 'react';
+import {useState, useEffect, useLayoutEffect, ReactNode, forwardRef, useImperativeHandle, createRef} from 'react';
 import {Stage as Wrap, Layer} from 'react-konva';
 import Konva from 'konva';
 import {Lasers, Targets, Mirrors} from './objects';
@@ -7,7 +7,8 @@ import {ColorMixingPopover, TutorialHint} from './hints';
 import {AddObjectDropdown} from './dropdown';
 import {useGridRay, useStageConfig} from './hooks';
 import {ObjectType, Level, Vector2D, Target, Mode, TutorialGoal} from './interfaces';
-
+import DownloadButton from './buttons/DownloadButton';
+import { state2info } from '@features/level/custom-level/utils';
 interface StageProps {
   mode: Mode;
   level: Level;
@@ -27,7 +28,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
   const {cellWidth, shouldRearrange} = useStageConfig();
   const gridRay = useGridRay(gridHeight, gridWidth, lasers, reflectors, lens, targets, targetActions.setTargetClear);
   
-  const boardOrigin: Vector2D = {x: (window.innerWidth-gridWidth*cellWidth) >> 1, y: 56};
+  const boardOrigin: Vector2D = {x: (window.innerWidth-gridWidth*cellWidth) * 0.5, y: 56};
 
   const isOnBoard = (pos: Vector2D) => (pos.x >= 0 && pos.x < gridWidth && pos.y >= 0 && pos.y < gridHeight);
   const isEmptyCell = (pos: Vector2D): boolean => (gridRay.grid[pos.y][pos.x].object.type === ObjectType.None);
@@ -84,6 +85,9 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
             <Mirrors mode={mode} mirrors={[...reflectors, ...lens]} mirrorActions={mirrorActions} isDraggable={isDraggable} isDisabled={isDisabled} isOnBoard={isOnBoard} isValidCell={isValidCell}/>
             <ColorMixingPopover isGettingThumbnail={Boolean(isGettingThumbnail)} target={mouseOnTarget}/>
             <AddObjectDropdown mode={mode} isGettingThumbnail={Boolean(isGettingThumbnail)} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  
+          </Layer>
+          <Layer x={boardOrigin.x} y={8}>
+            <DownloadButton levelInfo={state2info(levelState)}/>
           </Layer>
         </Wrap>
       </div>

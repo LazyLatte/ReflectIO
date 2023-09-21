@@ -45,7 +45,7 @@ const CustomLevel: FC<CustomLevelProps> = () => {
     const uri = stageRef.current?.getThumbnail() || '';
     //console.log(uri);
     updateMutation.mutate({id, levelInfo, thumbnail: uri.split(',')[1]}, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         setIsPublic(false);
       },
       onError: (error) => {
@@ -85,7 +85,7 @@ const CustomLevel: FC<CustomLevelProps> = () => {
     const uri = stageRef.current?.getThumbnail() || '';
     const mirrorStates = mirrorsStateBuffer || getMirrorStates(levelState);
     uploadMutation.mutate({id, levelInfo, mirrorStates, thumbnail: uri.split(',')[1]}, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         setMirrorsStateBuffer(null);
         setIsPublic(true);
       },

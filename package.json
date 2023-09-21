@@ -16,6 +16,7 @@
     "@mui/material": "^5.12.3",
     "@react-spring/konva": "^9.7.3",
     "axios": "^1.4.0",
+    "copy-to-clipboard": "^3.3.3",
     "framer-motion": "^10.12.8",
     "konva": "^9.0.1",
     "lottie-react": "^2.4.0",

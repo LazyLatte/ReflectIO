@@ -14,6 +14,7 @@ interface TutorialHintProps {
 }
 interface DegHintProps {type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, deg: number};
 interface PosHintProps {type: ObjectType.Reflector | ObjectType.Lens, fromPos: Vector2D, toPos: Vector2D};
+
 const PosHint: FC<PosHintProps> = ({type, fromPos, toPos}) => {
   const [tapImg] = useImage(TapImg);
   const image = type === ObjectType.Reflector ? useImages()?.reflectorImages[7] : useImages()?.lensImages[7];
@@ -37,6 +38,7 @@ const PosHint: FC<PosHintProps> = ({type, fromPos, toPos}) => {
       loop
     >
       {(props) => (
+          // @ts-ignore 
           <animated.Group {...props} image={tapImg}>
             <Image 
               image={tapImg} 

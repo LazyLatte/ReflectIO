@@ -5,7 +5,7 @@ interface ChangeUsernameModalProps {};
 export interface ChangeUsernameModalHandle {
   open: () => void;
 }
-const ChangeUsernameModal: ForwardRefRenderFunction<ChangeUsernameModalHandle, ChangeUsernameModalProps> = (props, ref) => {
+const ChangeUsernameModal: ForwardRefRenderFunction<ChangeUsernameModalHandle, ChangeUsernameModalProps> = ({}, ref) => {
   const [newUsername, setNewUsername] = useState('');
   const [pwd, setPwd] = useState('');
   const [errMsg1, setErrMsg1] = useState('');

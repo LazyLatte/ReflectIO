@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
-import Menu, { MenuProps } from '@mui/material/Menu';
+import Menu from '@mui/material/Menu';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 
@@ -108,7 +108,7 @@ const TopBar = () => {
   useEffect(()=>{
     const initRequest = async () => {
       try{
-        //const accessToken = await refresh();
+        refresh();
       }catch(err){
         accountModalRef.current?.open();
       }
