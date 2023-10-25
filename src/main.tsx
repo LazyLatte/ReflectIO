@@ -38,7 +38,7 @@ root.render(
             </ColorModeProvider>
           </AxiosPrivateProvider>
         </AuthProvider>
-      <ReactQueryDevtools/>
+      {/*<ReactQueryDevtools/>*/}
       </QueryClientProvider> 
   </StrictMode>
 );

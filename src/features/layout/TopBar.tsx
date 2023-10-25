@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { useAuth, useRefreshToken, AccountModal, AccountModalHandle, userSignOut} from '@features/authentication';
 import useColorMode from 'src/hooks/useColorMode';
-//import GingerbreadMan from '@images/avatar/gingerbread-man.svg';
+import GingerbreadMan from '@images/avatar/gingerbread-man.svg';
 const styles = {
   pfpBtn: {
     height: '50px',
@@ -108,7 +108,7 @@ const TopBar = () => {
   useEffect(()=>{
     const initRequest = async () => {
       try{
-        refresh();
+        const accessToken = await refresh();
       }catch(err){
         accountModalRef.current?.open();
       }
@@ -141,7 +141,7 @@ const TopBar = () => {
           {auth && 
             <>
               {auth.accessToken ?
-                <Avatar  variant="rounded" src='src/assets/images/avatar/gingerbread-man.svg' sx={{ width: '100%', height: '100%'}}/>
+                <Avatar  variant="rounded" src={GingerbreadMan} sx={{ width: '100%', height: '100%'}}/>
                 :
                 <Avatar variant="rounded" sx={{ backgroundColor: 'transparent', fontSize: '20px', fontWeight: 'bold'}}>G</Avatar>
               }

@@ -1,6 +1,7 @@
 import {useLocation, useNavigate} from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from '@mui/material/Button';
+import BackImage from '@images/icons/back.svg';
 const BackButton = ({}) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const BackButton = ({}) => {
               height: '60px',
               width: '140px',
               backgroundColor: 'grey',
-              backgroundImage: 'url(src/assets/images/icons/back.svg)',
+              backgroundImage: `url(${BackImage})`,
               backgroundSize: '100% 100%',
               border: 'solid black',
               
