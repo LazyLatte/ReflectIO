@@ -13,7 +13,11 @@ import e7 from 'src/data/levels/easy/7.json';
 import e8 from 'src/data/levels/easy/8.json';
 import e9 from 'src/data/levels/easy/9.json';
 import e10 from 'src/data/levels/easy/10.json';
-// import e11 from 'src/data/levels/easy/11.json';
+import e11 from 'src/data/levels/easy/11.json';
+import e12 from 'src/data/levels/easy/12.json';
+import e13 from 'src/data/levels/easy/13.json';
+import e14 from 'src/data/levels/easy/14.json';
+import e15 from 'src/data/levels/easy/15.json';
 // normal levels
 import n1 from 'src/data/levels/normal/1.json';
 import n2 from 'src/data/levels/normal/2.json';
@@ -35,7 +39,7 @@ import h5 from 'src/data/levels/hard/5.json';
 //------------------------
 
 const levelNum = 15;
-const easyLevels: LevelInfo[] = [e1, e2, e3, e4, e5, e6, e7, e8, e9, e10];
+const easyLevels: LevelInfo[] = [e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15];
 const normalLevels: LevelInfo[] = [n1, n2, n3, n4, n5, n6, n7, n8, n9, n10];
 const hardLevels: LevelInfo[] = [h1, h2, h3, h4, h5];
 

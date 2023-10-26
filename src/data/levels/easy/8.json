@@ -1,33 +1,29 @@
 {
-  "height": 10,
-  "width": 10,
+  "height": 9,
+  "width": 9,
   "lasers": [
     {
-      "pos": {"x": 1, "y": 4},
-      "dir": {"x": 1, "y": 0},
+      "pos": {"x": 4, "y": 5},
+      "dir": {"x": 0, "y": 1},
       "color": 4
     },
     {
-      "pos": {"x": 5, "y": 1},
-      "dir": {"x": 0, "y": 1},
-      "color": 1
+      "pos": {"x": 5, "y": 4},
+      "dir": {"x": 1, "y": 0},
+      "color": 2
     },
     {
-      "pos": {"x": 5, "y": 6},
-      "dir": {"x": 0, "y": 1},
-      "color": 2
+      "pos": {"x": 3, "y": 4},
+      "dir": {"x": -1, "y": 0},
+      "color": 1
     }
   ],
   "targets": [
     {
-      "pos": {"x": 8, "y": 4},
-      "color": 2
-    },
-    {
-      "pos": {"x": 6, "y": 4},
-      "color": 1
+      "pos": {"x": 4, "y": 4},
+      "color": 7
     }
   ],
   "reflectorNum": 4,
-  "lensNum": 0
+  "lensNum": 4
 }
