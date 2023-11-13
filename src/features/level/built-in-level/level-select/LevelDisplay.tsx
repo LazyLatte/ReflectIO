@@ -143,6 +143,8 @@ export const LevelDisplay: FC<LevelDisplayProps> = ({difficulty}) => {
         borderStyle: 'solid', 
         width: `${160*shape.width}px`, 
         height: `${160*shape.height}px`,
+        minWidth: `${160*shape.width}px`,
+        minHeight: `${160*shape.height}px`,
       }}
     >
       <AnimatePresence>

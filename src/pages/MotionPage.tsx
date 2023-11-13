@@ -53,7 +53,7 @@ const MotionPage: FC<MotionPageProps> = ({transitionType, style, children}) => {
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-end',
-        paddingTop: '64px',
+        paddingTop: '5vh',
         ...style
       }}
     >
