@@ -1,6 +1,6 @@
 # ReflectIO
 
-![image](src/assets/images/thumbnail.png)
+<img src="src/assets/images/thumbnail.png" width="400" height="400" />
 
 ## Play Levels
 
