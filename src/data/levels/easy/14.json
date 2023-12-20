@@ -3,7 +3,7 @@
     "width":10,
     "lasers":[
         {
-            "pos": {"x":1,"y":1},
+            "pos": {"x":0,"y":0},
             "dir": {"x":1,"y":1},
             "color": 4
         },
@@ -30,6 +30,10 @@
         {
             "pos": {"x":5,"y":5},
             "color": 2
+        },
+        {
+            "pos": {"x":1,"y":1},
+            "color": 4
         }
     ],
     "reflectorNum":0,
