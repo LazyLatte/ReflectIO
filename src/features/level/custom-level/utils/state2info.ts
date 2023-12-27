@@ -6,7 +6,7 @@ export const state2info = (levelState: LevelState): LevelInfo => {
         width: levelState.width,
         lasers: levelState.lasers,
         targets: levelState.targets.map(e => ({pos: e.pos, color: e.color})),
-        reflectorNum: levelState.reflectors.length,
-        lensNum: levelState.lens.length
+        reflectors: levelState.reflectors.map(r => r.color),
+        lenses: levelState.lenses.map(l => l.color)
     }
 }

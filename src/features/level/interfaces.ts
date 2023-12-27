@@ -1,7 +1,7 @@
-import {Laser, Target, Vector2D} from '@features/stage';
+import {Laser, Target} from '@features/stage';
 export interface MirrorState {
   pos: Vector2D;
-  deg: number;
+  deg: Degree;
 }
 
 export interface MirrorStates {
@@ -14,8 +14,8 @@ export interface LevelInfo {
   width: number;
   lasers: Laser[];
   targets: Target[];
-  reflectorNum: number;
-  lensNum: number;
+  reflectors: Color[];
+  lenses: Color[];
 }
 
 export type UserLevelInfo = LevelInfo & {

@@ -1,7 +1,7 @@
 import {FC, Dispatch, SetStateAction, memo} from 'react';
 import { Group, Image } from 'react-konva';
 import Object from './Object';
-import {Mode, Target, TargetActions, Vector2D} from '../interfaces';
+import {Mode, Target, TargetActions} from '../interfaces';
 import {useStageConfig, useImages} from '../hooks';
 interface TargetProps {
   mode: Mode;

@@ -1,7 +1,7 @@
 import {FC, memo} from 'react';
 import Object from './Object';
 import { Group, Image } from 'react-konva';
-import {Laser, Mode, LaserActions, Vector2D} from '../interfaces';
+import {Laser, Mode, LaserActions} from '../interfaces';
 import {useStageConfig, useImages} from '../hooks';
 import {laserDirectionToDegree} from "../gameHelpers";
 interface LaserProps {
@@ -26,7 +26,7 @@ const Laser: FC<LaserProps & {laser: Laser}> = memo(({mode, laser, laserActions,
       onClick={(e)=>{
         if(mode === Mode.Custom){
           if(e.evt.button === 0){
-            rotateLaser(pos, 45);
+            rotateLaser(pos);
           }else if(e.evt.button === 2){
             deleteLaser(pos);
           }

@@ -2,7 +2,7 @@ import {FC} from 'react';
 import { Group} from 'react-konva';
 import OptionCell from './OptionCell';
 import {useStageConfig, useImages} from '../hooks';
-import { ObjectType, Vector2D, AddObjects } from '../interfaces';
+import { ObjectType, AddObjects } from '../interfaces';
 interface ObjectAlternativesDropdownProps {
   origin: Vector2D;
   cellPos: Vector2D;
@@ -11,9 +11,15 @@ interface ObjectAlternativesDropdownProps {
   closeDropdown: () => void;
 }
 
+const ObjectColorOptions = {
+  "Laser": [4, 2, 1, 6, 3, 5, 7] as const,
+  "Target": [4, 2, 1, 6, 3, 5, 7] as const,
+  "Reflect": [7, 4, 2, 1, 6, 3, 5] as const,
+  "Lens": [7, 4, 2, 1, 6, 3, 5] as const
+}
 const ObjectAlternativesDropdown: FC<ObjectAlternativesDropdownProps> = ({ origin, cellPos, objType, addObjects, closeDropdown}) => {
   const {addLaser, addTarget, addMirror} = addObjects;
-  const colorOptions = (objType === 'Reflect' || objType === 'Lens') ? [7/*, 4, 2, 1, 6, 3, 5*/] : [4, 2, 1, 6, 3, 5, 7];
+  const colorOptions = ObjectColorOptions[objType];
   
   const laserImages = useImages()?.laserImages || [];
   const targetImages = useImages()?.targetImages || [];
@@ -62,7 +68,7 @@ const ObjectAlternativesDropdown: FC<ObjectAlternativesDropdownProps> = ({ origi
               idx={i}
               image={reflectorImages[color]} 
               onClick={()=>{
-                addMirror(ObjectType.Reflector, cellPos, shouldRearrange);
+                addMirror(ObjectType.Reflector, cellPos, color, shouldRearrange);
                 closeDropdown();
               }}
             />
@@ -78,7 +84,7 @@ const ObjectAlternativesDropdown: FC<ObjectAlternativesDropdownProps> = ({ origi
               idx={i}
               image={lensImages[color]} 
               onClick={()=>{
-                addMirror(ObjectType.Lens, cellPos, shouldRearrange);
+                addMirror(ObjectType.Lens, cellPos, color, shouldRearrange);
                 closeDropdown();
               }}
             />

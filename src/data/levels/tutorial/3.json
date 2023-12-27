@@ -41,8 +41,8 @@
         "color": 3
       }
     ],
-    "reflectorNum": 0,
-    "lensNum": 2,
+    "reflectors": [],
+    "lenses": [7, 7],
     "title": "Color Mix",
     "answer": [
         {

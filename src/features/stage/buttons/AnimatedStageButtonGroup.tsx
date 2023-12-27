@@ -3,7 +3,6 @@ import { Group } from 'react-konva';
 import AnimatedStageButton from './AnimatedStageButton';
 import {useStageConfig} from '../hooks';
 import {ITEMS_BAR_HEIGHT} from '../gameHelpers';
-import {Vector2D} from '../interfaces';
 interface AnimatedBTN {
   originalImage:  HTMLImageElement | undefined;
   aninmatedImage:  HTMLImageElement | undefined;

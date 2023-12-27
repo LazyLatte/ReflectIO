@@ -1,7 +1,6 @@
 import {FC, useEffect, createRef, memo, ReactNode} from 'react';
 import { Group } from 'react-konva';
 import Konva from 'konva';
-import {Vector2D} from '../interfaces';
 import {useStageConfig} from '../hooks';
 interface ObjectProps {
   pos: Vector2D;

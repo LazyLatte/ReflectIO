@@ -2,7 +2,7 @@ import { FC, useLayoutEffect } from 'react';
 import Object from './Object';
 import { Group, Image } from 'react-konva';
 import {useStageConfig, useImages} from '../hooks';
-import {Mode, Mirror as MirrorState, MirrorActions, Vector2D, ObjectType} from '../interfaces';
+import {Mode, Mirror as MirrorInterface, MirrorActions, ObjectType} from '../interfaces';
 interface MirrorProps {
   mode: Mode;
   mirrorActions: MirrorActions;
@@ -12,8 +12,8 @@ interface MirrorProps {
   isValidCell: (pos: Vector2D) => boolean;
 }
 
-const Mirror: FC<MirrorProps & {mirror: MirrorState}> = ({mode, mirror, mirrorActions, isDraggable, isDisabled, isOnBoard, isValidCell}) => {
-  const { type, idx, pos, resetPos, deg } = mirror;
+const Mirror: FC<MirrorProps & {mirror: MirrorInterface}> = ({mode, mirror, mirrorActions, isDraggable, isDisabled, isOnBoard, isValidCell}) => {
+  const { type, idx, pos, resetPos, deg, color } = mirror;
   const {rotateMirror, updateMirrorPos, deleteMirror} = mirrorActions;
   const {cellWidth, shouldRearrange} = useStageConfig();
 
@@ -24,7 +24,7 @@ const Mirror: FC<MirrorProps & {mirror: MirrorState}> = ({mode, mirror, mirrorAc
   }, [resetPos]);
 
 
-  const image = type === ObjectType.Reflector ? useImages()?.reflectorImages[7] : useImages()?.lensImages[7];
+  const image = type === ObjectType.Reflector ? useImages()?.reflectorImages[color] : useImages()?.lensImages[color];
   //console.log(deg);
   return (
     <Object
@@ -36,12 +36,12 @@ const Mirror: FC<MirrorProps & {mirror: MirrorState}> = ({mode, mirror, mirrorAc
       onClick={(e) => {
         if(isDisabled(pos)) return;
         if(e.evt.button === 0){
-          rotateMirror(type, idx, 45);
+          rotateMirror(type, idx, true);
         }else if(e.evt.button === 2){
           if(mode === Mode.Custom){
             deleteMirror(type, idx, shouldRearrange);
           }else{
-            rotateMirror(type, idx, 315);
+            rotateMirror(type, idx, false);
           }
         }
       }}
@@ -60,7 +60,7 @@ const Mirror: FC<MirrorProps & {mirror: MirrorState}> = ({mode, mirror, mirrorAc
   );
 };
 
-const Mirrors: FC<MirrorProps & {mirrors: MirrorState[]}> = (props) => (
+const Mirrors: FC<MirrorProps & {mirrors: MirrorInterface[]}> = (props) => (
   <Group>
     {props.mirrors.map((mirror, i) => <Mirror {...props} mirror={mirror} key={i}/>)}
   </Group>

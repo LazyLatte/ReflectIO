@@ -1,1 +1,18 @@
-{"height":10,"width":10,"lasers":[{"pos":{"x":2,"y":0},"dir":{"x":1,"y":1},"color":4},{"pos":{"x":9,"y":3},"dir":{"x":-1,"y":1},"color":2},{"pos":{"x":7,"y":9},"dir":{"x":-1,"y":-1},"color":4},{"pos":{"x":0,"y":6},"dir":{"x":1,"y":-1},"color":1}],"targets":[{"pos":{"x":0,"y":4},"color":7},{"pos":{"x":9,"y":5},"color":7},{"pos":{"x":9,"y":1},"color":7},{"pos":{"x":0,"y":8},"color":7}],"reflectorNum":4,"lensNum":4}
+{
+    "height":10,
+    "width":10,
+    "lasers":[
+        {"pos":{"x":2,"y":0},"dir":{"x":1,"y":1},"color":4},
+        {"pos":{"x":9,"y":3},"dir":{"x":-1,"y":1},"color":2},
+        {"pos":{"x":7,"y":9},"dir":{"x":-1,"y":-1},"color":4},
+        {"pos":{"x":0,"y":6},"dir":{"x":1,"y":-1},"color":1}
+    ],
+    "targets":[
+        {"pos":{"x":0,"y":4},"color":7},
+        {"pos":{"x":9,"y":5},"color":7},
+        {"pos":{"x":9,"y":1},"color":7},
+        {"pos":{"x":0,"y":8},"color":7}
+    ],
+    "reflectors": [7, 7, 7, 7],
+    "lenses": [7, 7, 7, 7]
+}

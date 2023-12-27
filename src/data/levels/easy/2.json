@@ -27,6 +27,6 @@
       "color": 4
     }
   ],
-  "reflectorNum": 2,
-  "lensNum": 0
+  "reflectors": [7, 7],
+  "lenses": []
 }

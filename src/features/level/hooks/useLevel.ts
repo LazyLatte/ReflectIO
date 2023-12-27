@@ -1,10 +1,12 @@
 import {useState, useCallback } from "react";
-import {laserDirectionToDegree, laserDegreeToDirection, ITEMS_BAR_HEIGHT, MAX_MIRROR_NUM} from '@features/stage';
-import {ObjectType, Vector2D, LevelState, LaserActions, TargetActions, MirrorActions, Level, AddObjects} from '@features/stage';
+import {rotate, laserDirectionToDegree, laserDegreeToDirection, ITEMS_BAR_HEIGHT, MAX_MIRROR_NUM} from '@features/stage';
+import {ObjectType, LevelState, LaserActions, TargetActions, MirrorActions, Level, AddObjects} from '@features/stage';
 import {TutorialLevelInfo, UserLevelInfo, LevelInfo} from '@features/level'
 
 const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): Level => {
-  const {height, width, lasers, targets, reflectorNum, lensNum} = level;
+  const {height, width, lasers, targets} = level;
+  const reflectorNum = level.reflectors.length;
+  //const lensNum = level.lens.length;
   const getMirrorResetPos = (mirrorIdx: number, shouldRearrange: boolean): Vector2D => {
     const itemBarPos: Vector2D = shouldRearrange ? {x: 0, y: height+1} : {x: width+1, y: 0};
     const carry = Math.floor(mirrorIdx / ITEMS_BAR_HEIGHT);
@@ -18,23 +20,25 @@ const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): Level =
     width,
     lasers,
     targets: targets.map(target => ({...target, clear: false})),
-    reflectors: Array.from(Array(reflectorNum)).map((_, i) => {
+    reflectors: Array.from(level.reflectors).map((color, i) => {
       const resetPos = getMirrorResetPos(i, false);
       return {
         type: ObjectType.Reflector,
         idx: i,
         pos: resetPos,
         resetPos,
+        color,
         deg: 0
       }
     }),
-    lens: Array.from(Array(lensNum)).map((_, i) => {
+    lenses: Array.from(level.lenses).map((color, i) => {
       const resetPos = getMirrorResetPos(reflectorNum + i, false);
       return {
         type: ObjectType.Lens,
         idx: reflectorNum + i,
         pos: resetPos,
         resetPos,
+        color,
         deg: 0
       }
     }),
@@ -47,11 +51,11 @@ const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): Level =
       clear
     }));
   }
-  const rotateMirror = (type: ObjectType, idx: number, rotateDeg: number) => {
+  const rotateMirror = (type: ObjectType, idx: number, clockwise: boolean) => {
     setLevelState((prev) => ({
       ...prev,
-      reflectors: type === ObjectType.Reflector ? prev.reflectors.map((e, i)=> i===idx ? {...e, deg: (e.deg+rotateDeg) % 360} : e) : prev.reflectors,
-      lens: type === ObjectType.Lens ? prev.lens.map((e, i)=> i + prev.reflectors.length === idx ? {...e, deg: (e.deg+rotateDeg) % 180} : e) : prev.lens
+      reflectors: type === ObjectType.Reflector ? prev.reflectors.map((e, i)=> i===idx ? {...e, deg: rotate(e.deg, clockwise, 360)} : e) : prev.reflectors,
+      lenses: type === ObjectType.Lens ? prev.lenses.map((e, i)=> i + prev.reflectors.length === idx ? {...e, deg: rotate(e.deg, clockwise, 180)} : e) : prev.lenses
     }));
   };
 
@@ -60,21 +64,21 @@ const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): Level =
     setLevelState((prev) => ({
       ...prev, 
       reflectors: type === ObjectType.Reflector ? prev.reflectors.map((e, i)=> i===idx ? {...e, pos} : e) : prev.reflectors,
-      lens: type === ObjectType.Lens ? prev.lens.map((e, i)=> i + prev.reflectors.length === idx ? {...e, pos} : e) : prev.lens
+      lenses: type === ObjectType.Lens ? prev.lenses.map((e, i)=> i + prev.reflectors.length === idx ? {...e, pos} : e) : prev.lenses
     }));
   };
   const updateMirrorsResetPos = (shouldRearrange: boolean) => {
     setLevelState((prev) => ({
       ...prev, 
       reflectors: prev.reflectors.map((e, i)=> ({...e, resetPos: getMirrorResetPos(i, shouldRearrange)})),
-      lens: prev.lens.map((e, i)=>({...e, resetPos: getMirrorResetPos(prev.reflectors.length + i, shouldRearrange)}))
+      lenses: prev.lenses.map((e, i)=>({...e, resetPos: getMirrorResetPos(prev.reflectors.length + i, shouldRearrange)}))
     }));
   };
   const resetMirrors = useCallback(() => {
     setLevelState((prev)=>({
       ...prev,
       reflectors: prev.reflectors.map(e => ({...e, pos: e.resetPos, deg: 0})),
-      lens: prev.lens.map(e => ({...e, pos: e.resetPos, deg: 0}))
+      lenses: prev.lenses.map(e => ({...e, pos: e.resetPos, deg: 0}))
     }));
   }, []);
 
@@ -86,7 +90,7 @@ const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): Level =
   }
 
 
-  const addLaser = (pos: Vector2D, color: number) => {
+  const addLaser = (pos: Vector2D, color: Color) => {
     setLevelState((prev) => ({
       ...prev,
       lasers: [...prev.lasers, {
@@ -96,10 +100,10 @@ const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): Level =
       }]
     }));
   };
-  const rotateLaser = (pos: Vector2D, rotateDeg: number) => {
+  const rotateLaser = (pos: Vector2D) => {
     setLevelState((prev) => ({
       ...prev,
-      lasers: prev.lasers.map(e => e.pos.x === pos.x && e.pos.y === pos.y ? {...e, dir: laserDegreeToDirection(laserDirectionToDegree(e.dir) + rotateDeg)} : e)
+      lasers: prev.lasers.map(e => e.pos.x === pos.x && e.pos.y === pos.y ? {...e, dir: laserDegreeToDirection(rotate(laserDirectionToDegree(e.dir), true, 360))} : e)
     }));
   };
   const updateLaserPos = (prevPos: Vector2D, nextPos: Vector2D) => {
@@ -115,7 +119,7 @@ const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): Level =
       lasers: prev.lasers.filter(laser => laser.pos.x !== pos.x || laser.pos.y !== pos.y)
     }));
   };
-  const addTarget = (pos: Vector2D, color: number) => {
+  const addTarget = (pos: Vector2D, color: Color) => {
     setLevelState((prev) => ({
       ...prev,
       targets: [...prev.targets, {
@@ -139,9 +143,9 @@ const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): Level =
       targets: prev.targets.filter(target => target.pos.x !== pos.x || target.pos.y !== pos.y)
     }));
   };
-  const addMirror = (type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, shouldRearrange: boolean) => {
+  const addMirror = (type: ObjectType.Reflector | ObjectType.Lens, pos: Vector2D, color: Color, shouldRearrange: boolean) => {
     setLevelState((prev) => {
-      if(prev.reflectors.length + prev.lens.length < MAX_MIRROR_NUM){
+      if(prev.reflectors.length + prev.lenses.length < MAX_MIRROR_NUM){
         return {
           ...prev, 
           reflectors: type === ObjectType.Reflector ? [
@@ -151,19 +155,21 @@ const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): Level =
               idx: prev.reflectors.length,
               pos: pos,
               resetPos: getMirrorResetPos(prev.reflectors.length, shouldRearrange),
+              color,
               deg: 0
             }
           ] : prev.reflectors,
-          lens: type === ObjectType.Lens ? [
-            ...prev.lens,
+          lenses: type === ObjectType.Lens ? [
+            ...prev.lenses,
             {
               type: ObjectType.Lens,
-              idx: prev.reflectors.length + prev.lens.length,
+              idx: prev.reflectors.length + prev.lenses.length,
               pos: pos,
-              resetPos: getMirrorResetPos(prev.reflectors.length + prev.lens.length, shouldRearrange),
+              resetPos: getMirrorResetPos(prev.reflectors.length + prev.lenses.length, shouldRearrange),
+              color,
               deg: 0
             }
-          ] : prev.lens.map((e, i) => ({...e, idx: e.idx + 1, resetPos: getMirrorResetPos(prev.reflectors.length + 1 + i, shouldRearrange)}))
+          ] : prev.lenses.map((e, i) => ({...e, idx: e.idx + 1, resetPos: getMirrorResetPos(prev.reflectors.length + 1 + i, shouldRearrange)}))
         }
       }else{
         return prev;
@@ -177,8 +183,8 @@ const useLevel = (level: LevelInfo | UserLevelInfo | TutorialLevelInfo): Level =
     setLevelState((prev) => ({
       ...prev, 
       reflectors: type === ObjectType.Reflector ? prev.reflectors.filter(e => e.idx !== idx).map((e, i) => ({...e, idx: i, resetPos: getMirrorResetPos(i, shouldRearrange)})) : prev.reflectors,
-      lens: type === ObjectType.Lens ? prev.lens.filter(e => e.idx !== idx).map((e, i) => ({...e, idx: prev.reflectors.length + i, resetPos: getMirrorResetPos(prev.reflectors.length + i, shouldRearrange)})) : 
-                    prev.lens.map((e, i) => ({...e, idx: e.idx - 1, resetPos: getMirrorResetPos(prev.reflectors.length - 1 + i, shouldRearrange)}))
+      lenses: type === ObjectType.Lens ? prev.lenses.filter(e => e.idx !== idx).map((e, i) => ({...e, idx: prev.reflectors.length + i, resetPos: getMirrorResetPos(prev.reflectors.length + i, shouldRearrange)})) : 
+                    prev.lenses.map((e, i) => ({...e, idx: e.idx - 1, resetPos: getMirrorResetPos(prev.reflectors.length - 1 + i, shouldRearrange)}))
     }));
   };
   const laserActions: LaserActions = {rotateLaser, updateLaserPos, deleteLaser};

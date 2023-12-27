@@ -13,6 +13,6 @@
         {"pos":{"x":3,"y":5},"color":7},
         {"pos":{"x":5,"y":5},"color":7}
     ],
-    "reflectorNum":2,
-    "lensNum":4
+    "reflectors": [7, 7],
+    "lenses": [7, 7, 7, 7]
 }

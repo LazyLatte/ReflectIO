@@ -35,12 +35,12 @@ import ReflectorCyanImg from '../assets/images/mirrors/reflector-cyan-dark.png';
 import ReflectorMagentaImg from '../assets/images/mirrors/reflector-magenta-dark.png';
 import ReflectorWhiteImg from '../assets/images/mirrors/reflector-default-dark.png';
 
-import LensRedImg from '../assets/images/mirrors/reflector-red-dark.png';
-import LensGreenImg from '../assets/images/mirrors/reflector-green-dark.png';
-import LensBlueImg from '../assets/images/mirrors/reflector-blue-dark.png';
-import LensYellowImg from '../assets/images/mirrors/reflector-yellow-dark.png';
-import LensCyanImg from '../assets/images/mirrors/reflector-cyan-dark.png';
-import LensMagentaImg from '../assets/images/mirrors/reflector-magenta-dark.png';
+import LensRedImg from '../assets/images/mirrors/lens-red-dark.png';
+import LensGreenImg from '../assets/images/mirrors/lens-green-dark.png';
+import LensBlueImg from '../assets/images/mirrors/lens-blue-dark.png';
+import LensYellowImg from '../assets/images/mirrors/lens-yellow-dark.png';
+import LensCyanImg from '../assets/images/mirrors/lens-cyan-dark.png';
+import LensMagentaImg from '../assets/images/mirrors/lens-magenta-dark.png';
 import LensWhiteImg from '../assets/images/mirrors/lens-default-dark.png';
 interface ImagesInterface {
   reflectorImages: (HTMLImageElement | undefined)[];

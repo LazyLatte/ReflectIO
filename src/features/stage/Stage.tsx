@@ -6,7 +6,7 @@ import {Grid, CustomGrid, GridRay, ItemBar, CustomItemBar} from './grids';
 import {ColorMixingPopover, TutorialHint} from './hints';
 import {AddObjectDropdown} from './dropdown';
 import {useGridRay, useStageConfig} from './hooks';
-import {ObjectType, Level, Vector2D, Target, Mode, TutorialGoal} from './interfaces';
+import {ObjectType, Level, Target, Mode, TutorialGoal} from './interfaces';
 import DownloadButton from './buttons/DownloadButton';
 import { state2info } from '@features/level/custom-level/utils';
 interface StageProps {
@@ -23,10 +23,10 @@ export interface StageHandle {
 export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorialGoal, isGettingThumbnail, onClear, children}, ref) => {
   const layerRef = createRef<Konva.Layer>()
   const [levelState, laserActions, targetActions, mirrorActions, addObjects, setLevelClear] = level;
-  const {height: gridHeight, width: gridWidth, lasers, targets, reflectors, lens} = levelState;
+  const {height: gridHeight, width: gridWidth, lasers, targets, reflectors, lenses} = levelState;
   
   const {cellWidth, shouldRearrange} = useStageConfig();
-  const gridRay = useGridRay(gridHeight, gridWidth, lasers, reflectors, lens, targets, targetActions.setTargetClear);
+  const gridRay = useGridRay(gridHeight, gridWidth, lasers, reflectors, lenses, targets, targetActions.setTargetClear);
   
   const boardOrigin: Vector2D = {x: (window.innerWidth-gridWidth*cellWidth) * 0.5, y: 56};
 
@@ -70,7 +70,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
         <Wrap width={window.innerWidth} height={window.innerHeight - 100} >
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
             <ItemBar gridHeight={gridHeight} gridWidth={gridWidth}/>
-            <CustomItemBar mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} mirrorNum={reflectors.length + lens.length} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
+            <CustomItemBar mode={mode} gridHeight={gridHeight} gridWidth={gridWidth} mirrorNum={reflectors.length + lenses.length} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos}/>
             <Grid gridHeight={gridHeight} gridWidth={gridWidth}/>
             {children}
           </Layer>
@@ -82,7 +82,7 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
             <TutorialHint mode={mode} tutorialGoal={tutorialGoal}/>
           </Layer>
           <Layer x={boardOrigin.x} y={boardOrigin.y}>
-            <Mirrors mode={mode} mirrors={[...reflectors, ...lens]} mirrorActions={mirrorActions} isDraggable={isDraggable} isDisabled={isDisabled} isOnBoard={isOnBoard} isValidCell={isValidCell}/>
+            <Mirrors mode={mode} mirrors={[...reflectors, ...lenses]} mirrorActions={mirrorActions} isDraggable={isDraggable} isDisabled={isDisabled} isOnBoard={isOnBoard} isValidCell={isValidCell}/>
             <ColorMixingPopover isGettingThumbnail={Boolean(isGettingThumbnail)} target={mouseOnTarget}/>
             <AddObjectDropdown mode={mode} isGettingThumbnail={Boolean(isGettingThumbnail)} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  
           </Layer>

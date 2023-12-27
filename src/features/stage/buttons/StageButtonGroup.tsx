@@ -3,7 +3,6 @@ import { Group } from 'react-konva';
 import StageButton from './StageButton';
 import {useStageConfig} from '../hooks';
 import {ITEMS_BAR_HEIGHT} from '../gameHelpers';
-import {Vector2D} from '../interfaces';
 interface BTN {
   img:  HTMLImageElement | undefined;
   onClick: () => void;

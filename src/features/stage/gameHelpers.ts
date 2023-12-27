@@ -1,4 +1,4 @@
-import {ObjectType, Vector2D, CellRay} from './interfaces';
+import {ObjectType, CellRay} from './interfaces';
 export const ITEMS_BAR_HEIGHT = 4;
 export const ITEMS_BAR_WIDTH = 2;
 export const MAX_MIRROR_NUM = ITEMS_BAR_HEIGHT * ITEMS_BAR_WIDTH;
@@ -14,18 +14,9 @@ const mirrorNormalVectors = [
   {x: 0, y: 1},
   {x: -1, y: 1},
 ];
-const laserDirections = [
-  {x: 1, y: 0},
-  {x: 1, y: 1},
-  {x: 0, y: 1},
-  {x: -1, y: 1},
-  {x: -1, y: 0},
-  {x: -1, y: -1},
-  {x: 0, y: -1},
-  {x: 1, y: -1},
-]
-export const mirrorDegreeToNormalVector = (deg: number): Vector2D => mirrorNormalVectors[(deg/45)%8];
-export const mirrorNormalVectorToDegree = (nv: Vector2D): number => {
+
+export const mirrorDegreeToNormalVector = (deg: Degree): Vector2D => mirrorNormalVectors[(deg/45)%8];
+export const mirrorNormalVectorToDegree = (nv: Vector2D): Degree => {
   if(nv.x === -1 && nv.y === 0) return 0;
   if(nv.x === -1 && nv.y === -1) return 45;
   if(nv.x === 0 && nv.y === -1) return 90;
@@ -37,8 +28,19 @@ export const mirrorNormalVectorToDegree = (nv: Vector2D): number => {
   return 0;
 }
 
-export const laserDegreeToDirection = (deg: number): Vector2D => laserDirections[(deg/45)%8];
-export const laserDirectionToDegree = (dir: Vector2D): number =>{
+const laserDirections = [
+  {x: 1, y: 0},
+  {x: 1, y: 1},
+  {x: 0, y: 1},
+  {x: -1, y: 1},
+  {x: -1, y: 0},
+  {x: -1, y: -1},
+  {x: 0, y: -1},
+  {x: 1, y: -1},
+]
+
+export const laserDegreeToDirection = (deg: Degree): Vector2D => laserDirections[(deg/45)%8];
+export const laserDirectionToDegree = (dir: Vector2D): Degree =>{
   if(dir.x === 1 && dir.y === 0) return 0;
   if(dir.x === 1 && dir.y === 1) return 45;
   if(dir.x === 0 && dir.y === 1) return 90;
@@ -50,6 +52,10 @@ export const laserDirectionToDegree = (dir: Vector2D): number =>{
   return 0;
 }
 
+export const rotate = (deg: Degree, clockwise: boolean, mod: 180 | 360): Degree => {
+  const rotateDeg = clockwise ? 45 : 315;
+  return (deg + rotateDeg) % mod as Degree;
+}
 
 export const createGrid = (height: number, width: number): CellRay[][]=> (
   Array(height).fill(

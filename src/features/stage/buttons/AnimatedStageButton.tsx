@@ -2,7 +2,6 @@ import {FC, useEffect, createRef} from 'react';
 import { Group, Image, Rect } from 'react-konva';
 import Konva from "konva";
 import {useStageConfig} from '../hooks';
-import {Vector2D} from '../interfaces';
 import useColorMode from 'src/hooks/useColorMode';
 interface AnimatedStageButtonProps{
   originalImage: HTMLImageElement | undefined;

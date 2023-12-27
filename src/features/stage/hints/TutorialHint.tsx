@@ -2,7 +2,7 @@ import {FC, useState, useEffect} from 'react';
 import useImage from 'use-image';
 import { Image} from 'react-konva';
 import { Spring, animated, easings } from '@react-spring/konva';
-import { Vector2D, Mode, ObjectType, TutorialGoal } from '../interfaces';
+import { Mode, ObjectType, TutorialGoal } from '../interfaces';
 import {useStageConfig, useImages} from '../hooks';
 import TapImg from '@images/icons/tap.svg';
 import MouseImg from '@images/icons/mouse.svg';

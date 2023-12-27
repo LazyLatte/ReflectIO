@@ -23,8 +23,8 @@
         "color": 1
       }
     ],
-    "reflectorNum": 2,
-    "lensNum": 0,
+    "reflectors": [7, 7],
+    "lenses": [],
     "title": "Reflector",
     "answer": [
         {

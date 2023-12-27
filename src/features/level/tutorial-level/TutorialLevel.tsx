@@ -19,7 +19,7 @@ const TutorialLevel = () => {
   const [step, setStep] = useState(0);
   const [open, setOpen] = useState<boolean>(true);
 
-  const mirrors = [...levelState.reflectors, ...levelState.lens];
+  const mirrors = [...levelState.reflectors, ...levelState.lenses];
   useEffect(()=>{
     if(step < answer.length * 2){
       let stepComplete: boolean;
@@ -33,11 +33,11 @@ const TutorialLevel = () => {
       }
       stepComplete && setStep(prev => prev+1);
     }
-  }, [levelState.reflectors, levelState.lens])
+  }, [levelState.reflectors, levelState.lenses])
 
   const tutorialGoal: TutorialGoal | undefined = (!open && step < answer.length * 2) ? {
     match: step % 2 === 0 ? "pos" : "deg",
-    type: answer[Math.floor(step / 2)].idx < levelInfo.reflectorNum ? ObjectType.Reflector : ObjectType.Lens,
+    type: answer[Math.floor(step / 2)].idx < levelInfo.reflectors.length ? ObjectType.Reflector : ObjectType.Lens,
     fromPos: mirrors[answer[Math.floor(step / 2)].idx].pos,
     toPos: answer[Math.floor(step / 2)].pos,
     toDeg: answer[Math.floor(step / 2)].deg
