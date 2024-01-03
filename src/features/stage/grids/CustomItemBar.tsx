@@ -1,8 +1,8 @@
 import {FC, Dispatch, SetStateAction} from 'react'
 import { Group } from 'react-konva';
 import useImage from 'use-image';
-import { Mode, ITEMS_BAR_HEIGHT, ITEMS_BAR_WIDTH, Vector2D, useStageConfig } from '..';
-import CustomCell from './CustomCell';
+import { Mode, ITEMS_BAR_HEIGHT, ITEMS_BAR_WIDTH, useStageConfig } from '..';
+import {CustomCell} from './cells';
 import Plus from '@images/icons/add-object.svg'
 interface CustomItemBarProps {
     mode: Mode;

@@ -3,9 +3,9 @@ export enum Mode {BuiltIn, Custom, Public, Tutorial};
 export interface Laser {pos: Vector2D, dir: Vector2D, color: Color} 
 export interface Mirror {type: ObjectType.Reflector | ObjectType.Lens, idx: number, pos: Vector2D, resetPos: Vector2D, color: Color, deg: Degree}
 export interface Target {pos: Vector2D, color: Color, clear?: boolean}
-export interface Object {type: ObjectType, nv?: Vector2D, color?: Color} 
-export interface CellRay {object: Object, color: number}
-export interface GridRay {grid: CellRay[][], Dgrid: CellRay[][]}
+export interface CellObject {type: ObjectType, dir: Vector2D, color: Color} 
+export interface Cell {object: CellObject, topColor: Color, rightColor: Color, bottomColor: Color, leftColor: Color}
+export interface GridRay {grid: Cell[][], Dgrid: Cell[][]}
 
 export interface LevelState {  
   height: number;

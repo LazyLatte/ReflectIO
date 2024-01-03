@@ -1,12 +1,11 @@
 import {FC} from 'react';
 import { Group} from 'react-konva';
-import Cell from './Cell';
-import DiagonalCell from './DiagonalCell';
+import {CellRay, DiagonalCellRay} from './cells';
 import {useStageConfig} from '../hooks';
-import {CellRay} from '../interfaces';
+import {Cell as CellInterface} from '../interfaces';
 interface GridRayProps {
-  grid: CellRay[][];
-  Dgrid: CellRay[][];
+  grid: CellInterface[][];
+  Dgrid: CellInterface[][];
 }
 const inv_sqrt2 = 0.70710678118;
 const GridRay: FC<GridRayProps> = ({grid, Dgrid}) => {
@@ -26,7 +25,7 @@ const GridRay: FC<GridRayProps> = ({grid, Dgrid}) => {
       <Group>
         {grid.map((row, i) => (
           row.map((cell, j)=>(
-            <Cell cell={cell} i={i} j={j} key={i*Math.max(gridHeight, gridWidth)+j}/>
+            <CellRay cell={cell} i={i} j={j} key={i*Math.max(gridHeight, gridWidth)+j}/>
           ))
         ))}
       </Group>
@@ -39,7 +38,7 @@ const GridRay: FC<GridRayProps> = ({grid, Dgrid}) => {
       >
           {Dgrid.map((row, i) => (
             row.map((cell, j)=>(
-              <DiagonalCell cell={cell} i={i} j={j} key={i*Math.max(DgridHeight, DgridWidth)+j}/>
+              <DiagonalCellRay cell={cell} i={i} j={j} key={i*Math.max(DgridHeight, DgridWidth)+j}/>
             ))
           ))}
       </Group>

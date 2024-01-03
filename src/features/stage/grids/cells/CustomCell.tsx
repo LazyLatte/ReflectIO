@@ -1,7 +1,6 @@
 import {FC, useState} from 'react';
 import {Group, Rect, Image} from 'react-konva';
-import {useStageConfig} from '../hooks';
-import {Vector2D} from '../interfaces';
+import {useStageConfig} from '../../hooks';
 interface CustomCellProps {
   i: number;
   j: number;

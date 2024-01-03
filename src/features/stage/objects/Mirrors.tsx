@@ -28,9 +28,9 @@ const Mirror: FC<MirrorProps & {mirror: MirrorInterface}> = ({mode, mirror, mirr
   //console.log(deg);
   return (
     <Object
+      cursor
       pos={pos}
       draggable={isDraggable(pos)}
-      cursor
       isValidCell={isValidCell}
       updatePos={(newPos) => updateMirrorPos(type, idx, newPos)}
       onClick={(e) => {

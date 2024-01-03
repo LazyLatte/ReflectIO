@@ -1,21 +1,31 @@
 import { useState, useLayoutEffect} from "react";
-import { createGrid, mirrorDegreeToNormalVector} from "../gameHelpers";
-import {ObjectType, CellRay, GridRay, Laser, Mirror, Target, Object} from '../interfaces';
+import { createGrid, mirrorDegreeToDirection} from "../gameHelpers";
+import {ObjectType, GridRay, Cell, CellObject, Laser, Mirror, Target } from '../interfaces';
 interface LoopPotentialMirror{pos: Vector2D; dir: Vector2D;}
 interface QueueState {pos: Vector2D, dir: Vector2D, color: Color, loopPotentialMirrors: LoopPotentialMirror[]}
 class Grid {
   gridHeight: number;
   gridWidth: number;
-  grid: CellRay[][];
+  grid: Cell[][];
   constructor(gridHeight: number, gridWidth: number) {
     this.gridHeight = gridHeight;
     this.gridWidth = gridWidth;
 
     this.grid = [];
     for(let i=0; i<this.gridHeight; i++){
-      const row = [];
+      const row: Cell[] = [];
       for(let j=0; j<this.gridWidth; j++){
-        row.push({object: {type: ObjectType.None}, color: 0}); // color: MSB -> (top right bottom left) <- LSB
+        row.push({
+          object: {
+            type: ObjectType.None,
+            dir: {x:0, y:0},
+            color: 0
+          }, 
+          topColor: 0,
+          rightColor: 0,
+          bottomColor: 0,
+          leftColor: 0
+        }); 
       }
       this.grid.push(row);
     }
@@ -28,7 +38,7 @@ class Grid {
   laserIsPlaced(pos: Vector2D): boolean{
     return this.grid[pos.y][pos.x].object.type === ObjectType.Laser;
   }
-  addObject(pos: Vector2D, obj: Object){
+  addObject(pos: Vector2D, obj: CellObject){
     const newPos = this.positionTransform(pos);
     this.grid[newPos.y][newPos.x].object = obj;
   }
@@ -51,47 +61,41 @@ class Grid {
       }] : [...state.loopPotentialMirrors]
     })
   }
-  getColorMask(dir: Vector2D): number{
-    if(dir.x === 1 && dir.y === 0) return 0; //left
-    if(dir.x === 0 && dir.y === -1) return 3; // bottom
-    if(dir.x === -1 && dir.y === 0) return 6; //right
-    if(dir.x === 0 && dir.y === 1) return 9; //top
-    return 0;
+  applyColor(pos: Vector2D, dir: Vector2D, color: Color){
+    if(dir.x === 1 && dir.y === 0) this.grid[pos.y][pos.x].leftColor |= color; //left
+    if(dir.x === 0 && dir.y === -1) this.grid[pos.y][pos.x].bottomColor |= color; // bottom
+    if(dir.x === -1 && dir.y === 0) this.grid[pos.y][pos.x].rightColor |= color; //right
+    if(dir.x === 0 && dir.y === 1) this.grid[pos.y][pos.x].topColor |= color; //top
   }
   trace(laser: Laser){
     const Q: QueueState[] = [];
     const LaserPos: Vector2D = this.positionTransform(laser.pos);
     const LaserDir: Vector2D = this.directionTransform(laser.dir);
     const initState: QueueState = {pos: {x: LaserPos.x + LaserDir.x, y: LaserPos.y + LaserDir.y}, dir: LaserDir, color: laser.color, loopPotentialMirrors: []};
-    this.grid[LaserPos.y][LaserPos.x].color |= (laser.color << this.getColorMask({x: -LaserDir.x, y: -LaserDir.y}));
+    this.applyColor(LaserPos, {x: -LaserDir.x, y: -LaserDir.y}, laser.color);
     Q.unshift(initState);
 
     while(Q.length>0){
-      const state: QueueState = Q.pop() as QueueState;
+      const state = Q.pop() as QueueState;
       const {pos, dir, color, loopPotentialMirrors} = state;
 
       if(!this.outOfBound(pos)){
         if(!this.laserIsPlaced(pos)){
-          const objType: ObjectType = this.grid[pos.y][pos.x].object.type;
+          const objType = this.grid[pos.y][pos.x].object.type;
 
           switch(objType){
             case ObjectType.None:
             case ObjectType.Target:
               // direct pass
-              if(Math.abs(dir.x) === 1 && dir.y === 0){
-                this.grid[pos.y][pos.x].color |= (color << 6);
-                this.grid[pos.y][pos.x].color |= (color << 0);
-              }else if(Math.abs(dir.y) === 1 && dir.x === 0){
-                this.grid[pos.y][pos.x].color |= (color << 9);
-                this.grid[pos.y][pos.x].color |= (color << 3);
-              }
+              this.applyColor(pos, dir, color);
+              this.applyColor(pos, {x: -dir.x, y: -dir.y}, color);
               this.pushState(Q, state, dir, false);
               break;
             case ObjectType.Reflector:
               if(!this.loopDetection(pos, dir, loopPotentialMirrors)){
                 const incidentVector = dir;
-                const normalVector = this.directionTransform(this.grid[pos.y][pos.x].object.nv as Vector2D);
-                const reflectorColor = this.grid[pos.y][pos.x].object.color || 0 as Color;
+                const normalVector = this.directionTransform(this.grid[pos.y][pos.x].object.dir);
+                const reflectorColor = this.grid[pos.y][pos.x].object.color;
                 const nextColor = (color & reflectorColor) as Color;
                 const innerProduct = incidentVector.x * normalVector.x + incidentVector.y * normalVector.y;
                 if(-incidentVector.x === normalVector.x && -incidentVector.y === normalVector.y){
@@ -102,31 +106,30 @@ class Grid {
                   // 45 deg reflect
                   const reflectVector = {x: incidentVector.x + normalVector.x, y: incidentVector.y + normalVector.y};
                   this.pushState(Q, {...state, color: nextColor}, reflectVector, true);
-                  this.grid[pos.y][pos.x].color |= (nextColor << this.getColorMask({x: -reflectVector.x, y: -reflectVector.y}));
+                  this.applyColor(pos, {x: -reflectVector.x, y: -reflectVector.y}, nextColor);
                 }
-                this.grid[pos.y][pos.x].color |= (color << this.getColorMask(dir));
+                this.applyColor(pos, dir, color);
               }
               break;
             case ObjectType.Lens:
-                //should prevent for way loop
                 if(!this.loopDetection(pos, dir, loopPotentialMirrors)){
                   const incidentVector = dir;
-                  const normalVector = this.directionTransform(this.grid[pos.y][pos.x].object.nv as Vector2D);
-                  const innerProduct = incidentVector.x * normalVector.x + incidentVector.y * normalVector.y;
-                  const lensColor = this.grid[pos.y][pos.x].object.color || 0 as Color;
+                  const normalVector = this.directionTransform(this.grid[pos.y][pos.x].object.dir);
+                  const lensColor = this.grid[pos.y][pos.x].object.color;
                   const nextColor = (color & lensColor) as Color;
+                  const innerProduct = incidentVector.x * normalVector.x + incidentVector.y * normalVector.y;
                   if(innerProduct !== 0){
 
                     const reflectVector = (innerProduct < 0) ? {x: incidentVector.x + normalVector.x, y: incidentVector.y + normalVector.y} : {x: incidentVector.x - normalVector.x, y: incidentVector.y - normalVector.y}
 
                     if(reflectVector.x !== 0 || reflectVector.y !==0){
                       this.pushState(Q, {...state, color: nextColor}, reflectVector, true);
-                      this.grid[pos.y][pos.x].color |= (nextColor << this.getColorMask({x: -reflectVector.x, y: -reflectVector.y}));
+                      this.applyColor(pos, {x: -reflectVector.x, y: -reflectVector.y}, nextColor);
                     }
                     this.pushState(Q, {...state, color: nextColor}, incidentVector, true);
-                    this.grid[pos.y][pos.x].color |= (nextColor << this.getColorMask({x: -incidentVector.x, y: -incidentVector.y}));
+                    this.applyColor(pos, {x: -incidentVector.x, y: -incidentVector.y}, nextColor);
                   }
-                  this.grid[pos.y][pos.x].color |= (color << this.getColorMask(dir));
+                  this.applyColor(pos, dir, color);
                 }
               break;
             default:
@@ -134,7 +137,7 @@ class Grid {
               break;
           }
         }else{
-          this.grid[pos.y][pos.x].color |= (color << this.getColorMask({x: dir.x, y: dir.y}));
+          this.applyColor(pos, dir, color);
         }
       }
     }
@@ -145,13 +148,22 @@ class Dgrid extends Grid{
   DgridWidth: number;
   constructor(gridHeight: number, gridWidth: number) {
     super(gridHeight, gridWidth);
-
     this.DgridWidth = gridHeight + gridWidth + 1;
     this.grid = [];
     for(let i=0; i<this.DgridWidth; i++){
-      const row = [];
+      const row: Cell[] = [];
       for(let j=0; j<this.DgridWidth; j++){
-        row.push({object: {type: ObjectType.None}, color: 0});
+        row.push({
+          object: {
+            type: ObjectType.None,
+            dir: {x:0, y:0},
+            color: 0
+          }, 
+          topColor: 0,
+          rightColor: 0,
+          bottomColor: 0,
+          leftColor: 0
+        });
       }
       this.grid.push(row);
     }
@@ -200,17 +212,19 @@ export const useGridRay = (height: number, width: number, lasers: Laser[], refle
       const newDgrid = new Dgrid(height, width);
 
       lasers.forEach(laser => {
-        newGrid.addObject(laser.pos, {type: ObjectType.Laser});
-        newDgrid.addObject(laser.pos, {type: ObjectType.Laser});
+        const {pos, dir, color} = laser;
+        newGrid.addObject(pos, {type: ObjectType.Laser, dir, color});
+        newDgrid.addObject(pos, {type: ObjectType.Laser, dir, color});
       });
       targets.forEach(target => {
-        newGrid.addObject(target.pos, {type: ObjectType.Target});
-        newDgrid.addObject(target.pos, {type: ObjectType.Target});
+        const {pos, color} = target;
+        newGrid.addObject(pos, {type: ObjectType.Target, dir: {x:0, y:0}, color});
+        newDgrid.addObject(pos, {type: ObjectType.Target, dir: {x:0, y:0}, color});
       });
       reflectors.concat(lenses).filter(mirror => mirror.pos.x >= 0 && mirror.pos.x < width && mirror.pos.y >= 0 && mirror.pos.y < height).forEach(mirror => {
         const {type, pos, deg, color} = mirror;
-        newGrid.addObject(pos, {type, nv: mirrorDegreeToNormalVector(deg), color});
-        newDgrid.addObject(pos, {type, nv: mirrorDegreeToNormalVector(deg), color});
+        newGrid.addObject(pos, {type, dir: mirrorDegreeToDirection(deg), color});
+        newDgrid.addObject(pos, {type, dir: mirrorDegreeToDirection(deg), color});
       });
 
       lasers.forEach(laser => {
@@ -220,8 +234,7 @@ export const useGridRay = (height: number, width: number, lasers: Laser[], refle
       targets.forEach(target => {
         const targetPos = target.pos;
         const DgridTargetPos = newDgrid.positionTransform(target.pos);
-        const centerColor = (newGrid.grid[targetPos.y][targetPos.x].color & 7) | ((newGrid.grid[targetPos.y][targetPos.x].color >> 3) & 7) | 
-                            (newDgrid.grid[DgridTargetPos.y][DgridTargetPos.x].color & 7) | ((newDgrid.grid[DgridTargetPos.y][DgridTargetPos.x].color >> 3) & 7);
+        const centerColor = newGrid.grid[targetPos.y][targetPos.x].topColor | newGrid.grid[targetPos.y][targetPos.x].rightColor | newDgrid.grid[DgridTargetPos.y][DgridTargetPos.x].topColor | newDgrid.grid[DgridTargetPos.y][DgridTargetPos.x].rightColor;
         const isActivated = target.color === centerColor;
         (target.clear !== isActivated) && setTargetClear(target.pos, isActivated);     
       })

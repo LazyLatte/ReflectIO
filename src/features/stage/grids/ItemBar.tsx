@@ -3,7 +3,6 @@ import { Group, Rect} from 'react-konva';
 import {useStageConfig} from '../hooks';
 import useColorMode from 'src/hooks/useColorMode';
 import {ITEMS_BAR_HEIGHT, ITEMS_BAR_WIDTH} from '../gameHelpers';
-import {Vector2D} from '../interfaces';
 
 interface ItemBarProps {
   gridHeight: number;

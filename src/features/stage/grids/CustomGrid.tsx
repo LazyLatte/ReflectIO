@@ -1,7 +1,7 @@
 import {FC, Dispatch, SetStateAction} from 'react';
 import { Group} from 'react-konva';
-import CustomCell from './CustomCell';
-import { Vector2D, Mode } from '../interfaces';
+import CustomCell from './cells/CustomCell';
+import { Mode } from '../interfaces';
 
 interface CustomGridProps {
   mode: Mode;

@@ -11,7 +11,6 @@ interface MainInfoProps {
     height: number;
 }
 const MainInfo: FC<MainInfoProps> = ({userLevelInfo, setToggle, height}) => {
-  const {width, reflectorNum, lensNum, clears, likes, timestamp, personal_best, thumbnail} = userLevelInfo;
   return (
     <Box 
         display='flex' 
@@ -28,10 +27,10 @@ const MainInfo: FC<MainInfoProps> = ({userLevelInfo, setToggle, height}) => {
         }}
         onClick={()=>setToggle(prev => !prev)}
     >
-        <Thumbnail thumbnail={thumbnail} timestamp={timestamp} personal_best={personal_best} gridWidth={width}/>
-        <PublicInfo reflectorNum={reflectorNum} lensNum={lensNum} clears={clears} likes={likes}/>
+        <Thumbnail {...userLevelInfo} gridWidth={userLevelInfo.width}/>
+        <PublicInfo {...userLevelInfo}/>
     </Box>
   )
 }
 
-export default MainInfo
+export default MainInfo;
