@@ -2,6 +2,7 @@ import {Laser, Target} from '@features/stage';
 export interface MirrorState {
   pos: Vector2D;
   deg: Degree;
+  color: Color;
 }
 
 export interface MirrorStates {

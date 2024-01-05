@@ -35,9 +35,6 @@ class Grid {
   outOfBound(pos: Vector2D): boolean{
     return (pos.x < 0 || pos.y < 0 || pos.x >= this.gridWidth || pos.y >= this.gridHeight);
   }
-  laserIsPlaced(pos: Vector2D): boolean{
-    return this.grid[pos.y][pos.x].object.type === ObjectType.Laser;
-  }
   addObject(pos: Vector2D, obj: CellObject){
     const newPos = this.positionTransform(pos);
     this.grid[newPos.y][newPos.x].object = obj;
@@ -50,11 +47,11 @@ class Grid {
     })
     return hasLoop;
   }
-  pushState(Q: QueueState[], state: QueueState, nextDir: Vector2D, loopPotential: boolean){
+  pushState(Q: QueueState[], state: QueueState, nextDir: Vector2D, nextColor: Color, loopPotential: boolean){
     Q.unshift({
       pos: {x: state.pos.x + nextDir.x, y: state.pos.y + nextDir.y},
       dir: {x: nextDir.x, y: nextDir.y},
-      color: state.color,
+      color: nextColor,
       loopPotentialMirrors: loopPotential ? [...state.loopPotentialMirrors, {
         pos: {x: state.pos.x, y: state.pos.y},
         dir: {x: state.dir.x, y: state.dir.y}
@@ -80,64 +77,63 @@ class Grid {
       const {pos, dir, color, loopPotentialMirrors} = state;
 
       if(!this.outOfBound(pos)){
-        if(!this.laserIsPlaced(pos)){
-          const objType = this.grid[pos.y][pos.x].object.type;
+        const objType = this.grid[pos.y][pos.x].object.type;
 
-          switch(objType){
-            case ObjectType.None:
-            case ObjectType.Target:
-              // direct pass
+        switch(objType){
+          case ObjectType.None:
+          case ObjectType.Target:
+            // direct pass
+            this.applyColor(pos, dir, color);
+            this.applyColor(pos, {x: -dir.x, y: -dir.y}, color);
+            this.pushState(Q, state, dir, color, false);
+            break;
+          case ObjectType.Laser:
+            this.applyColor(pos, dir, color);
+            break;
+          case ObjectType.Reflector:
+            if(!this.loopDetection(pos, dir, loopPotentialMirrors)){
+              const incidentVector = dir;
+              const normalVector = this.directionTransform(this.grid[pos.y][pos.x].object.dir);
+              const reflectorColor = this.grid[pos.y][pos.x].object.color;
+              const nextColor = (color & reflectorColor) as Color;
+              const innerProduct = incidentVector.x * normalVector.x + incidentVector.y * normalVector.y;
+              if(-incidentVector.x === normalVector.x && -incidentVector.y === normalVector.y){
+                // 180 deg reflect
+                const reflectVector = normalVector;
+                this.pushState(Q, state, reflectVector, nextColor, true);
+              }else if(innerProduct < 0){
+                // 45 deg reflect
+                const reflectVector = {x: incidentVector.x + normalVector.x, y: incidentVector.y + normalVector.y};
+                this.pushState(Q, state, reflectVector, nextColor, true);
+                this.applyColor(pos, {x: -reflectVector.x, y: -reflectVector.y}, nextColor);
+              }
               this.applyColor(pos, dir, color);
-              this.applyColor(pos, {x: -dir.x, y: -dir.y}, color);
-              this.pushState(Q, state, dir, false);
-              break;
-            case ObjectType.Reflector:
-              if(!this.loopDetection(pos, dir, loopPotentialMirrors)){
-                const incidentVector = dir;
-                const normalVector = this.directionTransform(this.grid[pos.y][pos.x].object.dir);
-                const reflectorColor = this.grid[pos.y][pos.x].object.color;
-                const nextColor = (color & reflectorColor) as Color;
-                const innerProduct = incidentVector.x * normalVector.x + incidentVector.y * normalVector.y;
-                if(-incidentVector.x === normalVector.x && -incidentVector.y === normalVector.y){
-                  // 180 deg reflect
-                  const reflectVector = normalVector;
-                  this.pushState(Q, {...state, color: nextColor}, reflectVector, true);
-                }else if(innerProduct < 0){
-                  // 45 deg reflect
-                  const reflectVector = {x: incidentVector.x + normalVector.x, y: incidentVector.y + normalVector.y};
-                  this.pushState(Q, {...state, color: nextColor}, reflectVector, true);
+            }
+            break;
+          case ObjectType.Lens:
+            if(!this.loopDetection(pos, dir, loopPotentialMirrors)){
+              const incidentVector = dir;
+              const normalVector = this.directionTransform(this.grid[pos.y][pos.x].object.dir);
+              const lensColor = this.grid[pos.y][pos.x].object.color;
+              const nextColor = (color & lensColor) as Color;
+              const innerProduct = incidentVector.x * normalVector.x + incidentVector.y * normalVector.y;
+              if(innerProduct !== 0){
+
+                const reflectVector = (innerProduct < 0) ? {x: incidentVector.x + normalVector.x, y: incidentVector.y + normalVector.y} : {x: incidentVector.x - normalVector.x, y: incidentVector.y - normalVector.y}
+
+                if(reflectVector.x !== 0 || reflectVector.y !==0){
+                  this.pushState(Q, state, reflectVector, nextColor, true);
                   this.applyColor(pos, {x: -reflectVector.x, y: -reflectVector.y}, nextColor);
                 }
-                this.applyColor(pos, dir, color);
+                this.pushState(Q, state, incidentVector, nextColor, true);
+                this.applyColor(pos, {x: -incidentVector.x, y: -incidentVector.y}, nextColor);
               }
-              break;
-            case ObjectType.Lens:
-                if(!this.loopDetection(pos, dir, loopPotentialMirrors)){
-                  const incidentVector = dir;
-                  const normalVector = this.directionTransform(this.grid[pos.y][pos.x].object.dir);
-                  const lensColor = this.grid[pos.y][pos.x].object.color;
-                  const nextColor = (color & lensColor) as Color;
-                  const innerProduct = incidentVector.x * normalVector.x + incidentVector.y * normalVector.y;
-                  if(innerProduct !== 0){
-
-                    const reflectVector = (innerProduct < 0) ? {x: incidentVector.x + normalVector.x, y: incidentVector.y + normalVector.y} : {x: incidentVector.x - normalVector.x, y: incidentVector.y - normalVector.y}
-
-                    if(reflectVector.x !== 0 || reflectVector.y !==0){
-                      this.pushState(Q, {...state, color: nextColor}, reflectVector, true);
-                      this.applyColor(pos, {x: -reflectVector.x, y: -reflectVector.y}, nextColor);
-                    }
-                    this.pushState(Q, {...state, color: nextColor}, incidentVector, true);
-                    this.applyColor(pos, {x: -incidentVector.x, y: -incidentVector.y}, nextColor);
-                  }
-                  this.applyColor(pos, dir, color);
-                }
-              break;
-            default:
-              console.log('Unknown object', pos);
-              break;
-          }
-        }else{
-          this.applyColor(pos, dir, color);
+              this.applyColor(pos, dir, color);
+            }
+            break;
+          default:
+            console.log('Unknown object', pos);
+            break;
         }
       }
     }

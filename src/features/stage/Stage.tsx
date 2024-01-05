@@ -86,11 +86,11 @@ export const Stage = forwardRef<StageHandle, StageProps>(({mode, level, tutorial
             <ColorMixingPopover isGettingThumbnail={Boolean(isGettingThumbnail)} target={mouseOnTarget}/>
             <AddObjectDropdown mode={mode} isGettingThumbnail={Boolean(isGettingThumbnail)} gridHeight={gridHeight} gridWidth={gridWidth} dropdownCellPos={dropdownCellPos} setDropdownCellPos={setDropdownCellPos} addObjects={addObjects}  />  
           </Layer>
-          {/* 
+          { 
             <Layer x={boardOrigin.x} y={8}>
               <DownloadButton levelInfo={state2info(levelState)}/>
             </Layer>
-          */}
+          }
         </Wrap>
       </div>
   );

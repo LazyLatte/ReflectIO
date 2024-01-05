@@ -1,4 +1,5 @@
 import {useState, useEffect, useRef} from 'react';
+import { isAxiosError } from "axios";
 import {useLocation, useNavigate} from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -19,6 +20,7 @@ import IconButton from '@mui/material/IconButton';
 import { useAuth, useRefreshToken, AccountModal, AccountModalHandle, userSignOut} from '@features/authentication';
 import useColorMode from 'src/hooks/useColorMode';
 import GingerbreadMan from '@images/avatar/gingerbread-man.svg';
+
 const styles = {
   pfpBtn: {
     height: '50px',
@@ -110,7 +112,13 @@ const TopBar = () => {
       try{
         const accessToken = await refresh();
       }catch(err){
-        accountModalRef.current?.open();
+        if(isAxiosError(err)){
+          if(err.response){
+            accountModalRef.current?.open();
+          }else{
+            setAuth({name: '', accessToken: null});
+          }
+        }
       }
     }
     location.pathname === '/' && initRequest();

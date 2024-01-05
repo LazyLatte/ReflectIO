@@ -8,32 +8,32 @@ interface EmptyStageProps {
 
 
 export const EmptyStage: FC<EmptyStageProps> = ({size, cellWidth}) => {
-    const gridArray: null[][] = Array(size).fill(Array(size).fill(null));
-    return (
-        <Wrap width={size * cellWidth} height={size * cellWidth}>
-            <Layer x={0} y={0}>
-                <Rect 
-                    width={size*cellWidth} 
-                    height={size*cellWidth} 
-                    stroke="black"
-                    strokeWidth={3}
-                />
-                {gridArray.map((row, i)=>(
-                    row.map((_, j)=>(
-                        <Rect
-                            x={j*cellWidth} 
-                            y={i*cellWidth} 
-                            width={cellWidth} 
-                            height={cellWidth} 
-                            stroke="grey"
-                            strokeWidth = {1}
-                            key={i*size+j}
-                        />
-                    ))
-                ))}
-            </Layer>
-        </Wrap>
-    );
+  const gridArray: null[][] = Array(size).fill(Array(size).fill(null));
+  return (
+    <Wrap width={size * cellWidth} height={size * cellWidth}>
+        <Layer x={0} y={0}>
+            <Rect 
+                width={size*cellWidth} 
+                height={size*cellWidth} 
+                stroke="black"
+                strokeWidth={3}
+            />
+            {gridArray.map((row, i)=>(
+                row.map((_, j)=>(
+                    <Rect
+                        x={j*cellWidth} 
+                        y={i*cellWidth} 
+                        width={cellWidth} 
+                        height={cellWidth} 
+                        stroke="grey"
+                        strokeWidth = {1}
+                        key={i*size+j}
+                    />
+                ))
+            ))}
+        </Layer>
+    </Wrap>
+  );
 }
 
 export interface EmptyStageURIs {

@@ -37,13 +37,6 @@ import h4 from 'src/data/levels/hard/4.json';
 import h5 from 'src/data/levels/hard/5.json';
 
 //------------------------
-// const castingType = (level: typeof e1) => ({
-//   ...level,
-//   lasers: level.lasers.map(l => ({...l, color: l.color as Color})),
-//   targets: level.targets.map(t => ({...t, color: t.color as Color})),
-//   reflectors: level.reflectors.map(r => r as Color),
-//   lens: level.lens.map(l => l as Color)
-// })
 const levelNum = 15;
 const easyLevels: LevelInfo[] = [e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15] as LevelInfo[];
 const normalLevels: LevelInfo[] = [n1, n2, n3, n4, n5, n6, n7, n8, n9, n10] as LevelInfo[];
